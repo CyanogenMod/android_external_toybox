@@ -1,0 +1,8 @@
+/.config.old
+/generated/build.sh
+/generated/config2help
+/generated/Config.in
+/generated/Config.probed
+/generated/mkflags
+/generated/optlibs.dat
+/kconfig
