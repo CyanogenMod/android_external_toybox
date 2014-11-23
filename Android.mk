@@ -185,9 +185,9 @@ LOCAL_MODULE := toybox
 LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/Android.mk
 include $(BUILD_EXECUTABLE)
 
-# dupes: cat chmod chown clear cmp cp date df dmesg du false grep id ifconfig insmod kill ls lsmod mkdir
+# dupes: cat chmod chown cmp cp date df dmesg du grep id ifconfig insmod kill ls lsmod mkdir
 #        mknod mkswap mount mv nc netcat nohup notify(inotifyd) printenv readlink renice rm rmdir rmmod
-#        sleep swapoff swapon sync touch true umount vmstat
+#        sleep swapoff swapon sync touch umount vmstat
 # obsolete?: cpio killall5 link unlink
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
 # useless?: chvt fsfreeze halt install makedevs mkfifo mktemp partprobe pivot_root poweroff pwdx reboot rev
@@ -204,6 +204,7 @@ ALL_TOOLS := \
     chgrp \
     chroot \
     cksum \
+    clear \
     comm \
     cut \
     dirname \
@@ -214,6 +215,7 @@ ALL_TOOLS := \
     expand \
     factor \
     fallocate \
+    false \
     fgrep \
     find \
     free \
@@ -253,6 +255,7 @@ ALL_TOOLS := \
     tee \
     time \
     timeout \
+    true \
     truncate \
     uname \
     uniq \
