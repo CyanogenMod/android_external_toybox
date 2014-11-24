@@ -184,7 +184,7 @@ LOCAL_MODULE := toybox
 
 # dupes: cat chmod chown cmp cp date df dmesg du grep id ifconfig kill ls mkdir
 #        mknod mkswap mount mv nc netcat nohup notify(inotifyd) printenv readlink renice rm rmdir
-#        sleep swapoff swapon touch umount vmstat
+#        swapoff swapon touch umount vmstat
 # obsolete?: cpio killall5 link unlink
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
 # useless?: chvt fsfreeze install makedevs mkfifo mktemp partprobe pivot_root pwdx rev
@@ -244,6 +244,7 @@ ALL_TOOLS := \
     seq \
     setsid \
     sha1sum \
+    sleep \
     sort \
     split \
     stat \
