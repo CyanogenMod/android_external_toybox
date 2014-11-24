@@ -182,8 +182,6 @@ LOCAL_CFLAGS += \
     -funsigned-char -ffunction-sections -fdata-sections -fno-asynchronous-unwind-tables \
 
 LOCAL_MODULE := toybox
-LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/Android.mk
-include $(BUILD_EXECUTABLE)
 
 # dupes: cat chmod chown cmp cp date df dmesg du grep id ifconfig kill ls mkdir
 #        mknod mkswap mount mv nc netcat nohup notify(inotifyd) printenv readlink renice rm rmdir
@@ -272,16 +270,7 @@ ALL_TOOLS := \
     xargs \
     yes \
 
-# Make symbolic link launchers for each tool.
-SYMLINKS := $(addprefix $(TARGET_OUT)/bin/,$(ALL_TOOLS))
-$(SYMLINKS): TOYBOX_BINARY := $(LOCAL_MODULE)
-$(SYMLINKS): $(LOCAL_INSTALLED_MODULE) $(LOCAL_PATH)/Android.mk
-	@echo "Symlink: $@ -> $(TOYBOX_BINARY)"
-	@mkdir -p $(dir $@)
-	@rm -rf $@
-	$(hide) ln -sf $(TOYBOX_BINARY) $@
+# Install the symlinks.
+LOCAL_POST_INSTALL_CMD := $(hide) $(foreach t,$(ALL_TOOLS),ln -sf toybox $(TARGET_OUT)/bin/$(t);)
 
-ALL_DEFAULT_INSTALLED_MODULES += $(SYMLINKS)
-
-# We need this so that the installed files can be picked up based on the local module name.
-ALL_MODULES.$(LOCAL_MODULE).INSTALLED := $(ALL_MODULES.$(LOCAL_MODULE).INSTALLED) $(SYMLINKS)
+include $(BUILD_EXECUTABLE)
