@@ -185,8 +185,8 @@ LOCAL_MODULE := toybox
 LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/Android.mk
 include $(BUILD_EXECUTABLE)
 
-# dupes: cat chmod chown cmp cp date df dmesg du grep id ifconfig insmod kill ls lsmod mkdir
-#        mknod mkswap mount mv nc netcat nohup notify(inotifyd) printenv readlink renice rm rmdir rmmod
+# dupes: cat chmod chown cmp cp date df dmesg du grep id ifconfig kill ls mkdir
+#        mknod mkswap mount mv nc netcat nohup notify(inotifyd) printenv readlink renice rm rmdir
 #        sleep swapoff swapon sync touch umount vmstat
 # obsolete?: cpio killall5 link unlink
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
@@ -222,10 +222,12 @@ ALL_TOOLS := \
     groups \
     head \
     hostname \
+    insmod \
     killall \
     ln \
     logname \
     losetup \
+    lsmod \
     lspci \
     lsusb \
     md5sum \
@@ -241,6 +243,7 @@ ALL_TOOLS := \
     pwd \
     readahead \
     realpath \
+    rmmod \
     seq \
     setsid \
     sha1sum \
