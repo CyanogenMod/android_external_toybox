@@ -96,7 +96,6 @@ LOCAL_SRC_FILES := \
     toys/other/readahead.c \
     toys/other/readlink.c \
     toys/other/realpath.c \
-    toys/other/reboot.c \
     toys/other/rev.c \
     toys/other/rfkill.c \
     toys/other/rmmod.c \
@@ -188,7 +187,7 @@ LOCAL_MODULE := toybox
 #        sleep swapoff swapon sync touch umount vmstat
 # obsolete?: cpio killall5 link unlink
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
-# useless?: chvt fsfreeze halt install makedevs mkfifo mktemp partprobe pivot_root poweroff pwdx reboot rev
+# useless?: chvt fsfreeze install makedevs mkfifo mktemp partprobe pivot_root pwdx rev
 #           rfkill switch_root tty unshare
 # prefer efs2progs instead?: blkid chattr lsattr
 

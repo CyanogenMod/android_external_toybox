@@ -1374,7 +1374,7 @@
 #undef FOR_realpath
 #endif
 
-// reboot n n
+// reboot   n
 #ifdef CLEANUP_reboot
 #undef CLEANUP_reboot
 #undef FOR_reboot
@@ -3446,7 +3446,7 @@
 #ifndef TT
 #define TT this.reboot
 #endif
-#define FLAG_n (1<<0)
+#define FLAG_n 0
 #endif
 
 #ifdef FOR_renice

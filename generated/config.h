@@ -6,6 +6,12 @@
 #define USE_TOYBOX_ICONV(...) __VA_ARGS__
 #define CFG_TOYBOX_FALLOCATE 1
 #define USE_TOYBOX_FALLOCATE(...) __VA_ARGS__
+#define CFG_TOYBOX_UTMPX 0
+#define USE_TOYBOX_UTMPX(...)
+#define CFG_TOYBOX_PTY 0
+#define USE_TOYBOX_PTY(...)
+#define CFG_TOYBOX_SHADOW 0
+#define USE_TOYBOX_SHADOW(...)
 #define CFG_BASENAME 1
 #define USE_BASENAME(...) __VA_ARGS__
 #define CFG_CAL 1
@@ -388,8 +394,8 @@
 #define USE_READLINK(...) __VA_ARGS__
 #define CFG_REALPATH 1
 #define USE_REALPATH(...) __VA_ARGS__
-#define CFG_REBOOT 1
-#define USE_REBOOT(...) __VA_ARGS__
+#define CFG_REBOOT 0
+#define USE_REBOOT(...)
 #define CFG_REV 1
 #define USE_REV(...) __VA_ARGS__
 #define CFG_RFKILL 1
