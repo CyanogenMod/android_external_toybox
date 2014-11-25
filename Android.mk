@@ -183,8 +183,8 @@ LOCAL_CFLAGS += \
 LOCAL_MODULE := toybox
 
 # dupes: cat chmod chown cmp cp date df dmesg du grep id ifconfig kill ls mkdir
-#        mknod mkswap mount mv nc netcat nohup notify(inotifyd) readlink renice rm rmdir
-#        swapoff swapon touch umount vmstat
+#        mknod mount mv nc netcat nohup notify(inotifyd) readlink renice rm rmdir
+#        touch umount vmstat
 # obsolete?: cpio killall5 link unlink
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
 # useless?: chvt fsfreeze install makedevs mkfifo mktemp partprobe pivot_root pwdx rev
@@ -228,6 +228,7 @@ ALL_TOOLS := \
     lspci \
     lsusb \
     md5sum \
+    mkswap \
     modinfo \
     mountpoint \
     nice \
@@ -250,6 +251,8 @@ ALL_TOOLS := \
     split \
     stat \
     strings \
+    swapoff \
+    swapon \
     sync \
     sysctl \
     tac \
