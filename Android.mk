@@ -184,7 +184,7 @@ LOCAL_MODULE := toybox
 
 # dupes: cat chmod chown cmp cp date df du grep id ifconfig kill ls mkdir
 #        mknod mount mv nc netcat notify(inotifyd) renice rm rmdir
-#        touch umount vmstat
+#        touch umount
 # obsolete?: cpio killall5 link unlink
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
 # useless?: chvt fsfreeze install makedevs mkfifo mktemp partprobe pivot_root pwdx rev
@@ -272,6 +272,7 @@ ALL_TOOLS := \
     usleep \
     uudecode \
     uuencode \
+    vmstat \
     wc \
     which \
     whoami \
