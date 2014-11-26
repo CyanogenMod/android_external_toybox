@@ -54,7 +54,7 @@
 
 #define help_hostname "usage: hostname [newname]\n\nGet/Set the current hostname\n\n"
 
-#define help_dmesg "usage: dmesg [-n level] [-s bufsize] | -c\n\nPrint or control the kernel ring buffer.\n\n-n	Set kernel logging level (1-9).\n-s	Size of buffer to read (in bytes), default 16384.\n-c	Clear the ring buffer after printing.\n\n"
+#define help_dmesg "usage: dmesg [-n LEVEL] [-s SIZE] | -c\n\nPrint or control the kernel ring buffer.\n\n-c	Clear the ring buffer after printing\n-n	Set kernel logging LEVEL (1-9)\n-r	Raw output (with <level markers>)\n-s	Show the last SIZE many bytes\n\n"
 
 #define help_yes "usage: yes [args...]\n\nRepeatedly output line until killed. If no args, output 'y'.\n\n\n"
 
@@ -434,7 +434,7 @@
 
 #define help_dirname "usage: dirname PATH\n\nShow directory portion of path.\n\n"
 
-#define help_df "usage: df [-Pk] [-t type] [FILESYSTEM ...]\n\nThe \"disk free\" command shows total/used/available disk space for\neach filesystem listed on the command line, or all currently mounted\nfilesystems.\n\n-P	The SUSv3 \"Pedantic\" option\n-k	Sets units back to 1024 bytes (the default without -P)\n-t type	Display only filesystems of this type.\n\nPedantic provides a slightly less useful output format dictated by Posix,\nand sets the units to 512 bytes instead of the default 1024 bytes.\n"
+#define help_df "usage: df [-t type] [FILESYSTEM ...]\n\nThe \"disk free\" command shows total/used/available disk space for\neach filesystem listed on the command line, or all currently mounted\nfilesystems.\n\n-P	The SUSv3 \"Pedantic\" option\n-k	Sets units back to 1024 bytes (the default without -P)\n-t type	Display only filesystems of this type.\n\nPedantic provides a slightly less useful output format dictated by Posix,\nand sets the units to 512 bytes instead of the default 1024 bytes.\n\n"
 
 #define help_date "usage: date [-u] [-r FILE] [-d DATE] [+DISPLAY_FORMAT] [-s SET_FORMAT] [SET]\n\nSet/get the current date/time. With no SET shows the current date.\n\nDefault SET format is \"MMDDhhmm[[CC]YY][.ss]\", that's (2 digits each)\nmonth, day, hour (0-23), and minute. Optionally century, year, and second.\n\n-d	Show DATE instead of current time (convert date format)\n-r	Use modification time of FILE instead of current date\n-s	+FORMAT for SET or -d (instead of MMDDhhmm[[CC]YY][.ss])\n-u	Use UTC instead of current timezone\n\n+FORMAT specifies display format string using these escapes:\n\n%% literal %             %n newline              %t tab\n%S seconds (00-60)       %M minute (00-59)       %m month (01-12)\n%H hour (0-23)           %I hour (01-12)         %p AM/PM\n%y short year (00-99)    %Y year                 %C century\n%a short weekday name    %A weekday name         %u day of week (1-7, 1=mon)\n%b short month name      %B month name           %Z timezone name\n%j day of year (001-366) %d day of month (01-31) %e day of month ( 1-31)\n\n%U Week of year (0-53 start sunday)   %W Week of year (0-53 start monday)\n%V Week of year (1-53 start monday, week < 4 days not part of this year)\n\n%D = \"%m/%d/%y\"    %r = \"%I : %M : %S %p\"   %T = \"%H:%M:%S\"   %h = \"%b\"\n%x locale date     %X locale time           %c locale date/time\n\n"
 

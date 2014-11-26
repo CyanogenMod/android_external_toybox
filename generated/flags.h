@@ -305,7 +305,7 @@
 #undef FOR_deallocvt
 #endif
 
-// df Pkt*a Pkt*a
+// df Pkt*a[-Pk] Pkt*a[-Pk]
 #ifdef CLEANUP_df
 #undef CLEANUP_df
 #undef FOR_df
@@ -396,13 +396,14 @@
 #undef FOR_dirname
 #endif
 
-// dmesg s#n#c s#n#c
+// dmesg rs#<1n#c rs#<1n#c
 #ifdef CLEANUP_dmesg
 #undef CLEANUP_dmesg
 #undef FOR_dmesg
 #undef FLAG_c
 #undef FLAG_n
 #undef FLAG_s
+#undef FLAG_r
 #endif
 
 // dos2unix    
@@ -2471,6 +2472,7 @@
 #define FLAG_c (1<<0)
 #define FLAG_n (1<<1)
 #define FLAG_s (1<<2)
+#define FLAG_r (1<<3)
 #endif
 
 #ifdef FOR_dos2unix
