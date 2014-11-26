@@ -182,7 +182,7 @@ LOCAL_CFLAGS += \
 
 LOCAL_MODULE := toybox
 
-# dupes: cat chmod chown cmp cp date df dmesg du grep id ifconfig kill ls mkdir
+# dupes: cat chmod chown cmp cp date df du grep id ifconfig kill ls mkdir
 #        mknod mount mv nc netcat notify(inotifyd) readlink renice rm rmdir
 #        touch umount vmstat
 # obsolete?: cpio killall5 link unlink
@@ -205,6 +205,7 @@ ALL_TOOLS := \
     comm \
     cut \
     dirname \
+    dmesg \
     dos2unix \
     echo \
     egrep \
