@@ -183,7 +183,7 @@ LOCAL_CFLAGS += \
 LOCAL_MODULE := toybox
 
 # dupes: cat chmod chown cmp cp date df du grep id ifconfig kill ls mkdir
-#        mknod mount mv nc netcat notify(inotifyd) readlink renice rm rmdir
+#        mknod mount mv nc netcat notify(inotifyd) renice rm rmdir
 #        touch umount vmstat
 # obsolete?: cpio killall5 link unlink
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
@@ -243,6 +243,7 @@ ALL_TOOLS := \
     printenv \
     pwd \
     readahead \
+    readlink \
     realpath \
     rmmod \
     seq \
