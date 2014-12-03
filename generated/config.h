@@ -380,8 +380,8 @@
 #define USE_NBD_CLIENT(...) __VA_ARGS__
 #define CFG_NETCAT 1
 #define USE_NETCAT(...) __VA_ARGS__
-#define CFG_NETCAT_LISTEN 0
-#define USE_NETCAT_LISTEN(...)
+#define CFG_NETCAT_LISTEN 1
+#define USE_NETCAT_LISTEN(...) __VA_ARGS__
 #define CFG_ONEIT 1
 #define USE_ONEIT(...) __VA_ARGS__
 #define CFG_PARTPROBE 1

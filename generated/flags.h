@@ -1144,7 +1144,7 @@
 #undef FLAG_n
 #endif
 
-// netcat w#p#s:q#f: tl^L^w#p#s:q#f:
+// netcat tl^L^w#p#s:q#f: tl^L^w#p#s:q#f:
 #ifdef CLEANUP_netcat
 #undef CLEANUP_netcat
 #undef FOR_netcat
@@ -3246,9 +3246,9 @@
 #define FLAG_s (1<<2)
 #define FLAG_p (1<<3)
 #define FLAG_w (1<<4)
-#define FLAG_L 0
-#define FLAG_l 0
-#define FLAG_t 0
+#define FLAG_L (1<<5)
+#define FLAG_l (1<<6)
+#define FLAG_t (1<<7)
 #endif
 
 #ifdef FOR_netstat
