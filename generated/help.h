@@ -38,9 +38,7 @@
 
 #define help_passwd "usage: passwd [-a ALGO] [-dlu] <account name>\n\nupdate user's authentication tokens. Default : current user\n\n-a ALGO	Encryption method (des, md5, sha256, sha512) default: des\n-d		Set password to ''\n-l		Lock (disable) account\n-u		Unlock (enable) account\n\n"
 
-#define help_nfsmount "usage: nfsmount SHARE DIR\n\nInvoke an eldrich horror from the dawn of time.\n\n"
-
-#define help_mount "usage: mount [-afFrsvw] [-t TYPE] [-o OPTIONS...] [[DEVICE] DIR]\n\nMount new filesystem(s) on directories. With no arguments, display existing\nmounts.\n\n-a	mount all entries in /etc/fstab (with -t, only entries of that TYPE)\n-O	only mount -a entries that have this option\n-f	fake it (don't actually mount)\n-r	read only (same as -o ro)\n-w	read/write (default, same as -o rw)\n-t	specify filesystem type\n-v	verbose\n\nOPTIONS is a comma separated list of options, which can also be supplied\nas --longopts.\n\nThis mount autodetects loopback mounts (a file on a directory) and\nbind mounts (file on file, directory on directory), so you don't need\nto say --bind or --loop. You can also \"mount -a /path\" to mount everything\nin /etc/fstab under /path, even if it's noauto.\n\n"
+#define help_mount "usage: mount [-afFrsvw] [-t TYPE] [-o OPTIONS...] [[DEVICE] DIR]\n\nMount new filesystem(s) on directories. With no arguments, display existing\nmounts.\n\n-a	mount all entries in /etc/fstab (with -t, only entries of that TYPE)\n-O	only mount -a entries that have this option\n-f	fake it (don't actually mount)\n-r	read only (same as -o ro)\n-w	read/write (default, same as -o rw)\n-t	specify filesystem type\n-v	verbose\n\nOPTIONS is a comma separated list of options, which can also be supplied\nas --longopts.\n\nThis mount autodetects loopback mounts (a file on a directory) and\nbind mounts (file on file, directory on directory), so you don't need\nto say --bind or --loop. You can also \"mount -a /path\" to mount everything\nin /etc/fstab under /path, even if it's noauto.\n\n\n"
 
 #define help_mktemp "usage: mktemp [-dq] [-p DIR] [TEMPLATE]\n\nSafely create new file and print its name. Default TEMPLATE is\n/tmp/tmp.XXXXXX and each trailing X is replaced with random char.\n\n-d, --directory        Create directory instead of file\n-p DIR, --tmpdir=DIR   Put new file in DIR\n-q                     Quiet\n\n"
 
@@ -302,7 +300,7 @@
 
 #define help_fdisk "usage: fdisk [-lu] [-C CYLINDERS] [-H HEADS] [-S SECTORS] [-b SECTSZ] DISK\n\nChange partition table\n\n-u            Start and End are in sectors (instead of cylinders)\n-l            Show partition table for each DISK, then exit\n-b size       sector size (512, 1024, 2048 or 4096)\n-C CYLINDERS  Set number of cylinders/heads/sectors\n-H HEADS\n-S SECTORS\n\n"
 
-#define help_expr "usage: expr args\n\nEvaluate expression and print result.\n\nThe supported operators, in order of increasing precedence, are:\n\n| & = > >= < <= != + - * / %\n\nIn addition, parentheses () are supported for grouping.\n\n"
+#define help_expr "usage: expr args\n\nEvaluate expression and print result.\n\nThe supported operators, in order of increasing precedence, are:\n\n| & = > >= < <= != + - * / % :\n\nIn addition, parentheses () are supported for grouping.\n\n"
 
 #define help_dumpleases "usage: dumpleases [-r|-a] [-f LEASEFILE]\n\nDisplay DHCP leases granted by udhcpd\n-f FILE,  Lease file\n-r        Show remaining time\n-a        Show expiration time\n\n"
 
@@ -318,9 +316,17 @@
 
 #define help_crond "usage: crond [-fbS] [-l N] [-d N] [-L LOGFILE] [-c DIR]\n\nA daemon to execute scheduled commands.\n\n-b Background (default)\n-c crontab dir\n-d Set log level, log to stderr\n-f Foreground\n-l Set log level. 0 is the most verbose, default 8\n-S Log to syslog (default)\n-L Log to file\n\n"
 
+#define help_gunzip "usage: gunzip [-cflqStv] [FILE...]\n\nDecompess (deflate) file(s). With no files, compress stdin to stdout.\n\nOn successful decompression, compressed files are replaced with the\nuncompressed version. The input file is removed and replaced with\na new file without the .gz extension (with same ownership/permissions).\n\n-c	cat to stdout (act as zcat)\n-f	force (output file exists, input is tty, unrecognized extension)\n-l	list compressed/uncompressed/ratio/name for each input file.\n-q	quiet (no warnings)\n-S	specify exension (default .*)\n-t	test compressed file(s)\n-v	verbose (like -l, but decompress files)\n\n"
+
 #define help_zcat "usage: zcat [FILE...]\n\nDecompress deflated file(s) to stdout\n\n"
 
-#define help_compress "usage: compress [-zglrcd9] [FILE]\n\nCompress or decompress file (or stdin) using \"deflate\" algorithm.\n\n-c	compress with -g gzip (default)  -L zlib  -r raw  -z zip\n-d	decompress (autodetects type)\n\n"
+#define help_decompress "usage: compress [-zglrcd9] [FILE]\n\nCompress or decompress file (or stdin) using \"deflate\" algorithm.\n\n-c	compress with -g gzip (default)  -l zlib  -r raw  -z zip\n-d	decompress (autodetects type)\n\n\n"
+
+#define help_gzip_d "usage: gzip [-d]\n\n-d	decompress (act as gunzip)\n\n"
+
+#define help_gzip "usage: gzip [-19cfqStvzgLR] [FILE...]\n\nCompess (deflate) file(s). With no files, compress stdin to stdout.\n\nOn successful decompression, compressed files are replaced with the\nuncompressed version. The input file is removed and replaced with\na new file without the .gz extension (with same ownership/permissions).\n\n-1	Minimal compression (fastest)\n-9	Max compression (default)\n-c	cat to stdout (act as zcat)\n-f	force (if output file exists, input is tty, unrecognized extension)\n-q	quiet (no warnings)\n-S	specify exension (default .*)\n-t	test compressed file(s)\n-v	verbose (like -l, but compress files)\n\nCompression type:\n-g gzip (default)    -L zlib    -R raw    -z zip\n\n"
+
+#define help_compress "usage: compress [-zgLR19] [FILE]\n\nCompress or decompress file (or stdin) using \"deflate\" algorithm.\n\n-1	min compression\n-9	max compression (default)\n-g	gzip (default)\n-L	zlib\n-R	raw\n-z	zip\n\n"
 
 #define help_brctl "usage: brctl COMMAND [BRIDGE [INTERFACE]]\n\nManage ethernet bridges\n\nCommands:\nshow                  Show a list of bridges\naddbr BRIDGE          Create BRIDGE\ndelbr BRIDGE          Delete BRIDGE\naddif BRIDGE IFACE    Add IFACE to BRIDGE\ndelif BRIDGE IFACE    Delete IFACE from BRIDGE\nsetageing BRIDGE TIME Set ageing time\nsetfd BRIDGE TIME     Set bridge forward delay\nsethello BRIDGE TIME  Set hello time\nsetmaxage BRIDGE TIME Set max message age\nsetpathcost BRIDGE PORT COST   Set path cost\nsetportprio BRIDGE PORT PRIO   Set port priority\nsetbridgeprio BRIDGE PRIO      Set bridge priority\nstp BRIDGE [1/yes/on|0/no/off] STP on/off\n\n"
 

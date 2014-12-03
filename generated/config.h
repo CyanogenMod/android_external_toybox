@@ -6,12 +6,12 @@
 #define USE_TOYBOX_ICONV(...) __VA_ARGS__
 #define CFG_TOYBOX_FALLOCATE 1
 #define USE_TOYBOX_FALLOCATE(...) __VA_ARGS__
-#define CFG_TOYBOX_UTMPX 0
-#define USE_TOYBOX_UTMPX(...)
-#define CFG_TOYBOX_PTY 0
-#define USE_TOYBOX_PTY(...)
-#define CFG_TOYBOX_SHADOW 0
-#define USE_TOYBOX_SHADOW(...)
+#define CFG_TOYBOX_UTMPX 1
+#define USE_TOYBOX_UTMPX(...) __VA_ARGS__
+#define CFG_TOYBOX_PTY 1
+#define USE_TOYBOX_PTY(...) __VA_ARGS__
+#define CFG_TOYBOX_SHADOW 1
+#define USE_TOYBOX_SHADOW(...) __VA_ARGS__
 #define CFG_BASENAME 1
 #define USE_BASENAME(...) __VA_ARGS__
 #define CFG_CAL 1
@@ -46,8 +46,6 @@
 #define USE_DATE(...) __VA_ARGS__
 #define CFG_DF 1
 #define USE_DF(...) __VA_ARGS__
-#define CFG_DF_PEDANTIC 1
-#define USE_DF_PEDANTIC(...) __VA_ARGS__
 #define CFG_DIRNAME 1
 #define USE_DIRNAME(...) __VA_ARGS__
 #define CFG_DU 1
@@ -166,8 +164,16 @@
 #define USE_BRCTL(...)
 #define CFG_COMPRESS 0
 #define USE_COMPRESS(...)
+#define CFG_GZIP 0
+#define USE_GZIP(...)
+#define CFG_GZIP_D 0
+#define USE_GZIP_D(...)
+#define CFG_DECOMPRESS 0
+#define USE_DECOMPRESS(...)
 #define CFG_ZCAT 0
 #define USE_ZCAT(...)
+#define CFG_GUNZIP 0
+#define USE_GUNZIP(...)
 #define CFG_CROND 0
 #define USE_CROND(...)
 #define CFG_CRONTAB 0
@@ -454,8 +460,6 @@
 #define USE_MKTEMP(...) __VA_ARGS__
 #define CFG_MOUNT 1
 #define USE_MOUNT(...) __VA_ARGS__
-#define CFG_NFSMOUNT 0
-#define USE_NFSMOUNT(...)
 #define CFG_PASSWD 0
 #define USE_PASSWD(...)
 #define CFG_PIDOF 1

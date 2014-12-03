@@ -190,13 +190,13 @@
 #undef FLAG_3
 #endif
 
-// compress   zcd9Lrg[-cd][!zgLr]
+// compress   zcd9lrg[-cd][!zgLr]
 #ifdef CLEANUP_compress
 #undef CLEANUP_compress
 #undef FOR_compress
 #undef FLAG_g
 #undef FLAG_r
-#undef FLAG_L
+#undef FLAG_l
 #undef FLAG_9
 #undef FLAG_d
 #undef FLAG_c
@@ -639,6 +639,40 @@
 #ifdef CLEANUP_groupdel
 #undef CLEANUP_groupdel
 #undef FOR_groupdel
+#endif
+
+// gunzip   cflqStv
+#ifdef CLEANUP_gunzip
+#undef CLEANUP_gunzip
+#undef FOR_gunzip
+#undef FLAG_v
+#undef FLAG_t
+#undef FLAG_S
+#undef FLAG_q
+#undef FLAG_l
+#undef FLAG_f
+#undef FLAG_c
+#endif
+
+// gzip   d19dcflqStvgLRz[!gLRz]
+#ifdef CLEANUP_gzip
+#undef CLEANUP_gzip
+#undef FOR_gzip
+#undef FLAG_z
+#undef FLAG_R
+#undef FLAG_L
+#undef FLAG_g
+#undef FLAG_v
+#undef FLAG_t
+#undef FLAG_S
+#undef FLAG_q
+#undef FLAG_l
+#undef FLAG_f
+#undef FLAG_c
+#undef FLAG_d
+#undef FLAG_9
+#undef FLAG_1
+#undef FLAG_d
 #endif
 
 // head n#<0=10 n#<0=10
@@ -1093,7 +1127,7 @@
 #undef FLAG_O
 #endif
 
-// mountpoint <1qdx <1qdx
+// mountpoint <1qdx[-dx] <1qdx[-dx]
 #ifdef CLEANUP_mountpoint
 #undef CLEANUP_mountpoint
 #undef FOR_mountpoint
@@ -1139,12 +1173,6 @@
 #undef FLAG_r
 #undef FLAG_W
 #undef FLAG_p
-#endif
-
-// nfsmount   ?<2>2
-#ifdef CLEANUP_nfsmount
-#undef CLEANUP_nfsmount
-#undef FOR_nfsmount
 #endif
 
 // nice ^<1n# ^<1n#
@@ -2057,14 +2085,10 @@
 #undef FOR_yes
 #endif
 
-// zcat   aLrg[!aLrg]
+// zcat    
 #ifdef CLEANUP_zcat
 #undef CLEANUP_zcat
 #undef FOR_zcat
-#undef FLAG_g
-#undef FLAG_r
-#undef FLAG_L
-#undef FLAG_a
 #endif
 
 #ifdef FOR_acpi
@@ -2265,7 +2289,7 @@
 #endif
 #define FLAG_g 0
 #define FLAG_r 0
-#define FLAG_L 0
+#define FLAG_l 0
 #define FLAG_9 0
 #define FLAG_d 0
 #define FLAG_c 0
@@ -2708,6 +2732,40 @@
 #ifndef TT
 #define TT this.groupdel
 #endif
+#endif
+
+#ifdef FOR_gunzip
+#ifndef TT
+#define TT this.gunzip
+#endif
+#define FLAG_v 0
+#define FLAG_t 0
+#define FLAG_S 0
+#define FLAG_q 0
+#define FLAG_l 0
+#define FLAG_f 0
+#define FLAG_c 0
+#endif
+
+#ifdef FOR_gzip
+#ifndef TT
+#define TT this.gzip
+#endif
+#define FLAG_z 0
+#define FLAG_R 0
+#define FLAG_L 0
+#define FLAG_g 0
+#define FLAG_v 0
+#define FLAG_t 0
+#define FLAG_S 0
+#define FLAG_q 0
+#define FLAG_l 0
+#define FLAG_f 0
+#define FLAG_c 0
+#define FLAG_d 0
+#define FLAG_9 0
+#define FLAG_1 0
+#define FLAG_d 0
 #endif
 
 #ifdef FOR_head
@@ -3208,12 +3266,6 @@
 #define FLAG_r 0
 #define FLAG_W 0
 #define FLAG_p 0
-#endif
-
-#ifdef FOR_nfsmount
-#ifndef TT
-#define TT this.nfsmount
-#endif
 #endif
 
 #ifdef FOR_nice
@@ -4130,9 +4182,5 @@
 #ifndef TT
 #define TT this.zcat
 #endif
-#define FLAG_g 0
-#define FLAG_r 0
-#define FLAG_L 0
-#define FLAG_a 0
 #endif
 

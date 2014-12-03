@@ -15,7 +15,7 @@
 #define OPTSTR_cksum	"HIPLN"
 #define OPTSTR_cmp	"<2>2ls"
 #define OPTSTR_comm	"<2>2321"
-#define OPTSTR_compress	"zcd9Lrg[-cd][!zgLr]"
+#define OPTSTR_compress	"zcd9lrg[-cd][!zgLr]"
 #define OPTSTR_cp	"<2RHLPp"USE_CP_MORE("rdaslvnF")"fi[-HLPd]"USE_CP_MORE("[-ni]")
 #define OPTSTR_cpio	"mduH:p:|i|t|F:v(verbose)o|[!pio][!pot][!pF]"
 #define OPTSTR_crond	"fbSl#<0=8d#<0L:c:[-bf][-LS][-ld]"
@@ -48,6 +48,7 @@
 #define OPTSTR_grep	"ZzEFHabhinorsvwclqe*f*m#x[!wx][!EFw]"
 #define OPTSTR_groupadd	"<1>2g#<0S"
 #define OPTSTR_groupdel	"<1>2"
+#define OPTSTR_gunzip	"cflqStv"
 #define OPTSTR_head	"n#<0=10"
 #define OPTSTR_help	""USE_HELP_EXTRAS("ah")
 #define OPTSTR_host	"<1>2avt:"
@@ -87,10 +88,9 @@
 #define OPTSTR_modinfo	"<1b:k:F:0"
 #define OPTSTR_modprobe	"alrqvsDb"
 #define OPTSTR_mount	"?O:afnrvwt:o*[-rw]"
-#define OPTSTR_mountpoint	"<1qdx"
+#define OPTSTR_mountpoint	"<1qdx[-dx]"
 #define OPTSTR_nbd_client	"<3>3ns"
 #define OPTSTR_netstat	"pWrxwutneal"
-#define OPTSTR_nfsmount	"?<2>2"
 #define OPTSTR_nice	"^<1n#"
 #define OPTSTR_nl	"v#<1=1l#b:n:s:w#<0=6E"
 #define OPTSTR_nohup	"<1^"
@@ -170,4 +170,3 @@
 #define OPTSTR_which	"<1a"
 #define OPTSTR_who	"a"
 #define OPTSTR_xargs	"^I:E:L#ptxrn#<1s#0"
-#define OPTSTR_zcat	"aLrg[!aLrg]"

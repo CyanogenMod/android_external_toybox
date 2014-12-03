@@ -313,17 +313,22 @@ struct brctl_data {
 // toys/pending/compress.c
 
 struct compress_data {
-  // base offset and extra bits tables (length and distance)
+  // Huffman codes: base offset and extra bits tables (length and distance)
   char lenbits[29], distbits[30];
   unsigned short lenbase[29], distbase[30];
   void *fixdisthuff, *fixlithuff;
 
+  // CRC
   void (*crcfunc)(char *data, int len);
-  unsigned crc, len;
+  unsigned crc;
 
-  char *outbuf;
-  unsigned outlen;
-  int outfd;
+  // Compressed data buffer
+  char *data;
+  unsigned pos, len;
+  int fd;
+
+  // Tables only used for deflation
+  unsigned short *head, *chain;
 };
 
 // toys/pending/crond.c
