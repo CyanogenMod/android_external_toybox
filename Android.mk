@@ -182,7 +182,7 @@ LOCAL_CFLAGS += \
 
 LOCAL_MODULE := toybox
 
-# dupes: cat chmod chown cmp cp date df du grep id ifconfig kill ls mkdir
+# dupes: cat chmod chown cmp cp date df du grep id ifconfig ls mkdir
 #        mknod mount mv nc netcat notify(inotifyd) renice rm rmdir
 #        touch umount
 # obsolete?: cpio killall5 link unlink
@@ -221,6 +221,7 @@ ALL_TOOLS := \
     head \
     hostname \
     insmod \
+    kill \
     killall \
     ln \
     logname \
