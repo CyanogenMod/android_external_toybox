@@ -182,7 +182,7 @@ LOCAL_CFLAGS += \
 
 LOCAL_MODULE := toybox
 
-# dupes: cat chmod chown cmp cp date df du grep id ifconfig ls mkdir
+# dupes: cat chown cmp cp date df du grep id ifconfig ls mkdir
 #        mknod mount mv nc netcat notify(inotifyd) renice rm rmdir
 #        touch umount
 # obsolete?: cpio killall5 link unlink
@@ -199,6 +199,7 @@ ALL_TOOLS := \
     cal \
     catv \
     chgrp \
+    chmod \
     chroot \
     cksum \
     clear \
