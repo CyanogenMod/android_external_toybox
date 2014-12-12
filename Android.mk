@@ -115,6 +115,7 @@ LOCAL_SRC_FILES := \
     toys/other/vmstat.c \
     toys/other/which.c \
     toys/other/yes.c \
+    toys/pending/more.c \
     toys/posix/basename.c \
     toys/posix/cal.c \
     toys/posix/cat.c \
@@ -233,6 +234,7 @@ ALL_TOOLS := \
     md5sum \
     mkswap \
     modinfo \
+    more \
     mountpoint \
     nice \
     nl \

@@ -216,6 +216,16 @@ struct oneit_data {
   char *console;
 };
 
+// toys/other/shred.c
+
+struct shred_data {
+  long offset;
+  long iterations;
+  long size;
+
+  int ufd;
+};
+
 // toys/other/stat.c
 
 struct stat_data {
@@ -325,10 +335,10 @@ struct compress_data {
   // Compressed data buffer
   char *data;
   unsigned pos, len;
-  int fd;
+  int infd, outfd;
 
   // Tables only used for deflation
-  unsigned short *head, *chain;
+  unsigned short *hashhead, *hashchain;
 };
 
 // toys/pending/crond.c
@@ -1165,6 +1175,7 @@ extern union global_union {
 	struct modinfo_data modinfo;
 	struct netcat_data netcat;
 	struct oneit_data oneit;
+	struct shred_data shred;
 	struct stat_data stat;
 	struct swapon_data swapon;
 	struct switch_root_data switch_root;

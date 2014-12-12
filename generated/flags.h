@@ -1514,6 +1514,19 @@
 #undef FLAG_b
 #endif
 
+// shred   <1zxus#<1n#<1o#<0f
+#ifdef CLEANUP_shred
+#undef CLEANUP_shred
+#undef FOR_shred
+#undef FLAG_f
+#undef FLAG_o
+#undef FLAG_n
+#undef FLAG_s
+#undef FLAG_u
+#undef FLAG_x
+#undef FLAG_z
+#endif
+
 // skeleton   (walrus)(blubber):;(also):e@d*c#b:a
 #ifdef CLEANUP_skeleton
 #undef CLEANUP_skeleton
@@ -3605,6 +3618,19 @@
 #define TT this.sha1sum
 #endif
 #define FLAG_b (1<<0)
+#endif
+
+#ifdef FOR_shred
+#ifndef TT
+#define TT this.shred
+#endif
+#define FLAG_f 0
+#define FLAG_o 0
+#define FLAG_n 0
+#define FLAG_s 0
+#define FLAG_u 0
+#define FLAG_x 0
+#define FLAG_z 0
 #endif
 
 #ifdef FOR_skeleton

@@ -125,6 +125,7 @@
 #define OPTSTR_setsid	"^<1t"
 #define OPTSTR_sh	"c:"USE_SH_INTERACTIVE("i")
 #define OPTSTR_sha1sum	"b"
+#define OPTSTR_shred	"<1zxus#<1n#<1o#<0f"
 #define OPTSTR_skeleton	"(walrus)(blubber):;(also):e@d*c#b:a"
 #define OPTSTR_skeleton_alias	"b#dq"
 #define OPTSTR_sleep	"<1"

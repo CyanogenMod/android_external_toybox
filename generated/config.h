@@ -246,8 +246,8 @@
 #define USE_MKE2FS_EXTENDED(...)
 #define CFG_MODPROBE 0
 #define USE_MODPROBE(...)
-#define CFG_MORE 0
-#define USE_MORE(...)
+#define CFG_MORE 1
+#define USE_MORE(...) __VA_ARGS__
 #define CFG_NETSTAT 0
 #define USE_NETSTAT(...)
 #define CFG_NSENTER 0
@@ -410,6 +410,8 @@
 #define USE_RMMOD(...) __VA_ARGS__
 #define CFG_SETSID 1
 #define USE_SETSID(...) __VA_ARGS__
+#define CFG_SHRED 0
+#define USE_SHRED(...)
 #define CFG_STAT 1
 #define USE_STAT(...) __VA_ARGS__
 #define CFG_SWAPOFF 1
