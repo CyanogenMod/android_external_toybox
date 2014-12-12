@@ -184,7 +184,7 @@ LOCAL_CFLAGS += \
 LOCAL_MODULE := toybox
 
 # dupes: cat chown cmp cp date df du grep id ifconfig ls mkdir
-#        mknod mount mv nc netcat notify(inotifyd) renice rm rmdir
+#        mount mv nc netcat notify(inotifyd) renice rm rmdir
 #        touch umount
 # obsolete?: cpio killall5 link unlink
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
@@ -232,6 +232,7 @@ ALL_TOOLS := \
     lspci \
     lsusb \
     md5sum \
+    mknod \
     mkswap \
     modinfo \
     more \
