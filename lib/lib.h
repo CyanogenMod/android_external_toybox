@@ -81,6 +81,7 @@ void show_help(void);
 
 // xwrap.c
 void xstrncpy(char *dest, char *src, size_t size);
+void xstrncat(char *dest, char *src, size_t size);
 void xexit(void) noreturn;
 void *xmalloc(size_t size);
 void *xzalloc(size_t size);
@@ -92,7 +93,6 @@ void xprintf(char *format, ...);
 void xputs(char *s);
 void xputc(char c);
 void xflush(void);
-pid_t xfork(void);
 void xexec_optargs(int skip);
 void xexec(char **argv);
 pid_t xpopen_both(char **argv, int *pipes);
