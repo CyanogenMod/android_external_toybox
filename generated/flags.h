@@ -239,7 +239,7 @@
 #undef FLAG_R
 #endif
 
-// cpio mduH:p:|i|t|F:v(verbose)o|[!pio][!pot][!pF] mduH:p:|i|t|F:v(verbose)o|[!pio][!pot][!pF]
+// cpio   mduH:p:|i|t|F:v(verbose)o|[!pio][!pot][!pF]
 #ifdef CLEANUP_cpio
 #undef CLEANUP_cpio
 #undef FOR_cpio
@@ -855,7 +855,7 @@
 #undef FLAG_s
 #endif
 
-// killall5 ?o*ls: [!lo][!ls] ?o*ls: [!lo][!ls]
+// killall5   ?o*ls: [!lo][!ls]
 #ifdef CLEANUP_killall5
 #undef CLEANUP_killall5
 #undef FOR_killall5
@@ -880,7 +880,7 @@
 #undef FLAG_f
 #endif
 
-// link <2>2 <2>2
+// link   <2>2
 #ifdef CLEANUP_link
 #undef CLEANUP_link
 #undef FOR_link
@@ -1962,7 +1962,7 @@
 #undef FLAG_f
 #endif
 
-// unlink <1>1 <1>1
+// unlink   <1>1
 #ifdef CLEANUP_unlink
 #undef CLEANUP_unlink
 #undef FOR_unlink
@@ -2358,17 +2358,17 @@
 #ifndef TT
 #define TT this.cpio
 #endif
-#define FLAG_o (1<<0)
-#define FLAG_verbose (1<<1)
-#define FLAG_v (1<<1)
-#define FLAG_F (1<<2)
-#define FLAG_t (1<<3)
-#define FLAG_i (1<<4)
-#define FLAG_p (1<<5)
-#define FLAG_H (1<<6)
-#define FLAG_u (1<<7)
-#define FLAG_d (1<<8)
-#define FLAG_m (1<<9)
+#define FLAG_o 0
+#define FLAG_verbose 0
+#define FLAG_v 0
+#define FLAG_F 0
+#define FLAG_t 0
+#define FLAG_i 0
+#define FLAG_p 0
+#define FLAG_H 0
+#define FLAG_u 0
+#define FLAG_d 0
+#define FLAG_m 0
 #endif
 
 #ifdef FOR_crond
@@ -2974,9 +2974,9 @@
 #ifndef TT
 #define TT this.killall5
 #endif
-#define FLAG_s (1<<0)
-#define FLAG_l (1<<1)
-#define FLAG_o (1<<2)
+#define FLAG_s 0
+#define FLAG_l 0
+#define FLAG_o 0
 #endif
 
 #ifdef FOR_klogd

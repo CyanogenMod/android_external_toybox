@@ -126,7 +126,6 @@ LOCAL_SRC_FILES := \
     toys/posix/cmp.c \
     toys/posix/comm.c \
     toys/posix/cp.c \
-    toys/posix/cpio.c \
     toys/posix/cut.c \
     toys/posix/date.c \
     toys/posix/df.c \
@@ -141,7 +140,6 @@ LOCAL_SRC_FILES := \
     toys/posix/head.c \
     toys/posix/id.c \
     toys/posix/kill.c \
-    toys/posix/link.c \
     toys/posix/ln.c \
     toys/posix/ls.c \
     toys/posix/mkdir.c \
@@ -168,7 +166,6 @@ LOCAL_SRC_FILES := \
     toys/posix/tty.c \
     toys/posix/uname.c \
     toys/posix/uniq.c \
-    toys/posix/unlink.c \
     toys/posix/uudecode.c \
     toys/posix/uuencode.c \
     toys/posix/wc.c \
@@ -189,7 +186,6 @@ LOCAL_MODULE := toybox
 # dupes: cat chown cmp cp date df du grep id ifconfig ls
 #        mount mv nc netcat notify(inotifyd) renice rm
 #        touch umount
-# obsolete?: cpio killall5 link unlink
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
 # useless?: chvt fsfreeze install makedevs mkfifo mktemp partprobe pivot_root pwdx rev
 #           rfkill switch_root tty unshare

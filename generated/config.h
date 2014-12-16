@@ -38,8 +38,8 @@
 #define USE_CP_MV_MORE(...) __VA_ARGS__
 #define CFG_INSTALL 1
 #define USE_INSTALL(...) __VA_ARGS__
-#define CFG_CPIO 1
-#define USE_CPIO(...) __VA_ARGS__
+#define CFG_CPIO 0
+#define USE_CPIO(...)
 #define CFG_CUT 1
 #define USE_CUT(...) __VA_ARGS__
 #define CFG_DATE 1
@@ -74,10 +74,10 @@
 #define USE_WHOAMI(...) __VA_ARGS__
 #define CFG_KILL 1
 #define USE_KILL(...) __VA_ARGS__
-#define CFG_KILLALL5 1
-#define USE_KILLALL5(...) __VA_ARGS__
-#define CFG_LINK 1
-#define USE_LINK(...) __VA_ARGS__
+#define CFG_KILLALL5 0
+#define USE_KILLALL5(...)
+#define CFG_LINK 0
+#define USE_LINK(...)
 #define CFG_LN 1
 #define USE_LN(...) __VA_ARGS__
 #define CFG_LS 1
@@ -140,8 +140,8 @@
 #define USE_UNAME(...) __VA_ARGS__
 #define CFG_UNIQ 1
 #define USE_UNIQ(...) __VA_ARGS__
-#define CFG_UNLINK 1
-#define USE_UNLINK(...) __VA_ARGS__
+#define CFG_UNLINK 0
+#define USE_UNLINK(...)
 #define CFG_UUDECODE 1
 #define USE_UUDECODE(...) __VA_ARGS__
 #define CFG_UUENCODE 1
