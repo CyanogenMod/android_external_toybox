@@ -162,6 +162,8 @@
 #define USE_BOOTCHARTD(...)
 #define CFG_BRCTL 0
 #define USE_BRCTL(...)
+#define CFG_CHCON 1
+#define USE_CHCON(...) __VA_ARGS__
 #define CFG_COMPRESS 0
 #define USE_COMPRESS(...)
 #define CFG_GZIP 0
@@ -296,10 +298,10 @@
 #define USE_TFTPD(...)
 #define CFG_TOP 0
 #define USE_TOP(...)
-#define CFG_TR 0
-#define USE_TR(...)
 #define CFG_TRACEROUTE 0
 #define USE_TRACEROUTE(...)
+#define CFG_TR 0
+#define USE_TR(...)
 #define CFG_USERADD 0
 #define USE_USERADD(...)
 #define CFG_USERDEL 0

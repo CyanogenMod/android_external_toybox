@@ -122,6 +122,15 @@
 #undef FOR_chattr
 #endif
 
+// chcon hRv hRv
+#ifdef CLEANUP_chcon
+#undef CLEANUP_chcon
+#undef FOR_chcon
+#undef FLAG_v
+#undef FLAG_R
+#undef FLAG_h
+#endif
+
 // chgrp <2hPLHRfv <2hPLHRfv
 #ifdef CLEANUP_chgrp
 #undef CLEANUP_chgrp
@@ -2226,6 +2235,15 @@
 #ifndef TT
 #define TT this.chattr
 #endif
+#endif
+
+#ifdef FOR_chcon
+#ifndef TT
+#define TT this.chcon
+#endif
+#define FLAG_v (1<<0)
+#define FLAG_R (1<<1)
+#define FLAG_h (1<<2)
 #endif
 
 #ifdef FOR_chgrp

@@ -115,6 +115,7 @@ LOCAL_SRC_FILES := \
     toys/other/vmstat.c \
     toys/other/which.c \
     toys/other/yes.c \
+    toys/pending/chcon.c \
     toys/pending/more.c \
     toys/posix/basename.c \
     toys/posix/cal.c \
@@ -181,6 +182,8 @@ LOCAL_CFLAGS += \
     -Wno-unused-parameter \
     -funsigned-char -ffunction-sections -fdata-sections -fno-asynchronous-unwind-tables \
 
+LOCAL_SHARED_LIBRARIES := libselinux
+
 LOCAL_MODULE := toybox
 
 # dupes: cat chown cmp cp date df du grep id ifconfig ls mkdir
@@ -199,6 +202,7 @@ ALL_TOOLS := \
     bzcat \
     cal \
     catv \
+    chcon \
     chgrp \
     chmod \
     chroot \

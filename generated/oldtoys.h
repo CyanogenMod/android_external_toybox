@@ -8,6 +8,7 @@
 #define OPTSTR_cal	">2"
 #define OPTSTR_cat	"u"
 #define OPTSTR_catv	"vte"
+#define OPTSTR_chcon	"hRv"
 #define OPTSTR_chgrp	"<2hPLHRfv"
 #define OPTSTR_chmod	"<2?vRf[-vf]"
 #define OPTSTR_chroot	"^<1"

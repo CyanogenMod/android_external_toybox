@@ -320,6 +320,12 @@ struct brctl_data {
     int sockfd;
 };
 
+// toys/pending/chcon.c
+
+struct chcon_data {
+  char *context;
+};
+
 // toys/pending/compress.c
 
 struct compress_data {
@@ -1185,6 +1191,7 @@ extern union global_union {
 	struct arping_data arping;
 	struct bootchartd_data bootchartd;
 	struct brctl_data brctl;
+	struct chcon_data chcon;
 	struct compress_data compress;
 	struct crond_data crond;
 	struct crontab_data crontab;
