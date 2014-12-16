@@ -186,7 +186,7 @@ LOCAL_SHARED_LIBRARIES := libselinux
 
 LOCAL_MODULE := toybox
 
-# dupes: cat chown cmp cp date df du grep id ifconfig ls mkdir
+# dupes: cat chown cmp cp date df du grep id ifconfig ls
 #        mount mv nc netcat notify(inotifyd) renice rm rmdir
 #        touch umount
 # obsolete?: cpio killall5 link unlink
@@ -236,6 +236,7 @@ ALL_TOOLS := \
     lspci \
     lsusb \
     md5sum \
+    mkdir \
     mknod \
     mkswap \
     modinfo \
