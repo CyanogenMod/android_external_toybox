@@ -180,8 +180,8 @@
 #define USE_CROND(...)
 #define CFG_CRONTAB 0
 #define USE_CRONTAB(...)
-#define CFG_DD 0
-#define USE_DD(...)
+#define CFG_DD 1
+#define USE_DD(...) __VA_ARGS__
 #define CFG_DHCP 0
 #define USE_DHCP(...)
 #define CFG_DHCPD 0
@@ -250,8 +250,8 @@
 #define USE_MODPROBE(...)
 #define CFG_MORE 1
 #define USE_MORE(...) __VA_ARGS__
-#define CFG_NETSTAT 0
-#define USE_NETSTAT(...)
+#define CFG_NETSTAT 1
+#define USE_NETSTAT(...) __VA_ARGS__
 #define CFG_NSENTER 0
 #define USE_NSENTER(...)
 #define CFG_OPENVT 0
@@ -264,12 +264,12 @@
 #define USE_PING(...)
 #define CFG_PRINTF 0
 #define USE_PRINTF(...)
-#define CFG_PS 0
-#define USE_PS(...)
+#define CFG_PS 1
+#define USE_PS(...) __VA_ARGS__
 #define CFG_RESET 0
 #define USE_RESET(...)
-#define CFG_ROUTE 0
-#define USE_ROUTE(...)
+#define CFG_ROUTE 1
+#define USE_ROUTE(...) __VA_ARGS__
 #define CFG_SED 0
 #define USE_SED(...)
 #define CFG_SH 0
@@ -296,10 +296,10 @@
 #define USE_TEST(...)
 #define CFG_TFTPD 0
 #define USE_TFTPD(...)
-#define CFG_TOP 0
-#define USE_TOP(...)
-#define CFG_TRACEROUTE 0
-#define USE_TRACEROUTE(...)
+#define CFG_TOP 1
+#define USE_TOP(...) __VA_ARGS__
+#define CFG_TRACEROUTE 1
+#define USE_TRACEROUTE(...) __VA_ARGS__
 #define CFG_TR 0
 #define USE_TR(...)
 #define CFG_USERADD 0

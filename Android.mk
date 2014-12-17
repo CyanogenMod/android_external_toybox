@@ -116,7 +116,13 @@ LOCAL_SRC_FILES := \
     toys/other/which.c \
     toys/other/yes.c \
     toys/pending/chcon.c \
+    toys/pending/dd.c \
     toys/pending/more.c \
+    toys/pending/ps.c \
+    toys/pending/netstat.c \
+    toys/pending/route.c \
+    toys/pending/top.c \
+    toys/pending/traceroute.c \
     toys/posix/basename.c \
     toys/posix/cal.c \
     toys/posix/cat.c \

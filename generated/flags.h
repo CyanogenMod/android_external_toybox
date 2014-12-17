@@ -1167,7 +1167,7 @@
 #undef FLAG_t
 #endif
 
-// netstat   pWrxwutneal
+// netstat pWrxwutneal pWrxwutneal
 #ifdef CLEANUP_netstat
 #undef CLEANUP_netstat
 #undef FOR_netstat
@@ -1367,7 +1367,7 @@
 #undef FOR_printf
 #endif
 
-// ps   >0o*T
+// ps >0o*T >0o*T
 #ifdef CLEANUP_ps
 #undef CLEANUP_ps
 #undef FOR_ps
@@ -1472,7 +1472,7 @@
 #undef FLAG_w
 #endif
 
-// route   ?neA:
+// route ?neA: ?neA:
 #ifdef CLEANUP_route
 #undef CLEANUP_route
 #undef FOR_route
@@ -1835,7 +1835,7 @@
 #undef FLAG_k
 #endif
 
-// top   >0d#=3n#<1mb
+// top >0d#=3n#<1mb >0d#=3n#<1mb
 #ifdef CLEANUP_top
 #undef CLEANUP_top
 #undef FOR_top
@@ -1873,7 +1873,7 @@
 #undef FLAG_C
 #endif
 
-// traceroute   <1>2i:f#<1>255=1z#<0>86400=0g*w#<0>86400=5t#<0>255=0s:q#<1>255=3p#<1>65535=33434m#<1>255=30rvndlIUF64
+// traceroute <1>2i:f#<1>255=1z#<0>86400=0g*w#<0>86400=5t#<0>255=0s:q#<1>255=3p#<1>65535=33434m#<1>255=30rvndlIUF64 <1>2i:f#<1>255=1z#<0>86400=0g*w#<0>86400=5t#<0>255=0s:q#<1>255=3p#<1>65535=33434m#<1>255=30rvndlIUF64
 #ifdef CLEANUP_traceroute
 #undef CLEANUP_traceroute
 #undef FOR_traceroute
@@ -3286,17 +3286,17 @@
 #ifndef TT
 #define TT this.netstat
 #endif
-#define FLAG_l 0
-#define FLAG_a 0
-#define FLAG_e 0
-#define FLAG_n 0
-#define FLAG_t 0
-#define FLAG_u 0
-#define FLAG_w 0
-#define FLAG_x 0
-#define FLAG_r 0
-#define FLAG_W 0
-#define FLAG_p 0
+#define FLAG_l (1<<0)
+#define FLAG_a (1<<1)
+#define FLAG_e (1<<2)
+#define FLAG_n (1<<3)
+#define FLAG_t (1<<4)
+#define FLAG_u (1<<5)
+#define FLAG_w (1<<6)
+#define FLAG_x (1<<7)
+#define FLAG_r (1<<8)
+#define FLAG_W (1<<9)
+#define FLAG_p (1<<10)
 #endif
 
 #ifdef FOR_nice
@@ -3486,8 +3486,8 @@
 #ifndef TT
 #define TT this.ps
 #endif
-#define FLAG_T 0
-#define FLAG_o 0
+#define FLAG_T (1<<0)
+#define FLAG_o (1<<1)
 #endif
 
 #ifdef FOR_pwd
@@ -3591,9 +3591,9 @@
 #ifndef TT
 #define TT this.route
 #endif
-#define FLAG_A 0
-#define FLAG_e 0
-#define FLAG_n 0
+#define FLAG_A (1<<0)
+#define FLAG_e (1<<1)
+#define FLAG_n (1<<2)
 #endif
 
 #ifdef FOR_sed
@@ -3954,10 +3954,10 @@
 #ifndef TT
 #define TT this.top
 #endif
-#define FLAG_b 0
-#define FLAG_m 0
-#define FLAG_n 0
-#define FLAG_d 0
+#define FLAG_b (1<<0)
+#define FLAG_m (1<<1)
+#define FLAG_n (1<<2)
+#define FLAG_d (1<<3)
 #endif
 
 #ifdef FOR_touch
@@ -3992,26 +3992,26 @@
 #ifndef TT
 #define TT this.traceroute
 #endif
-#define FLAG_4 0
-#define FLAG_6 0
-#define FLAG_F 0
-#define FLAG_U 0
-#define FLAG_I 0
-#define FLAG_l 0
-#define FLAG_d 0
-#define FLAG_n 0
-#define FLAG_v 0
-#define FLAG_r 0
-#define FLAG_m 0
-#define FLAG_p 0
-#define FLAG_q 0
-#define FLAG_s 0
-#define FLAG_t 0
-#define FLAG_w 0
-#define FLAG_g 0
-#define FLAG_z 0
-#define FLAG_f 0
-#define FLAG_i 0
+#define FLAG_4 (1<<0)
+#define FLAG_6 (1<<1)
+#define FLAG_F (1<<2)
+#define FLAG_U (1<<3)
+#define FLAG_I (1<<4)
+#define FLAG_l (1<<5)
+#define FLAG_d (1<<6)
+#define FLAG_n (1<<7)
+#define FLAG_v (1<<8)
+#define FLAG_r (1<<9)
+#define FLAG_m (1<<10)
+#define FLAG_p (1<<11)
+#define FLAG_q (1<<12)
+#define FLAG_s (1<<13)
+#define FLAG_t (1<<14)
+#define FLAG_w (1<<15)
+#define FLAG_g (1<<16)
+#define FLAG_z (1<<17)
+#define FLAG_f (1<<18)
+#define FLAG_i (1<<19)
 #endif
 
 #ifdef FOR_true
