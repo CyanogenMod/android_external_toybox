@@ -183,7 +183,7 @@ LOCAL_SHARED_LIBRARIES := libselinux
 
 LOCAL_MODULE := toybox
 
-# dupes: cat chown cmp cp date df du grep id ifconfig ls
+# dupes: cat chown cmp date df du grep id ifconfig ls
 #        mount mv nc netcat notify(inotifyd) renice rm
 #        touch umount
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
@@ -205,6 +205,7 @@ ALL_TOOLS := \
     cksum \
     clear \
     comm \
+    cp \
     cut \
     dirname \
     dmesg \
