@@ -184,7 +184,7 @@ LOCAL_SHARED_LIBRARIES := libselinux
 LOCAL_MODULE := toybox
 
 # dupes: cat chown cmp date df du grep id ifconfig ls
-#        mount mv nc netcat notify(inotifyd) renice rm
+#        mount mv nc netcat notify(inotifyd) renice
 #        touch umount
 # non-Linux: count freeramdisk fstype nbd-client oneit vconfig
 # useless?: chvt fsfreeze install makedevs mkfifo mktemp partprobe pivot_root pwdx rev
@@ -252,6 +252,7 @@ ALL_TOOLS := \
     readahead \
     readlink \
     realpath \
+    rm \
     rmdir \
     rmmod \
     seq \
