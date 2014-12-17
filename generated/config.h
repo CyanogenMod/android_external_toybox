@@ -326,8 +326,8 @@
 #define USE_CHVT(...) __VA_ARGS__
 #define CFG_CLEAR 1
 #define USE_CLEAR(...) __VA_ARGS__
-#define CFG_COUNT 1
-#define USE_COUNT(...) __VA_ARGS__
+#define CFG_COUNT 0
+#define USE_COUNT(...)
 #define CFG_DOS2UNIX 1
 #define USE_DOS2UNIX(...) __VA_ARGS__
 #define CFG_EJECT 0
@@ -384,8 +384,8 @@
 #define USE_NETCAT(...) __VA_ARGS__
 #define CFG_NETCAT_LISTEN 1
 #define USE_NETCAT_LISTEN(...) __VA_ARGS__
-#define CFG_ONEIT 1
-#define USE_ONEIT(...) __VA_ARGS__
+#define CFG_ONEIT 0
+#define USE_ONEIT(...)
 #define CFG_PARTPROBE 1
 #define USE_PARTPROBE(...) __VA_ARGS__
 #define CFG_PIVOT_ROOT 1

@@ -65,7 +65,6 @@ LOCAL_SRC_FILES := \
     toys/other/chroot.c \
     toys/other/chvt.c \
     toys/other/clear.c \
-    toys/other/count.c \
     toys/other/dos2unix.c \
     toys/other/factor.c \
     toys/other/fallocate.c \
@@ -87,7 +86,6 @@ LOCAL_SRC_FILES := \
     toys/other/mountpoint.c \
     toys/other/nbd_client.c \
     toys/other/netcat.c \
-    toys/other/oneit.c \
     toys/other/partprobe.c \
     toys/other/pivot_root.c \
     toys/other/pmap.c \
@@ -192,10 +190,10 @@ LOCAL_MODULE := toybox
 # dupes: cat chown cmp date df du grep id ifconfig ls
 #        mount nc netcat notify(inotifyd) renice
 #        touch umount
-# non-Linux: count freeramdisk fstype nbd-client oneit vconfig
-# useless?: chvt fsfreeze install makedevs mkfifo mktemp partprobe pivot_root pwdx rev
-#           rfkill switch_root tty unshare
+# useless?: chvt freeramdisk fsfreeze install makedevs mkfifo mktemp nbd-client
+#           partprobe pivot_root pwdx rev rfkill switch_root tty unshare vconfig
 # prefer efs2progs instead?: blkid chattr lsattr
+# unavoidable alias for blkid: fstype
 
 ALL_TOOLS := \
     acpi \

@@ -1249,7 +1249,7 @@
 #undef FLAG_j
 #endif
 
-// oneit ^<1c:p ^<1c:p
+// oneit   ^<1c:p
 #ifdef CLEANUP_oneit
 #undef CLEANUP_oneit
 #undef FOR_oneit
@@ -3368,8 +3368,8 @@
 #ifndef TT
 #define TT this.oneit
 #endif
-#define FLAG_p (1<<0)
-#define FLAG_c (1<<1)
+#define FLAG_p 0
+#define FLAG_c 0
 #endif
 
 #ifdef FOR_openvt
