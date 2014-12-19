@@ -177,7 +177,7 @@ struct string_list **splitpath(char *path, struct string_list **list)
     if (len > 0) {
       *list = xmalloc(sizeof(struct string_list) + len + 1);
       (*list)->next = 0;
-      strncpy((*list)->str, new, len);
+      memcpy((*list)->str, new, len);
       (*list)->str[len] = 0;
       list = &(*list)->next;
     }
@@ -210,7 +210,8 @@ struct string_list *find_in_path(char *path, char *filename)
     if (!len) sprintf(rnext->str, "%s/%s", cwd, filename);
     else {
       char *res = rnext->str;
-      strncpy(res, path, len);
+
+      memcpy(res, path, len);
       res += len;
       *(res++) = '/';
       strcpy(res, filename);
@@ -568,6 +569,21 @@ void crc_init(unsigned int *crc_table, int little_endian)
       else c=c&0x80000000 ? (c<<1)^0x04c11db7 : (c<<1);
     crc_table[i] = c;
   }
+}
+
+// Init base64 table
+
+void base64_init(char *p)
+{
+  int i;
+
+  for (i = 'A'; i != ':'; i++) {
+    if (i == 'Z'+1) i = 'a';
+    if (i == 'z'+1) i = '0';
+    *(p++) = i;
+  }
+  *(p++) = '+';
+  *(p++) = '/';
 }
 
 // Quick and dirty query size of terminal, doesn't do ANSI probe fallback.
