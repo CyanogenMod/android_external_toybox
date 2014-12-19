@@ -41,6 +41,15 @@
 #undef FLAG_s
 #endif
 
+// base64 diw#<1[!dw] diw#<1[!dw]
+#ifdef CLEANUP_base64
+#undef CLEANUP_base64
+#undef FOR_base64
+#undef FLAG_w
+#undef FLAG_i
+#undef FLAG_d
+#endif
+
 // basename <1>2 <1>2
 #ifdef CLEANUP_basename
 #undef CLEANUP_basename
@@ -2154,6 +2163,15 @@
 #define FLAG_w 0
 #define FLAG_I 0
 #define FLAG_s 0
+#endif
+
+#ifdef FOR_base64
+#ifndef TT
+#define TT this.base64
+#endif
+#define FLAG_w (1<<0)
+#define FLAG_i (1<<1)
+#define FLAG_d (1<<2)
 #endif
 
 #ifdef FOR_basename

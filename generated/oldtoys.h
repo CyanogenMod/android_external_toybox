@@ -1,6 +1,7 @@
 #define OPTSTR_acpi	"abctV"
 #define OPTSTR_arp	"vi:nDsdap:A:H:[+Ap][!sd]"
 #define OPTSTR_arping	"<1>1s:I:w#<0c#<0AUDbqf[+AU][+Df]"
+#define OPTSTR_base64	"diw#<1[!dw]"
 #define OPTSTR_basename	"<1>2"
 #define OPTSTR_blkid	"<1"
 #define OPTSTR_blockdev	"<1>1(setro)(setrw)(getro)(getss)(getbsz)(setbsz)#<0(getsz)(getsize)(getsize64)(flushbufs)(rereadpt)"

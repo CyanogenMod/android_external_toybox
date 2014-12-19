@@ -312,6 +312,8 @@
 #define USE_XZCAT(...)
 #define CFG_ACPI 1
 #define USE_ACPI(...) __VA_ARGS__
+#define CFG_BASE64 1
+#define USE_BASE64(...) __VA_ARGS__
 #define CFG_BLKID 1
 #define USE_BLKID(...) __VA_ARGS__
 #define CFG_BLOCKDEV 1

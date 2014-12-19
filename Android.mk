@@ -58,6 +58,7 @@ LOCAL_SRC_FILES := \
     toys/lsb/sync.c \
     toys/lsb/umount.c \
     toys/other/acpi.c \
+    toys/other/base64.c \
     toys/other/blkid.c \
     toys/other/blockdev.c \
     toys/other/bzcat.c \

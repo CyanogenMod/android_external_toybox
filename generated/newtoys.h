@@ -5,6 +5,7 @@ USE_GROUPADD(OLDTOY(addgroup, groupadd, OPTSTR_groupadd, TOYFLAG_NEEDROOT|TOYFLA
 USE_USERADD(OLDTOY(adduser, useradd, OPTSTR_useradd, TOYFLAG_NEEDROOT|TOYFLAG_UMASK|TOYFLAG_SBIN))
 USE_ARP(NEWTOY(arp, "vi:nDsdap:A:H:[+Ap][!sd]", TOYFLAG_USR|TOYFLAG_BIN))
 USE_ARPING(NEWTOY(arping, "<1>1s:I:w#<0c#<0AUDbqf[+AU][+Df]", TOYFLAG_USR|TOYFLAG_SBIN))
+USE_BASE64(NEWTOY(base64, "diw#<1[!dw]", TOYFLAG_USR|TOYFLAG_BIN))
 USE_BASENAME(NEWTOY(basename, "<1>2", TOYFLAG_USR|TOYFLAG_BIN))
 USE_BLKID(NEWTOY(blkid, "<1", TOYFLAG_BIN))
 USE_BLOCKDEV(NEWTOY(blockdev, "<1>1(setro)(setrw)(getro)(getss)(getbsz)(setbsz)#<0(getsz)(getsize)(getsize64)(flushbufs)(rereadpt)",TOYFLAG_USR|TOYFLAG_BIN))

@@ -184,6 +184,8 @@
 
 #define help_blkid "usage: blkid [block device...]\n\nPrints type, label and UUID of filesystem.\n\n"
 
+#define help_base64 "usage: base64 [-di] [-w COLUMNS] [FILE...]\n\nEncode or decode in base64.\n\n-d	decode\n-i	ignore non-alphabetic characters\n-w	wrap output at COLUMNS (default 76)\n\n"
+
 #define help_acpi "usage: acpi [-abctV]\n\nShow status of power sources and thermal devices.\n\n-a	show power adapters\n-b	show batteries\n-c	show cooling device state\n-t	show temperatures\n-V	show everything\n\n"
 
 #define help_xzcat "usage: xzcat [filename...]\n\nDecompress listed files to stdout. Use stdin if no files listed.\n\n\n\n"

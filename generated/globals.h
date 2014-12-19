@@ -116,6 +116,12 @@ struct acpi_data {
   char *cpath;
 };
 
+// toys/other/base64.c
+
+struct base64_data {
+  long columns;
+};
+
 // toys/other/blockdev.c
 
 struct blockdev_data {
@@ -1168,6 +1174,7 @@ extern union global_union {
 	struct su_data su;
 	struct umount_data umount;
 	struct acpi_data acpi;
+	struct base64_data base64;
 	struct blockdev_data blockdev;
 	struct dos2unix_data dos2unix;
 	struct fallocate_data fallocate;
