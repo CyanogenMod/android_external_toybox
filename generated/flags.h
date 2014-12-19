@@ -589,6 +589,12 @@
 #undef FLAG_f
 #endif
 
+// fstype   <1
+#ifdef CLEANUP_fstype
+#undef CLEANUP_fstype
+#undef FOR_fstype
+#endif
+
 // ftpget   <2cvu:p:P#<0=21>65535
 #ifdef CLEANUP_ftpget
 #undef CLEANUP_ftpget
@@ -1152,6 +1158,17 @@
 #undef FLAG_x
 #undef FLAG_d
 #undef FLAG_q
+#endif
+
+// mv <2vnFfi[-ni] <2vnFfi[-ni]
+#ifdef CLEANUP_mv
+#undef CLEANUP_mv
+#undef FOR_mv
+#undef FLAG_i
+#undef FLAG_f
+#undef FLAG_F
+#undef FLAG_n
+#undef FLAG_v
 #endif
 
 // nbd_client <3>3ns <3>3ns
@@ -2713,6 +2730,12 @@
 #define FLAG_f (1<<1)
 #endif
 
+#ifdef FOR_fstype
+#ifndef TT
+#define TT this.fstype
+#endif
+#endif
+
 #ifdef FOR_ftpget
 #ifndef TT
 #define TT this.ftpget
@@ -3276,6 +3299,17 @@
 #define FLAG_x (1<<0)
 #define FLAG_d (1<<1)
 #define FLAG_q (1<<2)
+#endif
+
+#ifdef FOR_mv
+#ifndef TT
+#define TT this.mv
+#endif
+#define FLAG_i (1<<0)
+#define FLAG_f (1<<1)
+#define FLAG_F (1<<2)
+#define FLAG_n (1<<3)
+#define FLAG_v (1<<4)
 #endif
 
 #ifdef FOR_nbd_client

@@ -32,10 +32,10 @@
 #define USE_CP(...) __VA_ARGS__
 #define CFG_CP_MORE 1
 #define USE_CP_MORE(...) __VA_ARGS__
-#define CFG_CP_MV 1
-#define USE_CP_MV(...) __VA_ARGS__
-#define CFG_CP_MV_MORE 1
-#define USE_CP_MV_MORE(...) __VA_ARGS__
+#define CFG_MV 1
+#define USE_MV(...) __VA_ARGS__
+#define CFG_MV_MORE 1
+#define USE_MV_MORE(...) __VA_ARGS__
 #define CFG_INSTALL 1
 #define USE_INSTALL(...) __VA_ARGS__
 #define CFG_CPIO 0
@@ -316,6 +316,8 @@
 #define USE_BASE64(...) __VA_ARGS__
 #define CFG_BLKID 1
 #define USE_BLKID(...) __VA_ARGS__
+#define CFG_FSTYPE 0
+#define USE_FSTYPE(...)
 #define CFG_BLOCKDEV 1
 #define USE_BLOCKDEV(...) __VA_ARGS__
 #define CFG_BZCAT 1

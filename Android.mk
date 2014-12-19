@@ -194,7 +194,6 @@ LOCAL_MODULE := toybox
 # useless?: chvt freeramdisk fsfreeze install makedevs mkfifo mktemp nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty unshare vconfig
 # prefer efs2progs instead?: blkid chattr lsattr
-# unavoidable alias for blkid: fstype
 
 ALL_TOOLS := \
     acpi \

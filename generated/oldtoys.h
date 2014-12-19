@@ -45,6 +45,7 @@
 #define OPTSTR_freeramdisk	"<1>1"
 #define OPTSTR_fsck	"?t:ANPRTVsC#"
 #define OPTSTR_fsfreeze	"<1>1f|u|[!fu]"
+#define OPTSTR_fstype	"<1"
 #define OPTSTR_ftpget	"<2cvu:p:P#<0=21>65535"
 #define OPTSTR_getty	"<2t#<0H:I:l:f:iwnmLh"
 #define OPTSTR_grep	"ZzEFHabhinorsvwclqe*f*m#x[!wx][!EFw]"
@@ -91,6 +92,7 @@
 #define OPTSTR_modprobe	"alrqvsDb"
 #define OPTSTR_mount	"?O:afnrvwt:o*[-rw]"
 #define OPTSTR_mountpoint	"<1qdx[-dx]"
+#define OPTSTR_mv	"<2"USE_CP_MORE("vnF")"fi"USE_CP_MORE("[-ni]")
 #define OPTSTR_nbd_client	"<3>3ns"
 #define OPTSTR_netstat	"pWrxwutneal"
 #define OPTSTR_nice	"^<1n#"

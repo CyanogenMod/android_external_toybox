@@ -182,7 +182,9 @@
 
 #define help_blockdev "usage: blockdev --OPTION... BLOCKDEV...\n\nCall ioctl(s) on each listed block device\n\nOPTIONs:\n--setro		Set read only\n--setrw		Set read write\n--getro		Get read only\n--getss		Get sector size\n--getbsz	Get block size\n--setbsz	BYTES	Set block size\n--getsz		Get device size in 512-byte sectors\n--getsize	Get device size in sectors (deprecated)\n--getsize64	Get device size in bytes\n--flushbufs	Flush buffers\n--rereadpt	Reread partition table\n\n"
 
-#define help_blkid "usage: blkid [block device...]\n\nPrints type, label and UUID of filesystem.\n\n"
+#define help_fstype "usage: fstype DEV...\n\nPrints type of filesystem on a block device or image.\n\n"
+
+#define help_blkid "usage: blkid DEV...\n\nPrints type, label and UUID of filesystem on a block device or image.\n\n"
 
 #define help_base64 "usage: base64 [-di] [-w COLUMNS] [FILE...]\n\nEncode or decode in base64.\n\n-d	decode\n-i	ignore non-alphabetic characters\n-w	wrap output at COLUMNS (default 76)\n\n"
 
@@ -454,7 +456,7 @@
 
 #define help_install "usage: install [-dDpsv] [-o USER] [-g GROUP] [-m MODE] [SOURCE...] DEST\n\nCopy files and set attributes.\n\n-d	Act like mkdir -p\n-D	Create leading directories for DEST\n-g	Make copy belong to GROUP\n-m	Set permissions to MODE\n-o	Make copy belong to USER\n-p	Preserve timestamps\n-s	Call \"strip -p\"\n-v	Verbose\n\n"
 
-#define help_cp_mv "usage: mv [-finv] SOURCE... DEST\"\n\n-f	force copy by deleting destination file\n-i	interactive, prompt before overwriting existing DEST\n-n	no clobber (don't overwrite DEST)\n-v	verbose\n"
+#define help_mv "usage: mv [-finv] SOURCE... DEST\"\n\n-f	force copy by deleting destination file\n-i	interactive, prompt before overwriting existing DEST\n-n	no clobber (don't overwrite DEST)\n-v	verbose\n"
 
 #define help_cp "usage: cp [-HLPRadfilnprsv] SOURCE... DEST\n\nCopy files from SOURCE to DEST.  If more than one SOURCE, DEST must\nbe a directory.\n-F	delete any existing destination file first (breaks hardlinks)\n-H	Follow symlinks listed on command line\n-L	Follow all symlinks\n-P	Do not follow symlinks [default]\n-R	recurse into subdirectories (DEST must be a directory)\n-a	same as -dpr\n-d	don't dereference symlinks\n-f	delete destination files we can't write to\n-i	interactive, prompt before overwriting existing DEST\n-l	hard link instead of copy\n-n	no clobber (don't overwrite DEST)\n-p	preserve timestamps, ownership, and permissions\n-r	synonym for -R\n-s	symlink instead of copy\n-v	verbose\n"
 
