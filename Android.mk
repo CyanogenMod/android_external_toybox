@@ -171,8 +171,6 @@ LOCAL_SRC_FILES := \
     toys/posix/tty.c \
     toys/posix/uname.c \
     toys/posix/uniq.c \
-    toys/posix/uudecode.c \
-    toys/posix/uuencode.c \
     toys/posix/wc.c \
     toys/posix/xargs.c \
 
@@ -284,8 +282,6 @@ ALL_TOOLS := \
     uniq \
     unix2dos \
     usleep \
-    uudecode \
-    uuencode \
     vmstat \
     wc \
     which \
