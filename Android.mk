@@ -242,6 +242,7 @@ ALL_TOOLS := \
     more \
     mountpoint \
     mv \
+    netstat \
     nice \
     nl \
     nohup \
