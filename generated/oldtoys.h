@@ -7,8 +7,7 @@
 #define OPTSTR_blockdev	"<1>1(setro)(setrw)(getro)(getss)(getbsz)(setbsz)#<0(getsz)(getsize)(getsize64)(flushbufs)(rereadpt)"
 #define OPTSTR_brctl	"<1"
 #define OPTSTR_cal	">2"
-#define OPTSTR_cat	"u"
-#define OPTSTR_catv	"vte"
+#define OPTSTR_cat	"u"USE_CAT_V("vte")
 #define OPTSTR_chcon	"hRv"
 #define OPTSTR_chgrp	"<2hPLHRfv"
 #define OPTSTR_chmod	"<2?vRf[-vf]"
@@ -47,6 +46,7 @@
 #define OPTSTR_fsfreeze	"<1>1f|u|[!fu]"
 #define OPTSTR_fstype	"<1"
 #define OPTSTR_ftpget	"<2cvu:p:P#<0=21>65535"
+#define OPTSTR_getenforce	""
 #define OPTSTR_getty	"<2t#<0H:I:l:f:iwnmLh"
 #define OPTSTR_grep	"ZzEFHabhinorsvwclqe*f*m#x[!wx][!EFw]"
 #define OPTSTR_groupadd	"<1>2g#<0S"
@@ -126,6 +126,7 @@
 #define OPTSTR_route	"?neA:"
 #define OPTSTR_sed	"(version)e*f*inr"
 #define OPTSTR_seq	"<1>3?f:s:"
+#define OPTSTR_setenforce	"<1"
 #define OPTSTR_setsid	"^<1t"
 #define OPTSTR_sh	"c:"USE_SH_INTERACTIVE("i")
 #define OPTSTR_sha1sum	"b"

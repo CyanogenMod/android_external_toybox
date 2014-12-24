@@ -18,6 +18,8 @@
 #define USE_CAL(...) __VA_ARGS__
 #define CFG_CAT 1
 #define USE_CAT(...) __VA_ARGS__
+#define CFG_CAT_V 1
+#define USE_CAT_V(...) __VA_ARGS__
 #define CFG_CHGRP 1
 #define USE_CHGRP(...) __VA_ARGS__
 #define CFG_CHMOD 1
@@ -108,6 +110,8 @@
 #define USE_RM(...) __VA_ARGS__
 #define CFG_RMDIR 1
 #define USE_RMDIR(...) __VA_ARGS__
+#define CFG_SED 0
+#define USE_SED(...)
 #define CFG_SLEEP 1
 #define USE_SLEEP(...) __VA_ARGS__
 #define CFG_SLEEP_FLOAT 1
@@ -202,6 +206,8 @@
 #define USE_FSCK(...)
 #define CFG_FTPGET 0
 #define USE_FTPGET(...)
+#define CFG_GETENFORCE 1
+#define USE_GETENFORCE(...) __VA_ARGS__
 #define CFG_GETTY 0
 #define USE_GETTY(...)
 #define CFG_GROUPADD 0
@@ -270,8 +276,8 @@
 #define USE_RESET(...)
 #define CFG_ROUTE 1
 #define USE_ROUTE(...) __VA_ARGS__
-#define CFG_SED 0
-#define USE_SED(...)
+#define CFG_SETENFORCE 1
+#define USE_SETENFORCE(...) __VA_ARGS__
 #define CFG_SH 0
 #define USE_SH(...)
 #define CFG_SH_INTERACTIVE 0
@@ -322,8 +328,6 @@
 #define USE_BLOCKDEV(...) __VA_ARGS__
 #define CFG_BZCAT 1
 #define USE_BZCAT(...) __VA_ARGS__
-#define CFG_CATV 1
-#define USE_CATV(...) __VA_ARGS__
 #define CFG_CHROOT 1
 #define USE_CHROOT(...) __VA_ARGS__
 #define CFG_CHVT 1

@@ -103,20 +103,14 @@
 #undef FOR_cal
 #endif
 
-// cat u u
+// cat uvte uvte
 #ifdef CLEANUP_cat
 #undef CLEANUP_cat
 #undef FOR_cat
-#undef FLAG_u
-#endif
-
-// catv vte vte
-#ifdef CLEANUP_catv
-#undef CLEANUP_catv
-#undef FOR_catv
 #undef FLAG_e
 #undef FLAG_t
 #undef FLAG_v
+#undef FLAG_u
 #endif
 
 // cd    
@@ -604,6 +598,12 @@
 #undef FLAG_u
 #undef FLAG_v
 #undef FLAG_c
+#endif
+
+// getenforce    
+#ifdef CLEANUP_getenforce
+#undef CLEANUP_getenforce
+#undef FOR_getenforce
 #endif
 
 // getty   <2t#<0H:I:l:f:iwnmLh
@@ -1527,6 +1527,12 @@
 #undef FLAG_f
 #endif
 
+// setenforce <1 <1
+#ifdef CLEANUP_setenforce
+#undef CLEANUP_setenforce
+#undef FOR_setenforce
+#endif
+
 // setsid ^<1t ^<1t
 #ifdef CLEANUP_setsid
 #undef CLEANUP_setsid
@@ -2248,16 +2254,10 @@
 #ifndef TT
 #define TT this.cat
 #endif
-#define FLAG_u (1<<0)
-#endif
-
-#ifdef FOR_catv
-#ifndef TT
-#define TT this.catv
-#endif
 #define FLAG_e (1<<0)
 #define FLAG_t (1<<1)
 #define FLAG_v (1<<2)
+#define FLAG_u (1<<3)
 #endif
 
 #ifdef FOR_cd
@@ -2745,6 +2745,12 @@
 #define FLAG_u 0
 #define FLAG_v 0
 #define FLAG_c 0
+#endif
+
+#ifdef FOR_getenforce
+#ifndef TT
+#define TT this.getenforce
+#endif
 #endif
 
 #ifdef FOR_getty
@@ -3666,6 +3672,12 @@
 #endif
 #define FLAG_s (1<<0)
 #define FLAG_f (1<<1)
+#endif
+
+#ifdef FOR_setenforce
+#ifndef TT
+#define TT this.setenforce
+#endif
 #endif
 
 #ifdef FOR_setsid
