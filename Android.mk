@@ -62,7 +62,6 @@ LOCAL_SRC_FILES := \
     toys/other/blkid.c \
     toys/other/blockdev.c \
     toys/other/bzcat.c \
-    toys/other/catv.c \
     toys/other/chroot.c \
     toys/other/chvt.c \
     toys/other/clear.c \
@@ -116,10 +115,12 @@ LOCAL_SRC_FILES := \
     toys/other/yes.c \
     toys/pending/chcon.c \
     toys/pending/dd.c \
+    toys/pending/getenforce.c \
     toys/pending/more.c \
     toys/pending/ps.c \
     toys/pending/netstat.c \
     toys/pending/route.c \
+    toys/pending/setenforce.c \
     toys/pending/top.c \
     toys/pending/traceroute.c \
     toys/posix/basename.c \
@@ -199,7 +200,6 @@ ALL_TOOLS := \
     blockdev \
     bzcat \
     cal \
-    catv \
     chcon \
     chgrp \
     chmod \

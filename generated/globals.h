@@ -672,21 +672,6 @@ struct route_data {
   char *family;
 };
 
-// toys/pending/sed.c
-
-struct sed_data {
-  struct arg_list *f;
-  struct arg_list *e;
-
-  // processed pattern list
-  struct double_list *pattern;
-
-  char *nextline, *remember;
-  void *restart, *lastregex;
-  long nextlen, rememberlen, count;
-  int fdout, noeol;
-};
-
 // toys/pending/sh.c
 
 struct sh_data {
@@ -1074,6 +1059,22 @@ struct renice_data {
   long nArgu;
 };
 
+// toys/posix/sed.c
+
+struct sed_data {
+  struct arg_list *f;
+  struct arg_list *e;
+
+  // processed pattern list
+  struct double_list *pattern;
+
+  char *nextline, *remember;
+  void *restart, *lastregex;
+  long nextlen, rememberlen, count;
+  int fdout, noeol;
+  unsigned xx;
+};
+
 // toys/posix/sort.c
 
 struct sort_data {
@@ -1234,7 +1235,6 @@ extern union global_union {
 	struct printf_data printf;
 	struct ps_data ps;
 	struct route_data route;
-	struct sed_data sed;
 	struct sh_data sh;
 	struct sulogin_data sulogin;
 	struct syslogd_data syslogd;
@@ -1273,6 +1273,7 @@ extern union global_union {
 	struct paste_data paste;
 	struct patch_data patch;
 	struct renice_data renice;
+	struct sed_data sed;
 	struct sort_data sort;
 	struct split_data split;
 	struct strings_data strings;
