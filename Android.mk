@@ -222,6 +222,7 @@ ALL_TOOLS := \
     fgrep \
     find \
     free \
+    getenforce \
     groups \
     head \
     hostname \
@@ -260,6 +261,7 @@ ALL_TOOLS := \
     rmdir \
     rmmod \
     seq \
+    setenforce \
     setsid \
     sha1sum \
     sleep \
