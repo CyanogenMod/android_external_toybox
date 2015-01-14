@@ -187,7 +187,7 @@ LOCAL_SHARED_LIBRARIES := libselinux
 
 LOCAL_MODULE := toybox
 
-# dupes: cat chown cmp date df du grep id ifconfig ls
+# dupes: chown cmp date df du grep id ifconfig ls
 #        mount nc netcat notify(inotifyd) renice
 #        touch umount
 # useless?: chvt freeramdisk fsfreeze install makedevs mkfifo mktemp nbd-client
@@ -200,6 +200,7 @@ ALL_TOOLS := \
     blockdev \
     bzcat \
     cal \
+    cat \
     chcon \
     chgrp \
     chmod \
