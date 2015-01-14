@@ -110,8 +110,8 @@
 #define USE_RM(...) __VA_ARGS__
 #define CFG_RMDIR 1
 #define USE_RMDIR(...) __VA_ARGS__
-#define CFG_SED 0
-#define USE_SED(...)
+#define CFG_SED 1
+#define USE_SED(...) __VA_ARGS__
 #define CFG_SLEEP 1
 #define USE_SLEEP(...) __VA_ARGS__
 #define CFG_SLEEP_FLOAT 1
@@ -306,8 +306,8 @@
 #define USE_TOP(...) __VA_ARGS__
 #define CFG_TRACEROUTE 1
 #define USE_TRACEROUTE(...) __VA_ARGS__
-#define CFG_TR 0
-#define USE_TR(...)
+#define CFG_TR 1
+#define USE_TR(...) __VA_ARGS__
 #define CFG_USERADD 0
 #define USE_USERADD(...)
 #define CFG_USERDEL 0

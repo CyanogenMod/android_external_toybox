@@ -1507,7 +1507,7 @@
 #undef FLAG_n
 #endif
 
-// sed   (version)e*f*inr
+// sed (version)e*f*inr (version)e*f*inr
 #ifdef CLEANUP_sed
 #undef CLEANUP_sed
 #undef FOR_sed
@@ -1895,7 +1895,7 @@
 #undef FOR_toybox
 #endif
 
-// tr   ^>2<1Ccsd[+cC]
+// tr ^>2<1Ccsd[+cC] ^>2<1Ccsd[+cC]
 #ifdef CLEANUP_tr
 #undef CLEANUP_tr
 #undef FOR_tr
@@ -3658,12 +3658,12 @@
 #ifndef TT
 #define TT this.sed
 #endif
-#define FLAG_r 0
-#define FLAG_n 0
-#define FLAG_i 0
-#define FLAG_f 0
-#define FLAG_e 0
-#define FLAG_version 0
+#define FLAG_r (1<<0)
+#define FLAG_n (1<<1)
+#define FLAG_i (1<<2)
+#define FLAG_f (1<<3)
+#define FLAG_e (1<<4)
+#define FLAG_version (1<<5)
 #endif
 
 #ifdef FOR_seq
@@ -4046,10 +4046,10 @@
 #ifndef TT
 #define TT this.tr
 #endif
-#define FLAG_d 0
-#define FLAG_s 0
-#define FLAG_c 0
-#define FLAG_C 0
+#define FLAG_d (1<<0)
+#define FLAG_s (1<<1)
+#define FLAG_c (1<<2)
+#define FLAG_C (1<<3)
 #endif
 
 #ifdef FOR_traceroute

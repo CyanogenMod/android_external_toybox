@@ -120,6 +120,7 @@ LOCAL_SRC_FILES := \
     toys/pending/route.c \
     toys/pending/setenforce.c \
     toys/pending/top.c \
+    toys/pending/tr.c \
     toys/pending/traceroute.c \
     toys/posix/basename.c \
     toys/posix/cal.c \
@@ -158,6 +159,7 @@ LOCAL_SRC_FILES := \
     toys/posix/renice.c \
     toys/posix/rm.c \
     toys/posix/rmdir.c \
+    toys/posix/sed.c \
     toys/posix/sleep.c \
     toys/posix/sort.c \
     toys/posix/split.c \
@@ -256,6 +258,7 @@ ALL_TOOLS := \
     rm \
     rmdir \
     rmmod \
+    sed \
     seq \
     setenforce \
     setsid \
@@ -275,6 +278,7 @@ ALL_TOOLS := \
     tee \
     time \
     timeout \
+    tr \
     true \
     truncate \
     uname \
