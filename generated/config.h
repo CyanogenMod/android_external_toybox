@@ -340,8 +340,8 @@
 #define USE_DOS2UNIX(...) __VA_ARGS__
 #define CFG_EJECT 0
 #define USE_EJECT(...)
-#define CFG_FACTOR 1
-#define USE_FACTOR(...) __VA_ARGS__
+#define CFG_FACTOR 0
+#define USE_FACTOR(...)
 #define CFG_FALLOCATE 1
 #define USE_FALLOCATE(...) __VA_ARGS__
 #define CFG_FREE 1
@@ -404,8 +404,8 @@
 #define USE_PRINTENV(...) __VA_ARGS__
 #define CFG_PWDX 1
 #define USE_PWDX(...) __VA_ARGS__
-#define CFG_READAHEAD 1
-#define USE_READAHEAD(...) __VA_ARGS__
+#define CFG_READAHEAD 0
+#define USE_READAHEAD(...)
 #define CFG_READLINK 1
 #define USE_READLINK(...) __VA_ARGS__
 #define CFG_REALPATH 1

@@ -66,7 +66,6 @@ LOCAL_SRC_FILES := \
     toys/other/chvt.c \
     toys/other/clear.c \
     toys/other/dos2unix.c \
-    toys/other/factor.c \
     toys/other/fallocate.c \
     toys/other/free.c \
     toys/other/freeramdisk.c \
@@ -91,7 +90,6 @@ LOCAL_SRC_FILES := \
     toys/other/pmap.c \
     toys/other/printenv.c \
     toys/other/pwdx.c \
-    toys/other/readahead.c \
     toys/other/readlink.c \
     toys/other/realpath.c \
     toys/other/rev.c \
@@ -216,7 +214,6 @@ ALL_TOOLS := \
     egrep \
     env \
     expand \
-    factor \
     fallocate \
     false \
     fgrep \
@@ -254,7 +251,6 @@ ALL_TOOLS := \
     pmap \
     printenv \
     pwd \
-    readahead \
     readlink \
     realpath \
     rm \
