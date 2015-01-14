@@ -114,6 +114,7 @@ LOCAL_SRC_FILES := \
     toys/pending/chcon.c \
     toys/pending/dd.c \
     toys/pending/getenforce.c \
+    toys/pending/hwclock.c \
     toys/pending/more.c \
     toys/pending/ps.c \
     toys/pending/netstat.c \
@@ -187,7 +188,7 @@ LOCAL_SHARED_LIBRARIES := libselinux
 
 LOCAL_MODULE := toybox
 
-# dupes: chown cmp date df du grep id ls
+# dupes: chown cmp df du grep id ls
 #        mount nc netcat renice
 #        touch umount
 # useless?: chvt freeramdisk fsfreeze install makedevs mkfifo mktemp nbd-client
@@ -210,6 +211,7 @@ ALL_TOOLS := \
     comm \
     cp \
     cut \
+    date \
     dirname \
     dmesg \
     dos2unix \
@@ -226,6 +228,7 @@ ALL_TOOLS := \
     groups \
     head \
     hostname \
+    hwclock \
     ifconfig \
     inotifyd \
     insmod \

@@ -216,8 +216,8 @@
 #define USE_GROUPDEL(...)
 #define CFG_HOST 0
 #define USE_HOST(...)
-#define CFG_HWCLOCK 0
-#define USE_HWCLOCK(...)
+#define CFG_HWCLOCK 1
+#define USE_HWCLOCK(...) __VA_ARGS__
 #define CFG_ICONV 0
 #define USE_ICONV(...)
 #define CFG_INIT 0

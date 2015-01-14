@@ -735,7 +735,7 @@
 #undef FOR_hostname
 #endif
 
-// hwclock   >0(fast)f(rtc):u(utc)l(localtime)t(systz)w(systohc)s(hctosys)r(show)[!ul][!rsw]
+// hwclock >0(fast)f(rtc):u(utc)l(localtime)t(systz)w(systohc)s(hctosys)r(show)[!ul][!rsw] >0(fast)f(rtc):u(utc)l(localtime)t(systz)w(systohc)s(hctosys)r(show)[!ul][!rsw]
 #ifdef CLEANUP_hwclock
 #undef CLEANUP_hwclock
 #undef FOR_hwclock
@@ -2886,21 +2886,21 @@
 #ifndef TT
 #define TT this.hwclock
 #endif
-#define FLAG_show 0
-#define FLAG_r 0
-#define FLAG_hctosys 0
-#define FLAG_s 0
-#define FLAG_systohc 0
-#define FLAG_w 0
-#define FLAG_systz 0
-#define FLAG_t 0
-#define FLAG_localtime 0
-#define FLAG_l 0
-#define FLAG_utc 0
-#define FLAG_u 0
-#define FLAG_rtc 0
-#define FLAG_f 0
-#define FLAG_fast 0
+#define FLAG_show (1<<0)
+#define FLAG_r (1<<0)
+#define FLAG_hctosys (1<<1)
+#define FLAG_s (1<<1)
+#define FLAG_systohc (1<<2)
+#define FLAG_w (1<<2)
+#define FLAG_systz (1<<3)
+#define FLAG_t (1<<3)
+#define FLAG_localtime (1<<4)
+#define FLAG_l (1<<4)
+#define FLAG_utc (1<<5)
+#define FLAG_u (1<<5)
+#define FLAG_rtc (1<<6)
+#define FLAG_f (1<<6)
+#define FLAG_fast (1<<7)
 #endif
 
 #ifdef FOR_iconv
