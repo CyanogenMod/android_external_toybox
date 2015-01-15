@@ -182,13 +182,15 @@ LOCAL_CFLAGS += \
     -Wno-sign-compare \
     -Wno-uninitialized \
     -Wno-unused-parameter \
-    -funsigned-char -ffunction-sections -fdata-sections -fno-asynchronous-unwind-tables \
+    -funsigned-char \
+    -ffunction-sections -fdata-sections \
+    -fno-asynchronous-unwind-tables \
 
 LOCAL_SHARED_LIBRARIES := libselinux
 
 LOCAL_MODULE := toybox
 
-# dupes: cmp df du grep id ls mount nc netcat renice touch umount
+# dupes: df du grep id ls mount nc netcat renice touch umount
 # useless?: chvt freeramdisk fsfreeze install makedevs mkfifo mktemp nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty unshare vconfig
 # prefer efs2progs instead?: blkid chattr lsattr
@@ -208,6 +210,7 @@ ALL_TOOLS := \
     cksum \
     clear \
     comm \
+    cmp \
     cp \
     cut \
     date \
