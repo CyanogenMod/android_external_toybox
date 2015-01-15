@@ -10,7 +10,8 @@
 #undef NEWTOY
 #undef OLDTOY
 #define NEWTOY(name, opts, flags) {#name, name##_main, opts, flags},
-#define OLDTOY(name, oldname, opts, flags) {#name, oldname##_main, opts, flags},
+#define OLDTOY(name, oldname, flags) \
+  {#name, oldname##_main, OPTSTR_##oldname, flags},
 
 struct toy_list toy_list[] = {
 #include "generated/newtoys.h"
@@ -57,7 +58,7 @@ struct toy_list *toy_find(char *name)
 #undef NEWTOY
 #undef OLDTOY
 #define NEWTOY(name, opts, flags) opts ||
-#define OLDTOY(name, oldname, opts, flags) opts ||
+#define OLDTOY(name, oldname, flags) OPTSTR_##oldname ||
 static const int NEED_OPTIONS =
 #include "generated/newtoys.h"
 0;  // Ends the opts || opts || opts...
@@ -135,7 +136,6 @@ void toy_exec(char *argv[])
   // Run command
   toy_init(which, argv);
   if (toys.which) toys.which->toy_main();
-  if (fflush(NULL) || ferror(stdout)) perror_exit("write");
   xexit();
 }
 
@@ -188,8 +188,7 @@ int main(int argc, char *argv[])
     // a single toybox command built standalone with no multiplexer
     toy_singleinit(toy_list, argv);
     toy_list->toy_main();
-    if (fflush(NULL) || ferror(stdout)) perror_exit("write");
   }
 
-  return toys.exitval;
+  xexit();
 }
