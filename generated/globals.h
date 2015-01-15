@@ -188,6 +188,15 @@ struct makedevs_data {
   char *fname;
 };
 
+// toys/other/mix.c
+
+struct mix_data {
+   long right;
+   long level;
+   char *dev;
+   char *chan;
+};
+
 // toys/other/mkpasswd.c
 
 struct mkpasswd_data {
@@ -561,15 +570,6 @@ struct logger_data {
   char *ident;
 };
 
-// toys/pending/mix.c
-
-struct mix_data {
-   int right;
-   int level;
-   char *device;
-   char *mixer;
-};
-
 // toys/pending/mke2fs.c
 
 struct mke2fs_data {
@@ -649,14 +649,6 @@ struct ping_data {
   long ttl;
 
   int sock;
-};
-
-// toys/pending/printf.c
-
-struct printf_data {
-  char *hv_w;
-  char *hv_p;
-  int encountered;
 };
 
 // toys/pending/ps.c
@@ -1185,6 +1177,7 @@ extern union global_union {
 	struct losetup_data losetup;
 	struct lspci_data lspci;
 	struct makedevs_data makedevs;
+	struct mix_data mix;
 	struct mkpasswd_data mkpasswd;
 	struct modinfo_data modinfo;
 	struct netcat_data netcat;
@@ -1224,7 +1217,6 @@ extern union global_union {
 	struct klogd_data klogd;
 	struct last_data last;
 	struct logger_data logger;
-	struct mix_data mix;
 	struct mke2fs_data mke2fs;
 	struct modprobe_data modprobe;
 	struct more_data more;
@@ -1232,7 +1224,6 @@ extern union global_union {
 	struct openvt_data openvt;
 	struct pgrep_data pgrep;
 	struct ping_data ping;
-	struct printf_data printf;
 	struct ps_data ps;
 	struct route_data route;
 	struct sh_data sh;

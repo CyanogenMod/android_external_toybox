@@ -130,6 +130,8 @@
 
 #define help_mkpasswd "usage: mkpasswd [-P FD] [-m TYPE] [-S SALT] [PASSWORD] [SALT]\n\nCrypt PASSWORD using crypt(3)\n\n-P FD   Read password from file descriptor FD\n-m TYPE Encryption method (des, md5, sha256, or sha512; default is des)\n-S SALT\n\n"
 
+#define help_mix "usage: mix [-d DEV] [-c CHANNEL] [-l VOL] [-r RIGHT]\n\nList OSS sound channels (module snd-mixer-oss), or set volume(s).\n\n-c CHANNEL	Set/show volume of CHANNEL (default first channel found)\n-d DEV		Device node (default /dev/mixer)\n-l VOL		Volume level\n-r RIGHT	Volume of right stereo channel (with -r, -l sets left volume)\n\n"
+
 #define help_makedevs "usage: makedevs [-d device_table] rootdir\n\nCreate a range of special files as specified in a device table.\n\n-d	file containing device table (default reads from stdin)\n\nEach line of of the device table has the fields:\n<name> <type> <mode> <uid> <gid> <major> <minor> <start> <increment> <count>\nWhere name is the file name, and type is one of the following:\n\nb	Block device\nc	Character device\nd	Directory\nf	Regular file\np	Named pipe (fifo)\n\nOther fields specify permissions, user and group id owning the file,\nand additional fields for device special files. Use '-' for blank entries,\nunspecified fields are treated as '-'.\n\n"
 
 #define help_lsusb "usage: lsusb\n\nList USB hosts/devices.\n\n"
@@ -234,8 +236,6 @@
 
 #define help_ps "usage: ps [-o COL1,COL2=HEADER] [-T]\n\nShow list of processes\n\n-o COL1,COL2=HEADER Select columns for display\n-T      Show threads\n\n"
 
-#define help_printf "usage: printf Format [Arguments..]\n\nFormat and print ARGUMENT(s) according to FORMAT.\nFormat is 'C' control output as 'C' printf.\n\n"
-
 #define help_ping "usage: ping [OPTIONS] HOST\n\nCheck network connectivity by sending packets to a host and reporting\nits response.\n\nSend ICMP ECHO_REQUEST packets to ipv4 or ipv6 addresses and prints each\necho it receives back, with round trip time.\n\nOptions:\n-4, -6      Force IPv4 or IPv6\n-c CNT      Send CNT many packets\n-I IFACE/IP Source interface or address\n-q          Quiet, only displays output at start and when finished\n-s SIZE     Packet SIZE in bytes (default 56)\n-t TTL      Set Time (number of hops) To Live\n-W SEC      Seconds to wait for response after all packets sent (default 10)\n-w SEC      Exit after this many seconds\n\n"
 
 #define help_pgrep "usage: pgrep [-flnovx] [-s SID|-P PPID|PATTERN]\n       pkill [-l|-SIGNAL] [-fnovx] [-s SID|-P PPID|PATTERN]\n\n-l  Show command name too / List all signals\n-f  Match against entire command line\n-n  Show/Signal the newest process only\n-o  Show/Signal the oldest process only\n-v  Negate the match\n-x  Match whole name (not substring)\n-s  Match session ID (0 for current)\n-P  Match parent process ID\n\n"
@@ -261,8 +261,6 @@
 #define help_mke2fs_journal "usage: mke2fs [-j] [-J size=###,device=XXX]\n\n-j         Create journal (ext3)\n-J         Journal options\n           size: Number of blocks (1024-102400)\n           device: Specify an external journal\n\n"
 
 #define help_mke2fs "usage: mke2fs [-Fnq] [-b ###] [-N|i ###] [-m ###] device\n\nCreate an ext2 filesystem on a block device or filesystem image.\n\n-F         Force to run on a mounted device\n-n         Don't write to device\n-q         Quiet (no output)\n-b size    Block size (1024, 2048, or 4096)\n-N inodes  Allocate this many inodes\n-i bytes   Allocate one inode for every XXX bytes of device\n-m percent Reserve this percent of filesystem space for root user\n\n"
-
-#define help_mix "usage: mix [-m mixer] [-d device] [-l level / left level] [-r right level]\n\nLists/sets mixer devices/levels.\n\n"
 
 #define help_mdev_conf "The mdev config file (/etc/mdev.conf) contains lines that look like:\nhd[a-z][0-9]* 0:3 660\n\nEach line must contain three whitespace separated fields. The first\nfield is a regular expression matching one or more device names, and\nthe second and third fields are uid:gid and file permissions for\nmatching devies.\n\n"
 
@@ -304,7 +302,7 @@
 
 #define help_fdisk "usage: fdisk [-lu] [-C CYLINDERS] [-H HEADS] [-S SECTORS] [-b SECTSZ] DISK\n\nChange partition table\n\n-u            Start and End are in sectors (instead of cylinders)\n-l            Show partition table for each DISK, then exit\n-b size       sector size (512, 1024, 2048 or 4096)\n-C CYLINDERS  Set number of cylinders/heads/sectors\n-H HEADS\n-S SECTORS\n\n"
 
-#define help_expr "usage: expr args\n\nEvaluate expression and print result.\n\nThe supported operators, in order of increasing precedence, are:\n\n| & = > >= < <= != + - * / % :\n\nIn addition, parentheses () are supported for grouping.\n\n"
+#define help_expr "usage: expr ARG1 OPERATOR ARG2...\n\nEvaluate expression and print result. For example, \"expr 1 + 2\".\n\nThe supported operators are (grouped from highest to lowest priority):\n\n  ( )    :    * / %    + -    != <= < >= > =    &    |\n\nEach constant and operator must be a separate command line argument.\nAll operators are infix, meaning they expect a constant (or expression\nthat resolves to a constant) on each side of the operator. Operators of\nthe same priority (within each group above) are evaluated left to right.\nParentheses may be used (as separate arguments) to elevate the priority\nof expressions.\n\nCalling expr from a command shell requires a lot of \\( or '*' escaping\nto avoid interpreting shell control characters.\n\nThe & and | operators are logical (not bitwise) and may operate on\nstrings (a blank string is \"false\"). Comparison operators may also\noperate on strings (alphabetical sort).\n\nConstants may be strings or integers. Comparison, logical, and regex\noperators may operate on strings (a blank string is \"false\"), other\noperators require integers.\n\n"
 
 #define help_dumpleases "usage: dumpleases [-r|-a] [-f LEASEFILE]\n\nDisplay DHCP leases granted by udhcpd\n-f FILE,  Lease file\n-r        Show remaining time\n-a        Show expiration time\n\n"
 
@@ -364,7 +362,7 @@
 
 #define help_true "Return zero.\n\n"
 
-#define help_touch "usage: touch [-amc] [-d DATE] [-t TIME] [-r FILE] FILE...\n\nUpdate the access and modification times of each FILE to the current time.\n\n-a	change access time\n-m	change modification time\n-c	don't create file\n-d	set time to DATE (in YYYY-MM-DDThh:mm:SS[.frac][tz] format)\n-t	set time to TIME (in [[CC]YY]MMDDhhmm[.ss][frac] format)\n-r	set time same as reference FILE\n\n"
+#define help_touch "usage: touch [-amc] [-d DATE] [-t TIME] [-r FILE] FILE...\n\nUpdate the access and modification times of each FILE to the current time.\n\n-a	change access time\n-m	change modification time\n-c	don't create file\n-d	set time to DATE (in YYYY-MM-DDThh:mm:SS[.frac][tz] format)\n-t	set time to TIME (in [[CC]YY]MMDDhhmm[.ss] format)\n-r	set time same as reference FILE\n\n"
 
 #define help_time "usage: time [-p] COMMAND [ARGS...]\n\nRun command line and report real, user, and system time elapsed in seconds.\n(real = clock on the wall, user = cpu used by command's code,\nsystem = cpu used by OS on behalf of command.)\n\n-p	posix mode (ignored)\n\n"
 
@@ -393,6 +391,8 @@
 #define help_renice "usage: renice [-gpu] -n increment ID ...\n\n"
 
 #define help_pwd "usage: pwd [-L|-P]\n\nPrint working (current) directory.\n\n-L  Use shell's path from $PWD (when applicable)\n-P  Print cannonical absolute path\n\n"
+
+#define help_printf "usage: printf FORMAT [ARGUMENT...]\n\nFormat and print ARGUMENT(s) according to FORMAT, using C printf syntax\n(% escapes for cdeEfgGiosuxX, \\ escapes for abefnrtv0 or \\OCTAL or \\xHEX).\n\n"
 
 #define help_patch "usage: patch [-i file] [-p depth] [-Ru]\n\nApply a unified diff to one or more files.\n\n-i	Input file (defaults=stdin)\n-l	Loose match (ignore whitespace)\n-p	Number of '/' to strip from start of file paths (default=all)\n-R	Reverse patch.\n-u	Ignored (only handles \"unified\" diffs)\n\nThis version of patch only handles unified diffs, and only modifies\na file when all all hunks to that file apply.  Patch prints failed\nhunks to stderr, and exits with nonzero status if any hunks fail.\n\nA file compared against /dev/null (or with a date <= the epoch) is\ncreated/deleted as appropriate.\n\n"
 
@@ -470,7 +470,9 @@
 
 #define help_chmod "usage: chmod [-R] MODE FILE...\n\nChange mode of listed file[s] (recursively with -R).\n\nMODE can be (comma-separated) stanzas: [ugoa][+-=][rwxstXugo]\n\nStanzas are applied in order: For each category (u = user,\ng = group, o = other, a = all three, if none specified default is a),\nset (+), clear (-), or copy (=), r = read, w = write, x = execute.\ns = u+s = suid, g+s = sgid, o+s = sticky. (+t is an alias for o+s).\nsuid/sgid: execute as the user/group who owns the file.\nsticky: can't delete files you don't own out of this directory\nX = x for directories or if any category already has x set.\n\nOr MODE can be an octal value up to 7777	ug uuugggooo	top +\nbit 1 = o+x, bit 1<<8 = u+w, 1<<11 = g+1	sstrwxrwxrwx	bottom\n\nExamples:\nchmod u+w file - allow owner of \"file\" to write to it.\nchmod 744 file - user can read/write/execute, everyone else read only\n\n"
 
-#define help_chgrp "usage: chown [-RHLP] [-fvh] [owner][:group] file...\nusage: chgrp [-RHLP] [-fvh] group file...\n\nChange ownership of one or more files.\n\n-f	suppress most error messages.\n-h	change symlinks instead of what they point to\n-R	recurse into subdirectories (implies -h).\n-H	with -R change target of symlink, follow command line symlinks\n-L	with -R change target of symlink, follow all symlinks\n-P	with -R change symlink, do not follow symlinks (default)\n-v	verbose output.\n\n"
+#define help_chown "see: chgrp\n\n"
+
+#define help_chgrp "usage: chgrp/chown [-RHLP] [-fvh] group file...\n\nChange group of one or more files.\n\n-f	suppress most error messages.\n-h	change symlinks instead of what they point to\n-R	recurse into subdirectories (implies -h).\n-H	with -R change target of symlink, follow command line symlinks\n-L	with -R change target of symlink, follow all symlinks\n-P	with -R change symlink, do not follow symlinks (default)\n-v	verbose output.\n\n"
 
 #define help_cat_v "	high ascii characters (>127), and ^x for other nonprinting chars.\n\nusage: cat [-etuv] [file...]\n\nCopy (concatenate) files to stdout.  If no files listed, copy from stdin.\nFilename \"-\" is a synonym for stdin.\n\nDisplay nonprinting characters as escape sequences. Use M-x for\n\n-e	Mark each newline with $\n-t	Show tabs as ^I\n-u	Copy one byte at a time (slow).\n-v	Display nonprinting characters as escape sequences. Use M-x for\n"
 

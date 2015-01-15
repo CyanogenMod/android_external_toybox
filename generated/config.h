@@ -22,6 +22,8 @@
 #define USE_CAT_V(...) __VA_ARGS__
 #define CFG_CHGRP 1
 #define USE_CHGRP(...) __VA_ARGS__
+#define CFG_CHOWN 1
+#define USE_CHOWN(...) __VA_ARGS__
 #define CFG_CHMOD 1
 #define USE_CHMOD(...) __VA_ARGS__
 #define CFG_CKSUM 1
@@ -102,6 +104,8 @@
 #define USE_PASTE(...) __VA_ARGS__
 #define CFG_PATCH 1
 #define USE_PATCH(...) __VA_ARGS__
+#define CFG_PRINTF 0
+#define USE_PRINTF(...)
 #define CFG_PWD 1
 #define USE_PWD(...) __VA_ARGS__
 #define CFG_RENICE 1
@@ -240,8 +244,6 @@
 #define USE_MDEV(...)
 #define CFG_MDEV_CONF 0
 #define USE_MDEV_CONF(...)
-#define CFG_MIX 0
-#define USE_MIX(...)
 #define CFG_MKE2FS 0
 #define USE_MKE2FS(...)
 #define CFG_MKE2FS_JOURNAL 0
@@ -268,8 +270,6 @@
 #define USE_PGREP(...)
 #define CFG_PING 0
 #define USE_PING(...)
-#define CFG_PRINTF 0
-#define USE_PRINTF(...)
 #define CFG_PS 1
 #define USE_PS(...) __VA_ARGS__
 #define CFG_RESET 0
@@ -378,6 +378,8 @@
 #define USE_LSUSB(...) __VA_ARGS__
 #define CFG_MAKEDEVS 1
 #define USE_MAKEDEVS(...) __VA_ARGS__
+#define CFG_MIX 0
+#define USE_MIX(...)
 #define CFG_MKPASSWD 0
 #define USE_MKPASSWD(...)
 #define CFG_MKSWAP 1
