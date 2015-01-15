@@ -188,9 +188,7 @@ LOCAL_SHARED_LIBRARIES := libselinux
 
 LOCAL_MODULE := toybox
 
-# dupes: chown cmp df du grep id ls
-#        mount nc netcat renice
-#        touch umount
+# dupes: cmp df du grep id ls mount nc netcat renice touch umount
 # useless?: chvt freeramdisk fsfreeze install makedevs mkfifo mktemp nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty unshare vconfig
 # prefer efs2progs instead?: blkid chattr lsattr
@@ -205,6 +203,7 @@ ALL_TOOLS := \
     chcon \
     chgrp \
     chmod \
+    chown \
     chroot \
     cksum \
     clear \
