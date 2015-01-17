@@ -8,8 +8,6 @@
 #define USE_TOYBOX_FALLOCATE(...) __VA_ARGS__
 #define CFG_TOYBOX_UTMPX 1
 #define USE_TOYBOX_UTMPX(...) __VA_ARGS__
-#define CFG_TOYBOX_PTY 1
-#define USE_TOYBOX_PTY(...) __VA_ARGS__
 #define CFG_TOYBOX_SHADOW 1
 #define USE_TOYBOX_SHADOW(...) __VA_ARGS__
 #define CFG_BASENAME 1
@@ -70,6 +68,8 @@
 #define USE_HEAD(...) __VA_ARGS__
 #define CFG_ID 1
 #define USE_ID(...) __VA_ARGS__
+#define CFG_ID_SELINUX 1
+#define USE_ID_SELINUX(...) __VA_ARGS__
 #define CFG_GROUPS 1
 #define USE_GROUPS(...) __VA_ARGS__
 #define CFG_LOGNAME 1
@@ -496,6 +496,8 @@
 #define USE_TOYBOX(...) __VA_ARGS__
 #define CFG_TOYBOX_SUID 1
 #define USE_TOYBOX_SUID(...) __VA_ARGS__
+#define CFG_TOYBOX_SELINUX 1
+#define USE_TOYBOX_SELINUX(...) __VA_ARGS__
 #define CFG_TOYBOX_FLOAT 1
 #define USE_TOYBOX_FLOAT(...) __VA_ARGS__
 #define CFG_TOYBOX_HELP 1
