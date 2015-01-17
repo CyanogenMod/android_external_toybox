@@ -16,6 +16,8 @@
 
 #define help_toybox_float "Include floating point support infrastructure and commands that\nrequire it.\n\n"
 
+#define help_toybox_selinux "Include SELinux options in commands such as ls, and add\nSELinux-specific commands such as chcon.\n\n"
+
 #define help_toybox_suid "Support for the Set User ID bit, to install toybox suid root and drop\npermissions for commands which do not require root access. To use\nthis change ownership of the file to the root user and set the suid\nbit in the file permissions:\n\nchown root:root toybox; chmod +s toybox\n\n"
 
 #define help_toybox "usage: toybox [--long | [command] [arguments...]]\n\nWith no arguments, shows available commands. First argument is\nname of a command to run, followed by any arguments to that command.\n\n--long	Show path to each command\n\nTo install command symlinks, try:\n  for i in $(/bin/toybox --long); do ln -s /bin/toybox $i; done\n\n"
@@ -428,7 +430,7 @@
 
 #define help_groups "usage: groups [user]\n\nPrint the groups a user is in.\n\n"
 
-#define help_id "usage: id [-nGgru]\n\nPrint user and group ID.\n\n-n	print names instead of numeric IDs (to be used with -Ggu)\n-G	Show only the group IDs\n-g	Show only the effective group ID\n-r	Show real ID instead of effective ID\n-u	Show only the effective user ID\n\n"
+#define help_id "usage: id [-GZgnru] \n\nPrint user and group ID.\n-G	Show only the group IDs\n-Z Show only SELinux context\n-g	Show only the effective group ID\n-n	print names instead of numeric IDs (to be used with -Ggu)\n-r	Show real ID instead of effective ID\n-u	Show only the effective user ID\n"
 
 #define help_head "usage: head [-n number] [file...]\n\nCopy first lines from files to stdout. If no files listed, copy from\nstdin. Filename \"-\" is a synonym for stdin.\n\n-n	Number of lines to copy.\n\n"
 

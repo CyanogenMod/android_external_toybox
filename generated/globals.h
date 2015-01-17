@@ -956,7 +956,7 @@ struct head_data {
 // toys/posix/id.c
 
 struct id_data {
-  int do_u, do_n, do_G, is_groups;
+  int do_u, do_n, do_G, do_Z, is_groups;
 };
 
 // toys/posix/kill.c

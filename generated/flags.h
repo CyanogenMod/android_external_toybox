@@ -159,9 +159,9 @@
 #undef FOR_chattr
 #endif
 
-// chcon hRv hRv
+// chcon <1hRv <1hRv
 #undef OPTSTR_chcon
-#define OPTSTR_chcon "hRv"
+#define OPTSTR_chcon "<1hRv"
 #ifdef CLEANUP_chcon
 #undef CLEANUP_chcon
 #undef FOR_chcon
@@ -928,9 +928,9 @@
 #undef FLAG_c
 #endif
 
-// id >1nGgru[!Ggu] >1nGgru[!Ggu]
+// id >1ZnGgru[!ZGgu] >1ZnGgru[!ZGgu]
 #undef OPTSTR_id
-#define OPTSTR_id ">1nGgru[!Ggu]"
+#define OPTSTR_id ">1ZnGgru[!ZGgu]"
 #ifdef CLEANUP_id
 #undef CLEANUP_id
 #undef FOR_id
@@ -939,6 +939,7 @@
 #undef FLAG_g
 #undef FLAG_G
 #undef FLAG_n
+#undef FLAG_Z
 #endif
 
 // ifconfig ^?a ^?a
@@ -3380,6 +3381,7 @@
 #define FLAG_g (1<<2)
 #define FLAG_G (1<<3)
 #define FLAG_n (1<<4)
+#define FLAG_Z (1<<5)
 #endif
 
 #ifdef FOR_ifconfig
