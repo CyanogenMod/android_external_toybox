@@ -190,7 +190,7 @@ LOCAL_SHARED_LIBRARIES := libselinux
 
 LOCAL_MODULE := toybox
 
-# dupes: df du grep id ls mount nc netcat renice touch umount
+# dupes: df du grep ls mount nc netcat renice touch umount
 # useless?: chvt freeramdisk fsfreeze install makedevs mkfifo mktemp nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty unshare vconfig
 # prefer efs2progs instead?: blkid chattr lsattr
@@ -231,6 +231,7 @@ ALL_TOOLS := \
     head \
     hostname \
     hwclock \
+    id \
     ifconfig \
     inotifyd \
     insmod \
