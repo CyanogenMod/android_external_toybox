@@ -40,8 +40,8 @@
 #define USE_MV_MORE(...) __VA_ARGS__
 #define CFG_INSTALL 1
 #define USE_INSTALL(...) __VA_ARGS__
-#define CFG_CPIO 0
-#define USE_CPIO(...)
+#define CFG_CPIO 1
+#define USE_CPIO(...) __VA_ARGS__
 #define CFG_CUT 1
 #define USE_CUT(...) __VA_ARGS__
 #define CFG_DATE 1

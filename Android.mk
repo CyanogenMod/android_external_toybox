@@ -132,6 +132,7 @@ LOCAL_SRC_FILES := \
     toys/posix/cmp.c \
     toys/posix/comm.c \
     toys/posix/cp.c \
+    toys/posix/cpio.c \
     toys/posix/cut.c \
     toys/posix/date.c \
     toys/posix/df.c \
@@ -212,6 +213,7 @@ ALL_TOOLS := \
     comm \
     cmp \
     cp \
+    cpio \
     cut \
     date \
     dirname \
