@@ -191,7 +191,7 @@ LOCAL_SHARED_LIBRARIES := libselinux
 LOCAL_MODULE := toybox
 
 # dupes: df du ls mount nc netcat renice touch umount
-# useless?: chvt freeramdisk fsfreeze install makedevs mkfifo mktemp nbd-client
+# useless?: chvt freeramdisk fsfreeze install makedevs mkfifo nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty vconfig
 # prefer efs2progs instead?: blkid chattr lsattr
 
@@ -246,6 +246,7 @@ ALL_TOOLS := \
     mkdir \
     mknod \
     mkswap \
+    mktemp \
     modinfo \
     more \
     mountpoint \
