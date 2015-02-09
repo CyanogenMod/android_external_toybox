@@ -190,9 +190,10 @@ LOCAL_SHARED_LIBRARIES := libselinux
 
 LOCAL_MODULE := toybox
 
-# dupes: df du ls mount nc netcat renice touch umount
+# dupes: dd df du ls mount renice umount
 # useless?: chvt freeramdisk fsfreeze install makedevs mkfifo nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty vconfig
+# prefer BSD netcat instead?: nc netcat
 # prefer efs2progs instead?: blkid chattr lsattr
 
 ALL_TOOLS := \
@@ -287,6 +288,7 @@ ALL_TOOLS := \
     tee \
     time \
     timeout \
+    touch \
     tr \
     true \
     truncate \
