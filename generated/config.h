@@ -170,8 +170,6 @@
 #define USE_BOOTCHARTD(...)
 #define CFG_BRCTL 0
 #define USE_BRCTL(...)
-#define CFG_CHCON 1
-#define USE_CHCON(...) __VA_ARGS__
 #define CFG_COMPRESS 0
 #define USE_COMPRESS(...)
 #define CFG_GZIP 0
@@ -260,8 +258,6 @@
 #define USE_MORE(...) __VA_ARGS__
 #define CFG_NETSTAT 1
 #define USE_NETSTAT(...) __VA_ARGS__
-#define CFG_NSENTER 0
-#define USE_NSENTER(...)
 #define CFG_OPENVT 0
 #define USE_OPENVT(...)
 #define CFG_DEALLOCVT 0
@@ -328,6 +324,8 @@
 #define USE_BLOCKDEV(...) __VA_ARGS__
 #define CFG_BZCAT 1
 #define USE_BZCAT(...) __VA_ARGS__
+#define CFG_CHCON 1
+#define USE_CHCON(...) __VA_ARGS__
 #define CFG_CHROOT 1
 #define USE_CHROOT(...) __VA_ARGS__
 #define CFG_CHVT 1
@@ -394,6 +392,10 @@
 #define USE_NETCAT(...) __VA_ARGS__
 #define CFG_NETCAT_LISTEN 1
 #define USE_NETCAT_LISTEN(...) __VA_ARGS__
+#define CFG_UNSHARE 0
+#define USE_UNSHARE(...)
+#define CFG_NSENTER 0
+#define USE_NSENTER(...)
 #define CFG_ONEIT 0
 #define USE_ONEIT(...)
 #define CFG_PARTPROBE 1
@@ -442,8 +444,6 @@
 #define USE_TIMEOUT(...) __VA_ARGS__
 #define CFG_TRUNCATE 1
 #define USE_TRUNCATE(...) __VA_ARGS__
-#define CFG_UNSHARE 1
-#define USE_UNSHARE(...) __VA_ARGS__
 #define CFG_UPTIME 0
 #define USE_UPTIME(...)
 #define CFG_USLEEP 1

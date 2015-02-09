@@ -62,6 +62,7 @@ LOCAL_SRC_FILES := \
     toys/other/blkid.c \
     toys/other/blockdev.c \
     toys/other/bzcat.c \
+    toys/other/chcon.c \
     toys/other/chroot.c \
     toys/other/chvt.c \
     toys/other/clear.c \
@@ -105,13 +106,11 @@ LOCAL_SRC_FILES := \
     toys/other/taskset.c \
     toys/other/timeout.c \
     toys/other/truncate.c \
-    toys/other/unshare.c \
     toys/other/usleep.c \
     toys/other/vconfig.c \
     toys/other/vmstat.c \
     toys/other/which.c \
     toys/other/yes.c \
-    toys/pending/chcon.c \
     toys/pending/dd.c \
     toys/pending/getenforce.c \
     toys/pending/hwclock.c \
@@ -193,7 +192,7 @@ LOCAL_MODULE := toybox
 
 # dupes: df du ls mount nc netcat renice touch umount
 # useless?: chvt freeramdisk fsfreeze install makedevs mkfifo mktemp nbd-client
-#           partprobe pivot_root pwdx rev rfkill switch_root tty unshare vconfig
+#           partprobe pivot_root pwdx rev rfkill switch_root tty vconfig
 # prefer efs2progs instead?: blkid chattr lsattr
 
 ALL_TOOLS := \

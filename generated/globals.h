@@ -57,7 +57,7 @@ struct md5sum_data {
 // toys/lsb/mktemp.c
 
 struct mktemp_data {
-  char * tmpdir;
+  char *tmpdir;
 };
 
 // toys/lsb/mount.c
@@ -225,6 +225,13 @@ struct netcat_data {
   long wait;             // -w Wait # seconds for a connection.
 };
 
+// toys/other/nsenter.c
+
+struct nsenter_data {
+  char *nsnames[6];
+  long targetpid;
+};
+
 // toys/other/oneit.c
 
 struct oneit_data {
@@ -333,12 +340,6 @@ struct bootchartd_data {
 
 struct brctl_data {
     int sockfd;
-};
-
-// toys/pending/chcon.c
-
-struct chcon_data {
-  char *context;
 };
 
 // toys/pending/compress.c
@@ -615,13 +616,6 @@ struct modprobe_data {
 struct more_data {
   struct termios inf;
   int cin_fd;
-};
-
-// toys/pending/nsenter.c
-
-struct nsenter_data {
-  char *nsnames[6];
-  long targetpid;
 };
 
 // toys/pending/openvt.c
@@ -1181,6 +1175,7 @@ extern union global_union {
 	struct mkpasswd_data mkpasswd;
 	struct modinfo_data modinfo;
 	struct netcat_data netcat;
+	struct nsenter_data nsenter;
 	struct oneit_data oneit;
 	struct shred_data shred;
 	struct stat_data stat;
@@ -1192,7 +1187,6 @@ extern union global_union {
 	struct arping_data arping;
 	struct bootchartd_data bootchartd;
 	struct brctl_data brctl;
-	struct chcon_data chcon;
 	struct compress_data compress;
 	struct crond_data crond;
 	struct crontab_data crontab;
@@ -1220,7 +1214,6 @@ extern union global_union {
 	struct mke2fs_data mke2fs;
 	struct modprobe_data modprobe;
 	struct more_data more;
-	struct nsenter_data nsenter;
 	struct openvt_data openvt;
 	struct pgrep_data pgrep;
 	struct ping_data ping;

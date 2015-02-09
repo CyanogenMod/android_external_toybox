@@ -159,14 +159,14 @@
 #undef FOR_chattr
 #endif
 
-// chcon <1hRv <1hRv
+// chcon <2hvR <2hvR
 #undef OPTSTR_chcon
-#define OPTSTR_chcon "<1hRv"
+#define OPTSTR_chcon "<2hvR"
 #ifdef CLEANUP_chcon
 #undef CLEANUP_chcon
 #undef FOR_chcon
-#undef FLAG_v
 #undef FLAG_R
+#undef FLAG_v
 #undef FLAG_h
 #endif
 
@@ -1501,7 +1501,7 @@
 #undef FOR_nohup
 #endif
 
-// nsenter   <1F(no-fork)t#(target)i:(ipc);m:(mount);n:(net);p:(pid);u:(uts);U:(user);
+// nsenter   <1F(no-fork)t#<1(target)i:(ipc);m:(mount);n:(net);p:(pid);u:(uts);U:(user);
 #undef OPTSTR_nsenter
 #define OPTSTR_nsenter  0 
 #ifdef CLEANUP_nsenter
@@ -2272,12 +2272,13 @@
 #undef FLAG_d
 #endif
 
-// touch acd:mr:t:[!dtr] acd:mr:t:[!dtr]
+// touch acd:mr:t:h[!dtr] acd:mr:t:h[!dtr]
 #undef OPTSTR_touch
-#define OPTSTR_touch "acd:mr:t:[!dtr]"
+#define OPTSTR_touch "acd:mr:t:h[!dtr]"
 #ifdef CLEANUP_touch
 #undef CLEANUP_touch
 #undef FOR_touch
+#undef FLAG_h
 #undef FLAG_t
 #undef FLAG_r
 #undef FLAG_m
@@ -2417,9 +2418,9 @@
 #undef FOR_unlink
 #endif
 
-// unshare <1^imnpuU <1^imnpuU
+// unshare   <1^imnpuU
 #undef OPTSTR_unshare
-#define OPTSTR_unshare "<1^imnpuU"
+#define OPTSTR_unshare  0 
 #ifdef CLEANUP_unshare
 #undef CLEANUP_unshare
 #undef FOR_unshare
@@ -2729,8 +2730,8 @@
 #ifndef TT
 #define TT this.chcon
 #endif
-#define FLAG_v (1<<0)
-#define FLAG_R (1<<1)
+#define FLAG_R (1<<0)
+#define FLAG_v (1<<1)
 #define FLAG_h (1<<2)
 #endif
 
@@ -4494,12 +4495,13 @@
 #ifndef TT
 #define TT this.touch
 #endif
-#define FLAG_t (1<<0)
-#define FLAG_r (1<<1)
-#define FLAG_m (1<<2)
-#define FLAG_d (1<<3)
-#define FLAG_c (1<<4)
-#define FLAG_a (1<<5)
+#define FLAG_h (1<<0)
+#define FLAG_t (1<<1)
+#define FLAG_r (1<<2)
+#define FLAG_m (1<<3)
+#define FLAG_d (1<<4)
+#define FLAG_c (1<<5)
+#define FLAG_a (1<<6)
 #endif
 
 #ifdef FOR_toybox
@@ -4617,12 +4619,12 @@
 #ifndef TT
 #define TT this.unshare
 #endif
-#define FLAG_U (1<<0)
-#define FLAG_u (1<<1)
-#define FLAG_p (1<<2)
-#define FLAG_n (1<<3)
-#define FLAG_m (1<<4)
-#define FLAG_i (1<<5)
+#define FLAG_U (FORCED_FLAG<<0)
+#define FLAG_u (FORCED_FLAG<<1)
+#define FLAG_p (FORCED_FLAG<<2)
+#define FLAG_n (FORCED_FLAG<<3)
+#define FLAG_m (FORCED_FLAG<<4)
+#define FLAG_i (FORCED_FLAG<<5)
 #endif
 
 #ifdef FOR_uptime

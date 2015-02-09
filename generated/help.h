@@ -42,7 +42,7 @@
 
 #define help_mount "usage: mount [-afFrsvw] [-t TYPE] [-o OPTIONS...] [[DEVICE] DIR]\n\nMount new filesystem(s) on directories. With no arguments, display existing\nmounts.\n\n-a	mount all entries in /etc/fstab (with -t, only entries of that TYPE)\n-O	only mount -a entries that have this option\n-f	fake it (don't actually mount)\n-r	read only (same as -o ro)\n-w	read/write (default, same as -o rw)\n-t	specify filesystem type\n-v	verbose\n\nOPTIONS is a comma separated list of options, which can also be supplied\nas --longopts.\n\nThis mount autodetects loopback mounts (a file on a directory) and\nbind mounts (file on file, directory on directory), so you don't need\nto say --bind or --loop. You can also \"mount -a /path\" to mount everything\nin /etc/fstab under /path, even if it's noauto.\n\n\n"
 
-#define help_mktemp "usage: mktemp [-dq] [-p DIR] [TEMPLATE]\n\nSafely create new file and print its name. Default TEMPLATE is\n/tmp/tmp.XXXXXX and each trailing X is replaced with random char.\n\n-d, --directory        Create directory instead of file\n-p DIR, --tmpdir=DIR   Put new file in DIR\n-q                     Quiet\n\n"
+#define help_mktemp "usage: mktemp [-dq] [-p DIR] [TEMPLATE]\n\nSafely create a new file \"DIR/TEMPLATE\" and print its name.\n\n-d	Create directory instead of file (--directory)\n-p	Put new file in DIR (--tmpdir)\n-q	Quiet, no error messages\n\nEach X in TEMPLATE is replaced with a random printable character. The\ndefault TEMPLATE is tmp.XXXXXX, and the default DIR is $TMPDIR if set,\nelse \"/tmp\".\n\n"
 
 #define help_mknod "usage: mknod NAME TYPE [MAJOR MINOR]\n\nCreate a special file NAME with a given type, possible types are\nb	block device\nc or u	character device\np	named pipe (ignores MAJOR/MINOR)\n\n"
 
@@ -69,8 +69,6 @@
 #define help_usleep "usage: usleep MICROSECONDS\n\nPause for MICROSECONDS microseconds.\n\n"
 
 #define help_uptime "usage: uptime\n\nTell how long the system has been running and the system load\naverages for the past 1, 5 and 15 minutes.\n\n"
-
-#define help_unshare "usage: unshare [-imnpuU] COMMAND...\n\nCreate new namespace(s) for this process and its children, so some\nattribute is not shared with the parent process.  This is part of\nLinux Containers.  Each process can have its own:\n\n-i	SysV IPC (message queues, semaphores, shared memory)\n-m	Mount/unmount tree\n-n	Network address, sockets, routing, iptables\n-p	Process IDs and init\n-u	Host and domain names\n-U	UIDs, GIDs, capabilities\n\n"
 
 #define help_truncate "usage: truncate [-c] -s file...\n\nSet length of file(s), extending sparsely if necessary.\n\n-c	Don't create file if it doesn't exist.\n-s	New size\n\n"
 
@@ -119,6 +117,10 @@
 #define help_partprobe "usage: partprobe DEVICE...\n\nTell the kernel about partition table changes\n\nAsk the kernel to re-read the partition table on the specified devices.\n\n"
 
 #define help_oneit "usage: oneit [-p] [-c /dev/tty0] command [...]\n\nA simple init program that runs a single supplied command line with a\ncontrolling tty (so CTRL-C can kill it).\n\n-p	Power off instead of rebooting when command exits.\n-c	Which console device to use.\n\nThe oneit command runs the supplied command line as a child process\n(because PID 1 has signals blocked), attached to /dev/tty0, in its\nown session. Then oneit reaps zombies until the child exits, at\nwhich point it reboots (or with -p, powers off) the system.\n\n"
+
+#define help_nsenter "usage: nsenter [-t pid] [-F] [-i] [-m] [-n] [-p] [-u] [-U] COMMAND...\n\nRun COMMAND in a different set of namespaces.\n\n-t  PID to take namespaces from    (--target)\n-F  don't fork, even if -p is used (--no-fork)\n\nThe namespaces to switch are:\n\n-i	SysV IPC: message queues, semaphores, shared memory (--ipc)\n-m	Mount/unmount tree (--mnt)\n-n	Network address, sockets, routing, iptables (--net)\n-p	Process IDs and init, will fork unless -F is used (--pid)\n-u	Host and domain names (--uts)\n-U	UIDs, GIDs, capabilities (--user)\n\nIf -t isn't specified, each namespace argument must provide a path\nto a namespace file, ala \"-i=/proc/$PID/ns/ipc\"\n\n"
+
+#define help_unshare "usage: unshare [-imnpuU] COMMAND...\n\nCreate new namespace(s) for this process and its children, so some\nattribute is not shared with the parent process.  This is part of\nLinux Containers.  Each process can have its own:\n\n-i	SysV IPC (message queues, semaphores, shared memory)\n-m	Mount/unmount tree\n-n	Network address, sockets, routing, iptables\n-p	Process IDs and init\n-u	Host and domain names\n-U	UIDs, GIDs, capabilities\n\n"
 
 #define help_netcat "usage: netcat [-tu] [-lL COMMAND...] [-wpq #] [-s addr] {IPADDR PORTNUM|-f FILENAME}\n\n-L	listen for multiple incoming connections (server mode).\n-f	use FILENAME (ala /dev/ttyS0) instead of network\n-l	listen for one incoming connection.\n-p	local port number\n-q	SECONDS quit this many seconds after EOF on stdin.\n-s	local ipv4 address\n-t	allocate tty (must come before -l or -L)\n-w	SECONDS timeout for connection\n\nUse \"stty 115200 -F /dev/ttyS0 && stty raw -echo -ctlecho\" with\nnetcat -f to connect to a serial port.\n\nThe command line after -l or -L is executed to handle each incoming\nconnection. If none, the connection is forwarded to stdin/stdout.\n\nFor a quick-and-dirty server, try something like:\nnetcat -s 127.0.0.1 -p 1234 -tL /bin/bash -l\n"
 
@@ -179,6 +181,8 @@
 #define help_chvt "usage: chvt N\n\nChange to virtual terminal number N. (This only works in text mode.)\n\nVirtual terminals are the Linux VGA text mode displays, ordinarily\nswitched between via alt-F1, alt-F2, etc. Use ctrl-alt-F1 to switch\nfrom X to a virtual terminal, and alt-F6 (or F7, or F8) to get back.\n\n"
 
 #define help_chroot "usage: chroot NEWPATH [commandline...]\n\nRun command within a new root directory. If no command, run /bin/sh.\n\n"
+
+#define help_chcon "usage: chcon [-hRv] CONTEXT FILE...\n\nChange the SELinux security context of listed file[s].\n\n-h change symlinks instead of what they point to.\n-R recurse into subdirectories.\n-v verbose output.\n\n"
 
 #define help_bzcat "usage: bzcat [filename...]\n\nDecompress listed files to stdout. Use stdin if no files listed.\n\n"
 
@@ -245,8 +249,6 @@
 #define help_deallocvt "usage: deallocvt [N]\n\nDeallocate unused virtual terminal /dev/ttyN, or all unused consoles.\n\n"
 
 #define help_openvt "usage: openvt [-c N] [-sw] [command [command_options]]\n\nstart a program on a new virtual terminal (VT)\n\n-c N  Use VT N\n-s    Switch to new VT\n-w    Wait for command to exit\n\nif -sw used together, switch back to originating VT when command completes\n\n"
-
-#define help_nsenter "usage: nsenter [-t pid] [-F] [-i] [-m] [-n] [-p] [-u] [-U] COMMAND...\n\nRun COMMAND in a different set of namespaces.\n\n-T  PID to take namespaces from\n-F  don't fork, even if -p is set\n\nThe namespaces to switch are:\n\n-i	SysV IPC (message queues, semaphores, shared memory)\n-m	Mount/unmount tree\n-n	Network address, sockets, routing, iptables\n-p	Process IDs and init (will fork unless -F is used)\n-u	Host and domain names\n-U	UIDs, GIDs, capabilities\n\nEach of those options takes an optional argument giving the path of\nthe namespace file (usually in /proc).  This optional argument is\nmandatory unless -t is used.\n\n"
 
 #define help_netstat "usage: netstat [-pWrxwutneal]\n\nDisplay networking information.\n\n-r  Display routing table.\n-a  Display all sockets (Default: Connected).\n-l  Display listening server sockets.\n-t  Display TCP sockets.\n-u  Display UDP sockets.\n-w  Display Raw sockets.\n-x  Display Unix sockets.\n-e  Display other/more information.\n-n  Don't resolve names.\n-W  Wide Display.\n-p  Display PID/Program name for sockets.\n\n"
 
@@ -332,8 +334,6 @@
 
 #define help_compress "usage: compress [-zgLR19] [FILE]\n\nCompress or decompress file (or stdin) using \"deflate\" algorithm.\n\n-1	min compression\n-9	max compression (default)\n-g	gzip (default)\n-L	zlib\n-R	raw\n-z	zip\n\n"
 
-#define help_chcon "usage: chcon [-hRv] CONTEXT FILE...\n\nChange the SELinux security context of listed file[s] (recursively with -R).\n\n-h change symlinks instead of what they point to.\n-R recurse into subdirectories.\n-v verbose output.\n\n"
-
 #define help_brctl "usage: brctl COMMAND [BRIDGE [INTERFACE]]\n\nManage ethernet bridges\n\nCommands:\nshow                  Show a list of bridges\naddbr BRIDGE          Create BRIDGE\ndelbr BRIDGE          Delete BRIDGE\naddif BRIDGE IFACE    Add IFACE to BRIDGE\ndelif BRIDGE IFACE    Delete IFACE from BRIDGE\nsetageing BRIDGE TIME Set ageing time\nsetfd BRIDGE TIME     Set bridge forward delay\nsethello BRIDGE TIME  Set hello time\nsetmaxage BRIDGE TIME Set max message age\nsetpathcost BRIDGE PORT COST   Set path cost\nsetportprio BRIDGE PORT PRIO   Set port priority\nsetbridgeprio BRIDGE PRIO      Set bridge priority\nstp BRIDGE [1/yes/on|0/no/off] STP on/off\n\n"
 
 #define help_bootchartd "usage: bootchartd {start [PROG ARGS]}|stop|init\n\nCreate /var/log/bootlog.tgz with boot chart data\n\nstart: start background logging; with PROG, run PROG,\n       then kill logging with USR1\nstop:  send USR1 to all bootchartd processes\ninit:  start background logging; stop when getty/xdm is seen\n      (for init scripts)\n\nUnder PID 1: as init, then exec $bootchart_init, /init, /sbin/init\n\n"
@@ -364,7 +364,7 @@
 
 #define help_true "Return zero.\n\n"
 
-#define help_touch "usage: touch [-amc] [-d DATE] [-t TIME] [-r FILE] FILE...\n\nUpdate the access and modification times of each FILE to the current time.\n\n-a	change access time\n-m	change modification time\n-c	don't create file\n-d	set time to DATE (in YYYY-MM-DDThh:mm:SS[.frac][tz] format)\n-t	set time to TIME (in [[CC]YY]MMDDhhmm[.ss] format)\n-r	set time same as reference FILE\n\n"
+#define help_touch "usage: touch [-amch] [-d DATE] [-t TIME] [-r FILE] FILE...\n\nUpdate the access and modification times of each FILE to the current time.\n\n-a	change access time\n-m	change modification time\n-c	don't create file\n-h	change symlink\n-d	set time to DATE (in YYYY-MM-DDThh:mm:SS[.frac][tz] format)\n-t	set time to TIME (in [[CC]YY]MMDDhhmm[.ss][frac] format)\n-r	set time same as reference FILE\n\n"
 
 #define help_time "usage: time [-p] COMMAND [ARGS...]\n\nRun command line and report real, user, and system time elapsed in seconds.\n(real = clock on the wall, user = cpu used by command's code,\nsystem = cpu used by OS on behalf of command.)\n\n-p	posix mode (ignored)\n\n"
 
