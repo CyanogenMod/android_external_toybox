@@ -294,7 +294,6 @@ void bootchartd_main()
       putenv("PATH=/sbin:/usr/sbin:/bin:/usr/bin");
     start_logging();
     stop_logging(tmp_dir, bchartd_opt == 1 ? toys.optargs[1] : NULL);
-    free(tmp_dir);
     return;
   } 
   waitpid(lgr_pid, NULL, WUNTRACED);
@@ -310,7 +309,7 @@ void bootchartd_main()
   if (bchartd_opt == 1 && toys.optargs[1]) { 
     pid_t prog_pid;
 
-    if (!(prog_pid = xfork())) xexec_optargs(1);
+    if (!(prog_pid = xfork())) xexec(toys.optargs+1);
     waitpid(prog_pid, NULL, 0);
     kill(lgr_pid, SIGUSR1);
   }

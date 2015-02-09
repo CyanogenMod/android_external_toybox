@@ -12,41 +12,39 @@ config MKTEMP
   help
     usage: mktemp [-dq] [-p DIR] [TEMPLATE]
 
-    Safely create new file and print its name. Default TEMPLATE is
-    /tmp/tmp.XXXXXX and each trailing X is replaced with random char.
+    Safely create a new file "DIR/TEMPLATE" and print its name.
 
-    -d, --directory        Create directory instead of file
-    -p DIR, --tmpdir=DIR   Put new file in DIR
-    -q                     Quiet
+    -d	Create directory instead of file (--directory)
+    -p	Put new file in DIR (--tmpdir)
+    -q	Quiet, no error messages
+
+    Each X in TEMPLATE is replaced with a random printable character. The
+    default TEMPLATE is tmp.XXXXXX, and the default DIR is $TMPDIR if set,
+    else "/tmp".
 */
 
 #define FOR_mktemp
 #include "toys.h"
 
 GLOBALS(
-  char * tmpdir;
+  char *tmpdir;
 )
 
 void mktemp_main(void)
 {
-  int  d_flag = toys.optflags & FLAG_d;
-  char *tmp;
+  int d_flag = toys.optflags & FLAG_d;
+  char *template = *toys.optargs;
 
-  tmp = *toys.optargs;
+  if (!template) template = "tmp.XXXXXX";
 
-  if (!tmp) {
-    if (!TT.tmpdir) TT.tmpdir = "/tmp";
-    tmp = "tmp.xxxxxx";
-  }
-  if (TT.tmpdir) tmp = xmprintf("%s/%s", TT.tmpdir ? TT.tmpdir : "/tmp",
-    *toys.optargs ? *toys.optargs : "tmp.XXXXXX");
+  if (!TT.tmpdir) TT.tmpdir = getenv("TMPDIR");
+  if (!TT.tmpdir) TT.tmpdir = "/tmp";
 
-  if (d_flag ? mkdtemp(tmp) == NULL : mkstemp(tmp) == -1)
-    if (toys.optflags & FLAG_q)
-      perror_exit("Failed to create temporary %s",
-        d_flag ? "directory" : "file");
+  snprintf(toybuf, sizeof(toybuf), "%s/%s", TT.tmpdir, template);
 
-  xputs(tmp);
-
-  if (CFG_TOYBOX_FREE && TT.tmpdir) free(tmp);
+  if (d_flag ? !mkdtemp(toybuf) : mkstemp(toybuf) == -1) {
+    if (toys.optflags & FLAG_q) toys.exitval = 1;
+    else perror_exit("Failed to create %s %s/%s",
+                     d_flag ? "directory" : "file", TT.tmpdir, template);
+  } else xputs(toybuf);
 }
