@@ -4,7 +4,7 @@
  *
  * http://refspecs.linuxfoundation.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic/mktemp.html
 
-USE_MKTEMP(NEWTOY(mktemp, ">1q(directory)d(tmpdir)p:", TOYFLAG_BIN))
+USE_MKTEMP(NEWTOY(mktemp, ">1qd(directory)p(tmpdir):", TOYFLAG_BIN))
 
 config MKTEMP
   bool "mktemp"
@@ -40,11 +40,14 @@ void mktemp_main(void)
   if (!TT.tmpdir) TT.tmpdir = getenv("TMPDIR");
   if (!TT.tmpdir) TT.tmpdir = "/tmp";
 
-  snprintf(toybuf, sizeof(toybuf), "%s/%s", TT.tmpdir, template);
+  template = strchr(template, '/') ? xstrdup(template)
+             : xmprintf("%s/%s", TT.tmpdir, template);
 
-  if (d_flag ? !mkdtemp(toybuf) : mkstemp(toybuf) == -1) {
+  if (d_flag ? !mkdtemp(template) : mkstemp(template) == -1) {
     if (toys.optflags & FLAG_q) toys.exitval = 1;
     else perror_exit("Failed to create %s %s/%s",
                      d_flag ? "directory" : "file", TT.tmpdir, template);
-  } else xputs(toybuf);
+  } else xputs(template);
+
+  if (CFG_TOYBOX_FREE) free(template);
 }
