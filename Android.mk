@@ -112,6 +112,7 @@ LOCAL_SRC_FILES := \
     toys/other/which.c \
     toys/other/yes.c \
     toys/pending/dd.c \
+    toys/pending/expr.c \
     toys/pending/getenforce.c \
     toys/pending/hwclock.c \
     toys/pending/more.c \
@@ -119,6 +120,7 @@ LOCAL_SRC_FILES := \
     toys/pending/netstat.c \
     toys/pending/route.c \
     toys/pending/setenforce.c \
+    toys/pending/tar.c \
     toys/pending/top.c \
     toys/pending/tr.c \
     toys/pending/traceroute.c \
@@ -222,6 +224,7 @@ ALL_TOOLS := \
     echo \
     env \
     expand \
+    expr \
     fallocate \
     false \
     find \
@@ -284,6 +287,7 @@ ALL_TOOLS := \
     sysctl \
     tac \
     tail \
+    tar \
     taskset \
     tee \
     time \

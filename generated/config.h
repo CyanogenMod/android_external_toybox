@@ -202,8 +202,8 @@
 #define USE_DIFF(...)
 #define CFG_DUMPLEASES 0
 #define USE_DUMPLEASES(...)
-#define CFG_EXPR 0
-#define USE_EXPR(...)
+#define CFG_EXPR 1
+#define USE_EXPR(...) __VA_ARGS__
 #define CFG_FDISK 0
 #define USE_FDISK(...)
 #define CFG_FOLD 0
@@ -290,8 +290,8 @@
 #define USE_SULOGIN(...)
 #define CFG_SYSLOGD 0
 #define USE_SYSLOGD(...)
-#define CFG_TAR 0
-#define USE_TAR(...)
+#define CFG_TAR 1
+#define USE_TAR(...) __VA_ARGS__
 #define CFG_TCPSVD 0
 #define USE_TCPSVD(...)
 #define CFG_TELNET 0
