@@ -64,6 +64,10 @@
 #define USE_FIND(...) __VA_ARGS__
 #define CFG_GREP 1
 #define USE_GREP(...) __VA_ARGS__
+#define CFG_EGREP 1
+#define USE_EGREP(...) __VA_ARGS__
+#define CFG_FGREP 1
+#define USE_FGREP(...) __VA_ARGS__
 #define CFG_HEAD 1
 #define USE_HEAD(...) __VA_ARGS__
 #define CFG_ID 1
@@ -336,6 +340,8 @@
 #define USE_COUNT(...)
 #define CFG_DOS2UNIX 1
 #define USE_DOS2UNIX(...) __VA_ARGS__
+#define CFG_UNIX2DOS 1
+#define USE_UNIX2DOS(...) __VA_ARGS__
 #define CFG_EJECT 0
 #define USE_EJECT(...)
 #define CFG_FACTOR 0

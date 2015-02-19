@@ -172,7 +172,9 @@
 
 #define help_eject "usage: eject [-stT] [DEVICE]\n\nEject DEVICE or default /dev/cdrom\n\n-s	SCSI device\n-t	Close tray\n-T	Open/close tray (toggle).\n\n"
 
-#define help_dos2unix "usage: dos2unix/unix2dos [file...]\n\nConvert newline format between dos (\\r\\n) and unix (just \\n)\nIf no files listed copy from stdin, \"-\" is a synonym for stdin.\n\n"
+#define help_unix2dos "usage: unix2dos [FILE...]\n\nConvert newline format from unix \"\\n\" to dos \"\\r\\n\".\nIf no files listed copy from stdin, \"-\" is a synonym for stdin.\n\n"
+
+#define help_dos2unix "usage: dos2unix [FILE...]\n\nConvert newline format from dos \"\\r\\n\" to unix \"\\n\".\nIf no files listed copy from stdin, \"-\" is a synonym for stdin.\n\n"
 
 #define help_count "usage: count\n\nCopy stdin to stdout, displaying simple progress indicator to stderr.\n\n"
 
@@ -286,7 +288,7 @@
 
 #define help_iconv "usage: iconv [-f FROM] [-t TO] [FILE...]\n\nConvert character encoding of files.\n\n-f  convert from (default utf8)\n-t  convert to   (default utf8)\n\n"
 
-#define help_hwclock "usage: hwclock [-rswtluf]\n\n-f FILE Use specified device file instead of /dev/rtc (--show)\n-l      Hardware clock uses localtime (--localtime)\n-r      Show hardware clock time (--show)\n-s      Set system time from hardware clock (--hctosys)\n-t      Set the system time based on the current timezone (--systz)\n-u      Hardware clock uses UTC (--utc)\n-w      Set hardware clock from system time (--systohc)\n\n"
+#define help_hwclock "usage: hwclock [-rswtluf]\n\n-f FILE Use specified device file instead of /dev/rtc (--rtc)\n-l      Hardware clock uses localtime (--localtime)\n-r      Show hardware clock time (--show)\n-s      Set system time from hardware clock (--hctosys)\n-t      Set the system time based on the current timezone (--systz)\n-u      Hardware clock uses UTC (--utc)\n-w      Set hardware clock from system time (--systohc)\n\n"
 
 #define help_host "usage: host [-av] [-t TYPE] NAME [SERVER]\n\nPerform DNS lookup on NAME, which can be a domain name to lookup,\nor an ipv4 dotted or ipv6 colon seprated address to reverse lookup.\nSERVER (if present) is the DNS server to use.\n\n-a	no idea\n-t	not a clue\n-v	verbose\n\n"
 
@@ -462,7 +464,7 @@
 
 #define help_mv "usage: mv [-finv] SOURCE... DEST\"\n\n-f	force copy by deleting destination file\n-i	interactive, prompt before overwriting existing DEST\n-n	no clobber (don't overwrite DEST)\n-v	verbose\n"
 
-#define help_cp "usage: cp [-HLPRadfilnprsv] SOURCE... DEST\n\nCopy files from SOURCE to DEST.  If more than one SOURCE, DEST must\nbe a directory.\n-F	delete any existing destination file first (breaks hardlinks)\n-H	Follow symlinks listed on command line\n-L	Follow all symlinks\n-P	Do not follow symlinks [default]\n-R	recurse into subdirectories (DEST must be a directory)\n-a	same as -dpr\n-d	don't dereference symlinks\n-f	delete destination files we can't write to\n-i	interactive, prompt before overwriting existing DEST\n-l	hard link instead of copy\n-n	no clobber (don't overwrite DEST)\n-p	preserve timestamps, ownership, and permissions\n-r	synonym for -R\n-s	symlink instead of copy\n-v	verbose\n"
+#define help_cp "usage: cp [-HLPRadfilnprsv] SOURCE... DEST\n\nCopy files from SOURCE to DEST.  If more than one SOURCE, DEST must\nbe a directory.\n-F	delete any existing destination file first (--remove-destination)\n-H	Follow symlinks listed on command line\n-L	Follow all symlinks\n-P	Do not follow symlinks [default]\n-R	recurse into subdirectories (DEST must be a directory)\n-a	same as -dpr\n-d	don't dereference symlinks\n-f	delete destination files we can't write to\n-i	interactive, prompt before overwriting existing DEST\n-l	hard link instead of copy\n-n	no clobber (don't overwrite DEST)\n-p	preserve timestamps, ownership, and permissions\n-r	synonym for -R\n-s	symlink instead of copy\n-v	verbose\n"
 
 #define help_comm "usage: comm [-123] FILE1 FILE2\n\nReads FILE1 and FILE2, which should be ordered, and produces three text\ncolumns as output: lines only in FILE1; lines only in FILE2; and lines\nin both files. Filename \"-\" is a synonym for stdin.\n\n-1 suppress the output column of lines unique to FILE1\n-2 suppress the output column of lines unique to FILE2\n-3 suppress the output column of lines duplicated in FILE1 and FILE2\n\n"
 

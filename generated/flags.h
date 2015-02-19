@@ -277,14 +277,15 @@
 #undef FOR_count
 #endif
 
-// cp <2RHLPprdaslvnFfi[-HLPd][-ni] <2RHLPprdaslvnFfi[-HLPd][-ni]
+// cp <2RHLPprdaslvnF(remove-destination)fi[-HLPd][-ni] <2RHLPprdaslvnF(remove-destination)fi[-HLPd][-ni]
 #undef OPTSTR_cp
-#define OPTSTR_cp "<2RHLPprdaslvnFfi[-HLPd][-ni]"
+#define OPTSTR_cp "<2RHLPprdaslvnF(remove-destination)fi[-HLPd][-ni]"
 #ifdef CLEANUP_cp
 #undef CLEANUP_cp
 #undef FOR_cp
 #undef FLAG_i
 #undef FLAG_f
+#undef FLAG_remove_destination
 #undef FLAG_F
 #undef FLAG_n
 #undef FLAG_v
@@ -893,18 +894,18 @@
 #undef FOR_hostname
 #endif
 
-// hwclock >0(fast)f(rtc):u(utc)l(localtime)t(systz)w(systohc)s(hctosys)r(show)[!ul][!rsw] >0(fast)f(rtc):u(utc)l(localtime)t(systz)w(systohc)s(hctosys)r(show)[!ul][!rsw]
+// hwclock >0(fast)f(rtc):u(utc)l(localtime)t(systz)s(hctosys)r(show)w(systohc)[-ul][!rtsw] >0(fast)f(rtc):u(utc)l(localtime)t(systz)s(hctosys)r(show)w(systohc)[-ul][!rtsw]
 #undef OPTSTR_hwclock
-#define OPTSTR_hwclock ">0(fast)f(rtc):u(utc)l(localtime)t(systz)w(systohc)s(hctosys)r(show)[!ul][!rsw]"
+#define OPTSTR_hwclock ">0(fast)f(rtc):u(utc)l(localtime)t(systz)s(hctosys)r(show)w(systohc)[-ul][!rtsw]"
 #ifdef CLEANUP_hwclock
 #undef CLEANUP_hwclock
 #undef FOR_hwclock
+#undef FLAG_systohc
+#undef FLAG_w
 #undef FLAG_show
 #undef FLAG_r
 #undef FLAG_hctosys
 #undef FLAG_s
-#undef FLAG_systohc
-#undef FLAG_w
 #undef FLAG_systz
 #undef FLAG_t
 #undef FLAG_localtime
@@ -1334,16 +1335,16 @@
 #undef FOR_mkswap
 #endif
 
-// mktemp >1q(directory)d(tmpdir)p: >1q(directory)d(tmpdir)p:
+// mktemp >1qd(directory)p(tmpdir): >1qd(directory)p(tmpdir):
 #undef OPTSTR_mktemp
-#define OPTSTR_mktemp ">1q(directory)d(tmpdir)p:"
+#define OPTSTR_mktemp ">1qd(directory)p(tmpdir):"
 #ifdef CLEANUP_mktemp
 #undef CLEANUP_mktemp
 #undef FOR_mktemp
-#undef FLAG_p
 #undef FLAG_tmpdir
-#undef FLAG_d
+#undef FLAG_p
 #undef FLAG_directory
+#undef FLAG_d
 #undef FLAG_q
 #endif
 
@@ -2410,6 +2411,14 @@
 #undef FLAG_f
 #endif
 
+// unix2dos    
+#undef OPTSTR_unix2dos
+#define OPTSTR_unix2dos  0 
+#ifdef CLEANUP_unix2dos
+#undef CLEANUP_unix2dos
+#undef FOR_unix2dos
+#endif
+
 // unlink   <1>1
 #undef OPTSTR_unlink
 #define OPTSTR_unlink  0 
@@ -2828,6 +2837,7 @@
 #endif
 #define FLAG_i (1<<0)
 #define FLAG_f (1<<1)
+#define FLAG_remove_destination (1<<2)
 #define FLAG_F (1<<2)
 #define FLAG_n (1<<3)
 #define FLAG_v (1<<4)
@@ -3346,12 +3356,12 @@
 #ifndef TT
 #define TT this.hwclock
 #endif
-#define FLAG_show (1<<0)
-#define FLAG_r (1<<0)
-#define FLAG_hctosys (1<<1)
-#define FLAG_s (1<<1)
-#define FLAG_systohc (1<<2)
-#define FLAG_w (1<<2)
+#define FLAG_systohc (1<<0)
+#define FLAG_w (1<<0)
+#define FLAG_show (1<<1)
+#define FLAG_r (1<<1)
+#define FLAG_hctosys (1<<2)
+#define FLAG_s (1<<2)
 #define FLAG_systz (1<<3)
 #define FLAG_t (1<<3)
 #define FLAG_localtime (1<<4)
@@ -3713,10 +3723,10 @@
 #ifndef TT
 #define TT this.mktemp
 #endif
+#define FLAG_tmpdir (1<<0)
 #define FLAG_p (1<<0)
-#define FLAG_tmpdir (1<<1)
+#define FLAG_directory (1<<1)
 #define FLAG_d (1<<1)
-#define FLAG_directory (1<<2)
 #define FLAG_q (1<<2)
 #endif
 
@@ -4607,6 +4617,12 @@
 #define FLAG_w (1<<5)
 #define FLAG_s (1<<6)
 #define FLAG_f (1<<7)
+#endif
+
+#ifdef FOR_unix2dos
+#ifndef TT
+#define TT this.unix2dos
+#endif
 #endif
 
 #ifdef FOR_unlink
