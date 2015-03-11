@@ -32,6 +32,7 @@ config TAR
     X File with names to exclude
     T File with names to include
 */
+
 #define FOR_tar
 #include "toys.h"
 
@@ -94,7 +95,7 @@ static void copy_in_out(int src, int dst, off_t size)
 static void itoo(char *str, int len, off_t val)
 {
   char *t, tmp[sizeof(off_t)*3+1];
-  int cnt  = sprintf(tmp, "%0*llo", len, val);
+  int cnt  = sprintf(tmp, "%0*llo", len, (unsigned long long)val);
 
   t = tmp + cnt - len;
   if (*t == '0') t++;
@@ -130,11 +131,11 @@ static void write_longname(struct archive_handler *tar, char *name, char type)
 
   memset(&tmp, 0, sizeof(tmp));
   strcpy(tmp.name, "././@LongLink");
-  sprintf(tmp.mode, "%0*d", sizeof(tmp.mode)-1, 0);
-  sprintf(tmp.uid, "%0*d", sizeof(tmp.uid)-1, 0);
-  sprintf(tmp.gid, "%0*d", sizeof(tmp.gid)-1, 0);
-  sprintf(tmp.size, "%0*d", sizeof(tmp.size)-1, 0);
-  sprintf(tmp.mtime, "%0*d", sizeof(tmp.mtime)-1, 0);
+  sprintf(tmp.mode, "%0*d", (int)sizeof(tmp.mode)-1, 0);
+  sprintf(tmp.uid, "%0*d", (int)sizeof(tmp.uid)-1, 0);
+  sprintf(tmp.gid, "%0*d", (int)sizeof(tmp.gid)-1, 0);
+  sprintf(tmp.size, "%0*d", (int)sizeof(tmp.size)-1, 0);
+  sprintf(tmp.mtime, "%0*d", (int)sizeof(tmp.mtime)-1, 0);
   itoo(tmp.size, sizeof(tmp.size), sz);
   tmp.type = type;
   memset(tmp.chksum, ' ', 8);
@@ -184,7 +185,7 @@ static void add_file(struct archive_handler *tar, char **nam, struct stat *st)
   while ((c = strstr(hname, "../"))) hname = c + 3;
   if (warn && hname != name) {
     printf("removing leading '%.*s' "
-        "from member names\n",hname-name, name);
+        "from member names\n", (int)(hname-name), name);
     warn = 0;
   }
 
@@ -208,7 +209,8 @@ static void add_file(struct archive_handler *tar, char **nam, struct stat *st)
     if (st->st_size <= (off_t)0777777777777LL)
       itoo(hdr.size, sizeof(hdr.size), st->st_size);
     else {
-      error_msg("can't store file '%s' of size '%d'\n", hname, st->st_size);
+      error_msg("can't store file '%s' of size '%lld'\n",
+                hname, (unsigned long long)st->st_size);
       return;
     }
   } else if (S_ISLNK(st->st_mode)) {
@@ -229,7 +231,7 @@ static void add_file(struct archive_handler *tar, char **nam, struct stat *st)
     itoo(hdr.major, sizeof(hdr.major), major(st->st_rdev));
     itoo(hdr.minor, sizeof(hdr.minor), minor(st->st_rdev));
   } else {
-    error_msg("unknown file type '%s'");
+    error_msg("unknown file type '%o'", st->st_mode & S_IFMT);
     return;
   }
   if (strlen(hname) > sizeof(hdr.name))
@@ -432,7 +434,8 @@ COPY:
       if (pw) u = pw->pw_uid;
       if (gr) g = gr->gr_gid;
     }
-    chown(file_hdr->name, u, g);
+    if (chown(file_hdr->name, u, g))
+      perror_msg("chown %d:%d '%s'", u, g, file_hdr->name);;
   }
 
   if (toys.optflags & FLAG_p) // || !(toys.optflags & FLAG_no_same_permissions))
@@ -744,14 +747,9 @@ SKIP:
 void tar_main(void)
 {
   struct archive_handler *tar_hdl;
-  int fd = 0, flags = O_RDONLY;
+  int fd = 0;
   struct arg_list *tmp;
   char **args = toys.optargs;
-
-  if (!toys.argv[1]) {
-    toys.exithelp++;
-    error_exit(NULL);
-  }
 
   if (!geteuid()) toys.optflags |= FLAG_p;
 
@@ -764,16 +762,16 @@ void tar_main(void)
 
   if (toys.optflags & FLAG_c) {
     if (!TT.inc) error_exit("empty archive");
-    fd = 1, flags = O_WRONLY|O_CREAT|O_TRUNC;
+    fd = 1;
   }
   if ((toys.optflags & FLAG_f) && strcmp(TT.fname, "-")) 
-    fd = xcreate(TT.fname, flags, 0666);
+    fd = xcreate(TT.fname, fd*(O_WRONLY|O_CREAT|O_TRUNC), 0666);
   if (toys.optflags & FLAG_C) xchdir(TT.dir);
 
   tar_hdl = init_handler();
   tar_hdl->src_fd = fd;
 
-  if (toys.optflags & FLAG_x || toys.optflags & FLAG_t) {
+  if ((toys.optflags & FLAG_x) || (toys.optflags & FLAG_t)) {
     if (toys.optflags & FLAG_O) tar_hdl->extract_handler = extract_to_stdout;
     if (toys.optflags & FLAG_to_command) {
       signal(SIGPIPE, SIG_IGN); //will be using pipe between child & parent

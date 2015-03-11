@@ -4,7 +4,7 @@
  *
  * No standard
 
-USE_TIMEOUT(NEWTOY(timeout, "<2^k:s: ", TOYFLAG_BIN))
+USE_TIMEOUT(NEWTOY(timeout, "<2^vk:s: ", TOYFLAG_BIN))
 
 config TIMEOUT
   bool "timeout"
@@ -21,6 +21,7 @@ config TIMEOUT
 
     -s	Send specified signal (default TERM)
     -k	Send KILL signal if child still running this long after first signal.
+    -v	Verbose
 */
 
 #define FOR_timeout
@@ -38,14 +39,15 @@ GLOBALS(
 
 static void handler(int i)
 {
+  fprintf(stderr, "timeout pid %d signal %d\n", TT.pid, TT.nextsig);
   kill(TT.pid, TT.nextsig);
   
   if (TT.k_timeout) {
     TT.k_timeout = 0;
     TT.nextsig = SIGKILL;
-    signal(SIGALRM, handler);
+    xsignal(SIGALRM, handler);
     TT.itv.it_value = TT.ktv;
-    setitimer(ITIMER_REAL, &TT.itv, (void *)&toybuf);
+    setitimer(ITIMER_REAL, &TT.itv, (void *)toybuf);
   }
 }
 
@@ -64,8 +66,8 @@ void timeout_main(void)
   else {
     int status;
 
-    signal(SIGALRM, handler);
-    setitimer(ITIMER_REAL, &TT.itv, (void *)&toybuf);
+    xsignal(SIGALRM, handler);
+    setitimer(ITIMER_REAL, &TT.itv, (void *)toybuf);
     while (-1 == waitpid(TT.pid, &status, 0) && errno == EINTR);
     toys.exitval = WIFEXITED(status)
       ? WEXITSTATUS(status) : WTERMSIG(status) + 127;

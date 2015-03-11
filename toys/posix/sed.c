@@ -7,13 +7,13 @@
  * TODO: lines > 2G could signed int wrap length counters. Not just getline()
  * but N and s///
 
-USE_SED(NEWTOY(sed, "(version)e*f*inr", TOYFLAG_USR|TOYFLAG_BIN|TOYFLAG_LOCALE))
+USE_SED(NEWTOY(sed, "(version)e*f*inEr[+Er]", TOYFLAG_USR|TOYFLAG_BIN|TOYFLAG_LOCALE))
 
 config SED
   bool "sed"
   default y
   help
-    usage: sed [-inr] [-e SCRIPT]...|SCRIPT [-f SCRIPT_FILE]... [FILE...]
+    usage: sed [-inrE] [-e SCRIPT]...|SCRIPT [-f SCRIPT_FILE]... [FILE...]
 
     Stream editor. Apply one or more editing SCRIPTs to each line of input
     (from FILE or stdin) producing output (by default to stdout).
@@ -23,6 +23,7 @@ config SED
     -i	Edit each file in place.
     -n	No default output. (Use the p command to output matched lines.)
     -r	Use extended regular expression syntax.
+    -E	Alias for -r.
     -s	Treat input files separately (implied by -i)
 
     A SCRIPT is a series of one or more COMMANDs separated by newlines or
@@ -996,7 +997,7 @@ resume_a:
 
 brand:
   // Reminisce about chestnut trees.
-  error_exit("bad pattern '%s'@%ld (%c)", errstart, line-errstart+1, *line);
+  error_exit("bad pattern '%s'@%ld (%c)", errstart, line-errstart+1L, *line);
 }
 
 void sed_main(void)
