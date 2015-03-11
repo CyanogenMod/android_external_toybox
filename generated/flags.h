@@ -1308,12 +1308,14 @@
 #undef FLAG_m
 #endif
 
-// mknod <2>4 <2>4
+// mknod <2>4m(mode): <2>4m(mode):
 #undef OPTSTR_mknod
-#define OPTSTR_mknod "<2>4"
+#define OPTSTR_mknod "<2>4m(mode):"
 #ifdef CLEANUP_mknod
 #undef CLEANUP_mknod
 #undef FOR_mknod
+#undef FLAG_mode
+#undef FLAG_m
 #endif
 
 // mkpasswd   >2S:m:P#=0<0
@@ -1545,14 +1547,16 @@
 #undef FLAG_j
 #endif
 
-// oneit   ^<1c:p
+// oneit   ^<1nc:p3[!pn]
 #undef OPTSTR_oneit
 #define OPTSTR_oneit  0 
 #ifdef CLEANUP_oneit
 #undef CLEANUP_oneit
 #undef FOR_oneit
+#undef FLAG_3
 #undef FLAG_p
 #undef FLAG_c
+#undef FLAG_n
 #endif
 
 // openvt   c#<1>63sw
@@ -1833,13 +1837,14 @@
 #undef FLAG_n
 #endif
 
-// sed (version)e*f*inr (version)e*f*inr
+// sed (version)e*f*inEr[+Er] (version)e*f*inEr[+Er]
 #undef OPTSTR_sed
-#define OPTSTR_sed "(version)e*f*inr"
+#define OPTSTR_sed "(version)e*f*inEr[+Er]"
 #ifdef CLEANUP_sed
 #undef CLEANUP_sed
 #undef FOR_sed
 #undef FLAG_r
+#undef FLAG_E
 #undef FLAG_n
 #undef FLAG_i
 #undef FLAG_f
@@ -2251,14 +2256,15 @@
 #undef FLAG_p
 #endif
 
-// timeout <2^k:s:  <2^k:s: 
+// timeout <2^vk:s:  <2^vk:s: 
 #undef OPTSTR_timeout
-#define OPTSTR_timeout "<2^k:s: "
+#define OPTSTR_timeout "<2^vk:s: "
 #ifdef CLEANUP_timeout
 #undef CLEANUP_timeout
 #undef FOR_timeout
 #undef FLAG_s
 #undef FLAG_k
+#undef FLAG_v
 #endif
 
 // top >0d#=3n#<1mb >0d#=3n#<1mb
@@ -2427,7 +2433,7 @@
 #undef FOR_unlink
 #endif
 
-// unshare   <1^imnpuU
+// unshare   <1^rimnpuU
 #undef OPTSTR_unshare
 #define OPTSTR_unshare  0 
 #ifdef CLEANUP_unshare
@@ -2439,6 +2445,7 @@
 #undef FLAG_n
 #undef FLAG_m
 #undef FLAG_i
+#undef FLAG_r
 #endif
 
 // uptime    
@@ -3702,6 +3709,8 @@
 #ifndef TT
 #define TT this.mknod
 #endif
+#define FLAG_mode (1<<0)
+#define FLAG_m (1<<0)
 #endif
 
 #ifdef FOR_mkpasswd
@@ -3903,8 +3912,10 @@
 #ifndef TT
 #define TT this.oneit
 #endif
-#define FLAG_p (FORCED_FLAG<<0)
-#define FLAG_c (FORCED_FLAG<<1)
+#define FLAG_3 (FORCED_FLAG<<0)
+#define FLAG_p (FORCED_FLAG<<1)
+#define FLAG_c (FORCED_FLAG<<2)
+#define FLAG_n (FORCED_FLAG<<3)
 #endif
 
 #ifdef FOR_openvt
@@ -4136,11 +4147,12 @@
 #define TT this.sed
 #endif
 #define FLAG_r (1<<0)
-#define FLAG_n (1<<1)
-#define FLAG_i (1<<2)
-#define FLAG_f (1<<3)
-#define FLAG_e (1<<4)
-#define FLAG_version (1<<5)
+#define FLAG_E (1<<1)
+#define FLAG_n (1<<2)
+#define FLAG_i (1<<3)
+#define FLAG_f (1<<4)
+#define FLAG_e (1<<5)
+#define FLAG_version (1<<6)
 #endif
 
 #ifdef FOR_seq
@@ -4489,6 +4501,7 @@
 #endif
 #define FLAG_s (1<<0)
 #define FLAG_k (1<<1)
+#define FLAG_v (1<<2)
 #endif
 
 #ifdef FOR_top
@@ -4641,6 +4654,7 @@
 #define FLAG_n (FORCED_FLAG<<3)
 #define FLAG_m (FORCED_FLAG<<4)
 #define FLAG_i (FORCED_FLAG<<5)
+#define FLAG_r (FORCED_FLAG<<6)
 #endif
 
 #ifdef FOR_uptime

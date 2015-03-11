@@ -54,6 +54,12 @@ struct md5sum_data {
   } buffer;
 };
 
+// toys/lsb/mknod.c
+
+struct mknod_data {
+  char *m;
+};
+
 // toys/lsb/mktemp.c
 
 struct mktemp_data {
@@ -650,6 +656,8 @@ struct ping_data {
 struct ps_data {
   struct arg_list *llist_o;
   unsigned screen_width;
+
+  void *o;
 };
 
 // toys/pending/route.c
@@ -1153,6 +1161,7 @@ extern union global_union {
 	struct dmesg_data dmesg;
 	struct killall_data killall;
 	struct md5sum_data md5sum;
+	struct mknod_data mknod;
 	struct mktemp_data mktemp;
 	struct mount_data mount;
 	struct passwd_data passwd;

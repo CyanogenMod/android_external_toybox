@@ -280,8 +280,6 @@
 #define USE_SETENFORCE(...) __VA_ARGS__
 #define CFG_SH 0
 #define USE_SH(...)
-#define CFG_SH_INTERACTIVE 0
-#define USE_SH_INTERACTIVE(...)
 #define CFG_EXIT 0
 #define USE_EXIT(...)
 #define CFG_CD 0
