@@ -4,5 +4,8 @@
 /generated/Config.in
 /generated/Config.probed
 /generated/mkflags
+/generated/obj
 /generated/optlibs.dat
 /kconfig
+/toybox
+/toybox_unstripped
