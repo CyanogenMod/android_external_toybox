@@ -33,6 +33,17 @@ LOCAL_PATH := $(call my-dir)
 #  git commit -a
 
 
+#
+# To add a toy:
+#
+
+#  make menuconfig
+#  # (Select the toy you want to add.)
+#  make clean && make  # Regenerate the generated files.
+#  # Edit LOCAL_SRC_FILES below to add the toy.
+#  # If you just want to use it as "toybox x" rather than "x", you can stop now.
+#  # If you want this toy to have a symbolic link in /system/bin, add the toy to ALL_TOOLS.
+
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
