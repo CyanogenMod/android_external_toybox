@@ -266,8 +266,8 @@
 #define USE_OPENVT(...)
 #define CFG_DEALLOCVT 0
 #define USE_DEALLOCVT(...)
-#define CFG_PGREP 0
-#define USE_PGREP(...)
+#define CFG_PGREP 1
+#define USE_PGREP(...) __VA_ARGS__
 #define CFG_PING 0
 #define USE_PING(...)
 #define CFG_PS 1

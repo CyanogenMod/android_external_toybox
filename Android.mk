@@ -127,6 +127,7 @@ LOCAL_SRC_FILES := \
     toys/pending/getenforce.c \
     toys/pending/hwclock.c \
     toys/pending/more.c \
+    toys/pending/pgrep.c \
     toys/pending/ps.c \
     toys/pending/netstat.c \
     toys/pending/route.c \
@@ -273,7 +274,9 @@ ALL_TOOLS := \
     od \
     paste \
     patch \
+    pgrep \
     pidof \
+    pkill \
     pmap \
     printenv \
     pwd \

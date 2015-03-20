@@ -1614,9 +1614,9 @@
 #undef FLAG_x
 #endif
 
-// pgrep   ?P# s# xvonlf[!sP]
+// pgrep ?P# s# xvonlf[!sP] ?P# s# xvonlf[!sP]
 #undef OPTSTR_pgrep
-#define OPTSTR_pgrep  0 
+#define OPTSTR_pgrep "?P# s# xvonlf[!sP]"
 #ifdef CLEANUP_pgrep
 #undef CLEANUP_pgrep
 #undef FOR_pgrep
@@ -3967,14 +3967,14 @@
 #ifndef TT
 #define TT this.pgrep
 #endif
-#define FLAG_f (FORCED_FLAG<<0)
-#define FLAG_l (FORCED_FLAG<<1)
-#define FLAG_n (FORCED_FLAG<<2)
-#define FLAG_o (FORCED_FLAG<<3)
-#define FLAG_v (FORCED_FLAG<<4)
-#define FLAG_x (FORCED_FLAG<<5)
-#define FLAG_s (FORCED_FLAG<<6)
-#define FLAG_P (FORCED_FLAG<<7)
+#define FLAG_f (1<<0)
+#define FLAG_l (1<<1)
+#define FLAG_n (1<<2)
+#define FLAG_o (1<<3)
+#define FLAG_v (1<<4)
+#define FLAG_x (1<<5)
+#define FLAG_s (1<<6)
+#define FLAG_P (1<<7)
 #endif
 
 #ifdef FOR_pidof
