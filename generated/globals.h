@@ -577,6 +577,13 @@ struct logger_data {
   char *ident;
 };
 
+// toys/pending/mdev.c
+
+struct mdev_data {
+  char *devname;
+  int root_maj, root_min, verbose;
+};
+
 // toys/pending/mke2fs.c
 
 struct mke2fs_data {
@@ -1220,6 +1227,7 @@ extern union global_union {
 	struct klogd_data klogd;
 	struct last_data last;
 	struct logger_data logger;
+	struct mdev_data mdev;
 	struct mke2fs_data mke2fs;
 	struct modprobe_data modprobe;
 	struct more_data more;

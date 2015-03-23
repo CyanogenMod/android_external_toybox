@@ -848,9 +848,9 @@
 #undef FLAG_d
 #endif
 
-// head n#<0=10 n#<0=10
+// head ?n#<0=10 ?n#<0=10
 #undef OPTSTR_head
-#define OPTSTR_head "n#<0=10"
+#define OPTSTR_head "?n#<0=10"
 #ifdef CLEANUP_head
 #undef CLEANUP_head
 #undef FOR_head
