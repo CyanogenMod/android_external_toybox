@@ -371,8 +371,8 @@ static int do_find(struct dirtree *new)
           udl = xmalloc(sizeof(*udl));
           dlist_add_nomalloc(&TT.argdata, (void *)udl);
 
-          if (*s == 'u') udl->u.uid = xgetpwnam(ss[1])->pw_uid;
-          else if (*s == 'g') udl->u.gid = xgetgrnam(ss[1])->gr_gid;
+          if (*s == 'u') udl->u.uid = xgetpwnamid(ss[1])->pw_uid;
+          else if (*s == 'g') udl->u.gid = xgetgrnamid(ss[1])->gr_gid;
           else {
             struct stat st;
 
@@ -435,7 +435,7 @@ static int do_find(struct dirtree *new)
           if (aa->dir && TT.topdir == -1) TT.topdir = xopen(".", 0);
 
         // collect names and execute commands
-        } else if (check) {
+        } else {
           char *name, *ss1 = ss[1];
           struct double_list **ddl;
 
@@ -443,11 +443,12 @@ static int do_find(struct dirtree *new)
           aa = (void *)llist_pop(&argdata);
           ss += aa->arglen + 1;
 
+          if (!check) goto cont;
           // name is always a new malloc, so we can always free it.
           name = aa->dir ? xstrdup(new->name) : dirtree_path(new, 0);
 
           // Mark entry so COMEAGAIN can call flush_exec() in parent.
-          // This is never a valid pointer valud for prev to have otherwise
+          // This is never a valid pointer value for prev to have otherwise
           if (aa->dir) aa->prev = (void *)1;
 
           if (*s == 'o') {

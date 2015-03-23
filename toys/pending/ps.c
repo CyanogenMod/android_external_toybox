@@ -38,21 +38,16 @@ struct header_list {
   int width, position;
 };
 
-/*
- * create list of header attributes taking care of -o (-o ooid=MOM..)
- * and width of attributes.
- */
+// create list of header attributes taking care of -o (-o ooid=MOM..)
+// and width of attributes.
 static void list_add(struct header_list *data, char *c_data)
 {
-  struct header_list *temp = TT.o, *new = xzalloc(sizeof(struct header_list));
+  struct header_list *temp = TT.o, *new;
 
-  new->name = data->name;   
+  memcpy(new = xmalloc(sizeof(*new)), data, sizeof(*new));
   if (c_data) new->header = c_data;
-  else new->header = xstrdup(data->header);  
+  else new->header = xstrdup(data->header);
   if (c_data && (strlen(c_data) > data->width)) new->width = strlen(c_data);
-  else new->width = data->width;
-  new->format = data->format;
-  new->position = data->position;
 
   if (temp) {
     while (temp->next) temp = temp->next;
@@ -60,20 +55,12 @@ static void list_add(struct header_list *data, char *c_data)
   } else TT.o = new;
 }
 
-//print the default header OR header with -o args
-static void print_header(struct header_list *hdr, int hdr_len)
+// parse -o arguments
+static void parse_o(struct header_list *hdr)
 {
-  int i = 0;
-  char *ptr = NULL, *str, *temp;
+  int i;
+  char *ptr, *str, *temp;
   struct arg_list *node = TT.llist_o;
-
-  // Default pid, user, time, comm
-  if (!node) {
-    list_add(hdr+4, 0);
-    list_add(hdr, 0);
-    list_add(hdr+11, 0);
-    list_add(hdr+3, 0);
-  }
 
   while (node) {
     char *s = str = xstrdup(node->arg);
@@ -82,8 +69,7 @@ static void print_header(struct header_list *hdr, int hdr_len)
     while (str) {
       if ((ptr = strsep(&str, ","))) { //seprate list
         if ((temp = strchr(ptr, '='))) { // Handle ppid = MOM
-          *temp = 0;
-          temp++;
+          *temp++ = 0;
           while (hdr[i].name) {
             // search from default header
             if (!(strcmp(hdr[i].name, ptr))) {
@@ -113,10 +99,6 @@ static void print_header(struct header_list *hdr, int hdr_len)
     free(s);
     node = node->next;
   }
-
-  for (hdr = TT.o; hdr; hdr = hdr->next)
-    printf(hdr->format , hdr->width, hdr->header);
-  xputc('\n');
 }
 
 //get uid/gid for processes.
@@ -168,10 +150,7 @@ void get_time(unsigned long s_time, unsigned long u_time)
   free(temp);
 }
 
-/*
- * read command line taking care of in between NUL's
- * in command line
- */
+// read command line taking care of in between NUL's in command line
 static void read_cmdline(int fd, char *cmd_ptr)
 {
   int size = read(fd, cmd_ptr, BUFF_SIZE); //sizeof(cmd_buf)
@@ -185,10 +164,8 @@ static void read_cmdline(int fd, char *cmd_ptr)
   }
 }
 
-/*
- * get the processes stats and print the stats 
- * corresponding to header attributes.
- */
+// get the processes stats and print the stats
+// corresponding to header attributes.
 static void do_ps_line(int pid, int tid)
 {
   char *stat_buff = toybuf + BUFF_SIZE, *cmd_buff = toybuf + (2*BUFF_SIZE);
@@ -311,7 +288,7 @@ static void do_ps_line(int pid, int tid)
         gr = getgrgid(rgid);
         if (!gr) rgroup = xmprintf("%d",(int)stats.st_gid);
         else rgroup = xmprintf("%s", gr->gr_name);
-        printf("%-*.*s", width,width, rgroup);
+        printf("%-*.*s", width, width, rgroup);
         free(rgroup);
         break;
       case 10:
@@ -351,7 +328,7 @@ clean:
   free(name);
 }
 
-//Do stats for threads (for -T option)
+// Do stats for threads (for -T option)
 void do_ps_threads(int pid)
 {       
   DIR *d; 
@@ -379,7 +356,7 @@ void ps_main(void)
   DIR *dp;
   struct dirent *entry;
   int pid;
-  struct header_list def_header[] = { 
+  struct header_list *hdr, def_header[] = { 
     {0, "user", "USER", "%-*s ", 8, 0},
     {0, "group", "GROUP", "%-*s ", 8, 1},
     {0, "comm", "COMMAND", "%-*s ",16, 2},
@@ -401,15 +378,25 @@ void ps_main(void)
   
   TT.screen_width = 80; //default width
   terminal_size(&TT.screen_width, NULL);
-  print_header(def_header, ARRAY_LEN(def_header));
+
+  // Default pid, user, time, comm
+  if (!TT.llist_o) {
+    list_add(def_header+4, 0);
+    list_add(def_header, 0);
+    list_add(def_header+11, 0);
+    list_add(def_header+3, 0);
+  } else parse_o(def_header); // ARRAY_LEN(def_header)
+
+  for (hdr = TT.o; hdr; hdr = hdr->next)
+    printf(hdr->format , hdr->width, hdr->header);
+  xputc('\n');
 
   if (!(dp = opendir("/proc"))) perror_exit("opendir");
   while ((entry = readdir(dp))) {
-    if (isdigit(*entry->d_name)) {
-      pid = atoi(entry->d_name);
-      do_ps_line(pid, 0);
-      if (toys.optflags & FLAG_T) do_ps_threads(pid);
-    }
+    if (!isdigit(*entry->d_name)) continue;
+    pid = atoi(entry->d_name);
+    do_ps_line(pid, 0);
+    if (toys.optflags & FLAG_T) do_ps_threads(pid);
   }
   closedir(dp);
 
