@@ -22,7 +22,9 @@
 
 #define help_toybox "usage: toybox [--long | [command] [arguments...]]\n\nWith no arguments, shows available commands. First argument is\nname of a command to run, followed by any arguments to that command.\n\n--long	Show path to each command\n\nTo install command symlinks, try:\n  for i in $(/bin/toybox --long); do ln -s /bin/toybox $i; done\n\n"
 
-#define help_skeleton_alias "usage: skeleton_alias [-dq] [-b NUMBER]\n\nExample of a second command with different arguments in the same source\nfile as the first. This allows shared infrastructure not added to lib/.\n\n"
+#define help_runcon "usage: runcon CONTEXT COMMAND [ARGS...]\n\nRun a command in a specified security context.\n\n"
+
+#define help_skeleton_alias "usage: skeleton_alias [-dq] [-b NUMBER]\n\nExample of a second command with different arguments in the same source\nfile as the first. This allows shared infrastructure not added to lib/.\n\n\n"
 
 #define help_skeleton "usage: skeleton [-a] [-b STRING] [-c NUMBER] [-d LIST] [-e COUNT] [...]\n\nTemplate for new commands. You don't need this.\n\nWhen creating a new command, copy this file and delete the parts you\ndon't need. Be sure to replace all instances of \"skeleton\" (upper and lower\ncase) with your new command name.\n\nFor simple commands, \"hello.c\" is probably a better starting point.\n\n"
 

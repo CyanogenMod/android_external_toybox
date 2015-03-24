@@ -1837,6 +1837,14 @@
 #undef FLAG_n
 #endif
 
+// runcon <2 <2
+#undef OPTSTR_runcon
+#define OPTSTR_runcon "<2"
+#ifdef CLEANUP_runcon
+#undef CLEANUP_runcon
+#undef FOR_runcon
+#endif
+
 // sed (version)e*f*inEr[+Er] (version)e*f*inEr[+Er]
 #undef OPTSTR_sed
 #define OPTSTR_sed "(version)e*f*inEr[+Er]"
@@ -4140,6 +4148,12 @@
 #define FLAG_A (1<<0)
 #define FLAG_e (1<<1)
 #define FLAG_n (1<<2)
+#endif
+
+#ifdef FOR_runcon
+#ifndef TT
+#define TT this.runcon
+#endif
 #endif
 
 #ifdef FOR_sed

@@ -57,6 +57,7 @@ LOCAL_SRC_FILES := \
     lib/portability.c \
     lib/xwrap.c \
     main.c \
+    toys/android/runcon.c \
     toys/lsb/dmesg.c \
     toys/lsb/hostname.c \
     toys/lsb/killall.c \
@@ -285,6 +286,7 @@ ALL_TOOLS := \
     rm \
     rmdir \
     rmmod \
+    runcon \
     sed \
     seq \
     setenforce \

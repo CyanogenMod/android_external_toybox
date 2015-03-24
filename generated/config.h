@@ -496,6 +496,8 @@
 #define USE_SKELETON(...)
 #define CFG_SKELETON_ALIAS 0
 #define USE_SKELETON_ALIAS(...)
+#define CFG_RUNCON 1
+#define USE_RUNCON(...) __VA_ARGS__
 #define CFG_TOYBOX 1
 #define USE_TOYBOX(...) __VA_ARGS__
 #define CFG_TOYBOX_SUID 1
