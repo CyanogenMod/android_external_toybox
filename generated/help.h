@@ -22,7 +22,13 @@
 
 #define help_toybox "usage: toybox [--long | [command] [arguments...]]\n\nWith no arguments, shows available commands. First argument is\nname of a command to run, followed by any arguments to that command.\n\n--long	Show path to each command\n\nTo install command symlinks, try:\n  for i in $(/bin/toybox --long); do ln -s /bin/toybox $i; done\n\n"
 
+#define help_setenforce "usage: setenforce [enforcing|permissive|1|0]\n\nSets whether SELinux is enforcing (1) or permissive (0).\n\n"
+
 #define help_runcon "usage: runcon CONTEXT COMMAND [ARGS...]\n\nRun a command in a specified security context.\n\n"
+
+#define help_load_policy "usage: load_policy FILE\n\nLoad the specified policy file.\n\n"
+
+#define help_getenforce "usage: getenforce\n\nShows whether SELinux is disabled, enforcing, or permissive.\n\n"
 
 #define help_skeleton_alias "usage: skeleton_alias [-dq] [-b NUMBER]\n\nExample of a second command with different arguments in the same source\nfile as the first. This allows shared infrastructure not added to lib/.\n\n\n"
 
@@ -236,8 +242,6 @@
 
 #define help_sh "usage: sh [-c command] [script]\n\nCommand shell.  Runs a shell script, or reads input interactively\nand responds to it.\n\n-c	command line to execute\n-i	interactive mode (default when STDIN is a tty)\n\n"
 
-#define help_setenforce "usage: setenforce [enforcing|permissive|1|0]\n\nSets whether SELinux is enforcing (1) or permissive (0).\n\n"
-
 #define help_route "usage: route -neA inet{6} / [{add|del}]\n\nDisplay/Edit kernel routing tables.\n\n-n  Don't resolve names\n-e  Display other/more information\n-A  inet{6} Select Address Family\n\n"
 
 #define help_reset "usage: reset\n\nA program to reset the terminal.\n\n"
@@ -297,8 +301,6 @@
 #define help_groupadd "usage: groupadd [-S] [-g GID] [USER] GROUP\n\nAdd a group or add a user to a group\n\n  -g GID Group id\n  -S     Create a system group\n\n"
 
 #define help_getty "usage: getty [OPTIONS] BAUD_RATE[,BAUD_RATE]... TTY [TERMTYPE]\n\n-h    Enable hardware RTS/CTS flow control\n-L    Set CLOCAL (ignore Carrier Detect state)\n-m    Get baud rate from modem's CONNECT status message\n-n    Don't prompt for login name\n-w    Wait for CR or LF before sending /etc/issue\n-i    Don't display /etc/issue\n-f ISSUE_FILE  Display ISSUE_FILE instead of /etc/issue\n-l LOGIN  Invoke LOGIN instead of /bin/login\n-t SEC    Terminate after SEC if no login name is read\n-I INITSTR  Send INITSTR before anything else\n-H HOST    Log HOST into the utmp file as the hostname\n\n"
-
-#define help_getenforce "usage: getenforce\n\nShows whether SELinux is disabled, enforcing, or permissive.\n\n"
 
 #define help_ftpget "usage: ftpget [-cv] [-u USER -p PASSWORD -P PORT] HOST_NAME [LOCAL_FILENAME] REMOTE_FILENAME\nusage: ftpput [-v] [-u USER -p PASSWORD -P PORT] HOST_NAME [REMOTE_FILENAME] LOCAL_FILENAME\n\nftpget - Get a remote file from FTP.\nftpput - Upload a local file on remote machine through FTP.\n\n-c Continue previous transfer.\n-v Verbose.\n-u User name.\n-p Password.\n-P Port Number (default 21).\n\n"
 
@@ -374,7 +376,7 @@
 
 #define help_tail_seek "This version uses lseek, which is faster on large files.\n\n"
 
-#define help_tail "usage: tail [-n|c NUMBER] [-f] [FILE...]\n\nCopy last lines from files to stdout. If no files listed, copy from\nstdin. Filename \"-\" is a synonym for stdin.\n\n-n	output the last NUMBER lines (default 10), +X counts from start.\n-c	output the last NUMBER bytes, +NUMBER counts from start\n-f	follow FILE(s), waiting for more data to be appended\n\n"
+#define help_tail "usage: tail [-n|c NUMBER] [-f] [FILE...]\n\nCopy last lines from files to stdout. If no files listed, copy from\nstdin. Filename \"-\" is a synonym for stdin.\n\n-n	output the last NUMBER lines (default 10), +X counts from start.\n-c	output the last NUMBER bytes, +NUMBER counts from start\n#-f	follow FILE(s), waiting for more data to be appended [TODO]\n\n"
 
 #define help_strings "usage: strings [-fo] [-n LEN] [FILE...]\n\nDisplay printable strings in a binary file\n\n-f	Precede strings with filenames\n-n	At least LEN characters form a string (default 4)\n-o	Precede strings with decimal offsets\n\n"
 

@@ -57,7 +57,10 @@ LOCAL_SRC_FILES := \
     lib/portability.c \
     lib/xwrap.c \
     main.c \
+    toys/android/getenforce.c \
+    toys/android/load_policy.c \
     toys/android/runcon.c \
+    toys/android/setenforce.c \
     toys/lsb/dmesg.c \
     toys/lsb/hostname.c \
     toys/lsb/killall.c \
@@ -125,14 +128,12 @@ LOCAL_SRC_FILES := \
     toys/other/yes.c \
     toys/pending/dd.c \
     toys/pending/expr.c \
-    toys/pending/getenforce.c \
     toys/pending/hwclock.c \
     toys/pending/more.c \
     toys/pending/pgrep.c \
     toys/pending/ps.c \
     toys/pending/netstat.c \
     toys/pending/route.c \
-    toys/pending/setenforce.c \
     toys/pending/tar.c \
     toys/pending/top.c \
     toys/pending/tr.c \
@@ -171,6 +172,7 @@ LOCAL_SRC_FILES := \
     toys/posix/od.c \
     toys/posix/paste.c \
     toys/posix/patch.c \
+    toys/posix/printf.c \
     toys/posix/pwd.c \
     toys/posix/renice.c \
     toys/posix/rm.c \
@@ -195,6 +197,7 @@ LOCAL_CFLAGS += \
     -Os \
     -Wno-char-subscripts \
     -Wno-sign-compare \
+    -Wno-string-plus-int \
     -Wno-uninitialized \
     -Wno-unused-parameter \
     -funsigned-char \
@@ -253,6 +256,7 @@ ALL_TOOLS := \
     insmod \
     kill \
     killall \
+    load_policy \
     ln \
     logname \
     losetup \
@@ -280,6 +284,7 @@ ALL_TOOLS := \
     pkill \
     pmap \
     printenv \
+    printf \
     pwd \
     readlink \
     realpath \

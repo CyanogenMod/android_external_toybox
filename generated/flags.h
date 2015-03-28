@@ -1107,6 +1107,14 @@
 #undef FLAG_v
 #endif
 
+// load_policy <1>1 <1>1
+#undef OPTSTR_load_policy
+#define OPTSTR_load_policy "<1>1"
+#ifdef CLEANUP_load_policy
+#undef CLEANUP_load_policy
+#undef FOR_load_policy
+#endif
+
 // logger   st:p:
 #undef OPTSTR_logger
 #define OPTSTR_logger  0 
@@ -1685,9 +1693,9 @@
 #undef FLAG_0
 #endif
 
-// printf   <1
+// printf <1 <1
 #undef OPTSTR_printf
-#define OPTSTR_printf  0 
+#define OPTSTR_printf "<1"
 #ifdef CLEANUP_printf
 #undef CLEANUP_printf
 #undef FOR_printf
@@ -2119,9 +2127,9 @@
 #undef FOR_tac
 #endif
 
-// tail fc-n-[-cn] fc-n-[-cn]
+// tail ?fc-n-[-cn] ?fc-n-[-cn]
 #undef OPTSTR_tail
-#define OPTSTR_tail "fc-n-[-cn]"
+#define OPTSTR_tail "?fc-n-[-cn]"
 #ifdef CLEANUP_tail
 #undef CLEANUP_tail
 #undef FOR_tail
@@ -3542,6 +3550,12 @@
 #define FLAG_f (1<<1)
 #define FLAG_n (1<<2)
 #define FLAG_v (1<<3)
+#endif
+
+#ifdef FOR_load_policy
+#ifndef TT
+#define TT this.load_policy
+#endif
 #endif
 
 #ifdef FOR_logger

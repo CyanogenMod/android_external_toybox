@@ -108,8 +108,8 @@
 #define USE_PASTE(...) __VA_ARGS__
 #define CFG_PATCH 1
 #define USE_PATCH(...) __VA_ARGS__
-#define CFG_PRINTF 0
-#define USE_PRINTF(...)
+#define CFG_PRINTF 1
+#define USE_PRINTF(...) __VA_ARGS__
 #define CFG_PWD 1
 #define USE_PWD(...) __VA_ARGS__
 #define CFG_RENICE 1
@@ -212,8 +212,6 @@
 #define USE_FSCK(...)
 #define CFG_FTPGET 0
 #define USE_FTPGET(...)
-#define CFG_GETENFORCE 1
-#define USE_GETENFORCE(...) __VA_ARGS__
 #define CFG_GETTY 0
 #define USE_GETTY(...)
 #define CFG_GROUPADD 0
@@ -276,8 +274,6 @@
 #define USE_RESET(...)
 #define CFG_ROUTE 1
 #define USE_ROUTE(...) __VA_ARGS__
-#define CFG_SETENFORCE 1
-#define USE_SETENFORCE(...) __VA_ARGS__
 #define CFG_SH 0
 #define USE_SH(...)
 #define CFG_EXIT 0
@@ -496,8 +492,14 @@
 #define USE_SKELETON(...)
 #define CFG_SKELETON_ALIAS 0
 #define USE_SKELETON_ALIAS(...)
+#define CFG_GETENFORCE 1
+#define USE_GETENFORCE(...) __VA_ARGS__
+#define CFG_LOAD_POLICY 1
+#define USE_LOAD_POLICY(...) __VA_ARGS__
 #define CFG_RUNCON 1
 #define USE_RUNCON(...) __VA_ARGS__
+#define CFG_SETENFORCE 1
+#define USE_SETENFORCE(...) __VA_ARGS__
 #define CFG_TOYBOX 1
 #define USE_TOYBOX(...) __VA_ARGS__
 #define CFG_TOYBOX_SUID 1
