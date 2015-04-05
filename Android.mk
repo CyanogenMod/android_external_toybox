@@ -20,7 +20,7 @@ LOCAL_PATH := $(call my-dir)
 # To update:
 #
 
-#  git remote add toybox https://github.com/gfto/toybox.git
+#  git remote add toybox https://github.com/landley/toybox.git
 #  git fetch toybox
 #  git merge toybox/master
 #  mm -j32
