@@ -727,9 +727,9 @@
 #undef FLAG_c
 #endif
 
-// getenforce    
+// getenforce >0 >0
 #undef OPTSTR_getenforce
-#define OPTSTR_getenforce  0 
+#define OPTSTR_getenforce ">0"
 #ifdef CLEANUP_getenforce
 #undef CLEANUP_getenforce
 #undef FOR_getenforce
@@ -1878,9 +1878,9 @@
 #undef FLAG_f
 #endif
 
-// setenforce <1 <1
+// setenforce <1>1 <1>1
 #undef OPTSTR_setenforce
-#define OPTSTR_setenforce "<1"
+#define OPTSTR_setenforce "<1>1"
 #ifdef CLEANUP_setenforce
 #undef CLEANUP_setenforce
 #undef FOR_setenforce
