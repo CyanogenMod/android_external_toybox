@@ -1787,6 +1787,20 @@
 #undef FOR_reset
 #endif
 
+// restorecon <1DFnRrv <1DFnRrv
+#undef OPTSTR_restorecon
+#define OPTSTR_restorecon "<1DFnRrv"
+#ifdef CLEANUP_restorecon
+#undef CLEANUP_restorecon
+#undef FOR_restorecon
+#undef FLAG_v
+#undef FLAG_r
+#undef FLAG_R
+#undef FLAG_n
+#undef FLAG_F
+#undef FLAG_D
+#endif
+
 // rev    
 #undef OPTSTR_rev
 #define OPTSTR_rev  0 
@@ -4116,6 +4130,18 @@
 #ifndef TT
 #define TT this.reset
 #endif
+#endif
+
+#ifdef FOR_restorecon
+#ifndef TT
+#define TT this.restorecon
+#endif
+#define FLAG_v (1<<0)
+#define FLAG_r (1<<1)
+#define FLAG_R (1<<2)
+#define FLAG_n (1<<3)
+#define FLAG_F (1<<4)
+#define FLAG_D (1<<5)
 #endif
 
 #ifdef FOR_rev

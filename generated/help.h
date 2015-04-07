@@ -26,6 +26,8 @@
 
 #define help_runcon "usage: runcon CONTEXT COMMAND [ARGS...]\n\nRun a command in a specified security context.\n\n"
 
+#define help_restorecon "usage: restorecon [-D] [-F] [-R] [-n] [-v] FILE...\n\nRestores the default security contexts for the given files.\n\n-D	apply to /data/data too\n-F	force reset\n-R	recurse into directories\n-n	don't make any changes; useful with -v to see what would change\n-v	verbose: show any changes\n\n"
+
 #define help_load_policy "usage: load_policy FILE\n\nLoad the specified policy file.\n\n"
 
 #define help_getenforce "usage: getenforce\n\nShows whether SELinux is disabled, enforcing, or permissive.\n\n"

@@ -59,6 +59,7 @@ LOCAL_SRC_FILES := \
     main.c \
     toys/android/getenforce.c \
     toys/android/load_policy.c \
+    toys/android/restorecon.c \
     toys/android/runcon.c \
     toys/android/setenforce.c \
     toys/lsb/dmesg.c \
@@ -288,6 +289,7 @@ ALL_TOOLS := \
     pwd \
     readlink \
     realpath \
+    restorecon \
     rm \
     rmdir \
     rmmod \
