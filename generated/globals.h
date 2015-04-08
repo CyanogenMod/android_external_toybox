@@ -1,3 +1,10 @@
+// toys/android/getprop.c
+
+struct getprop_data {
+  size_t size;
+  size_t capacity;
+};
+
 // toys/example/hello.c
 
 struct hello_data {
@@ -1163,6 +1170,7 @@ struct xargs_data {
 };
 
 extern union global_union {
+	struct getprop_data getprop;
 	struct hello_data hello;
 	struct skeleton_data skeleton;
 	struct dmesg_data dmesg;

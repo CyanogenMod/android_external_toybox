@@ -494,6 +494,8 @@
 #define USE_SKELETON_ALIAS(...)
 #define CFG_GETENFORCE 1
 #define USE_GETENFORCE(...) __VA_ARGS__
+#define CFG_GETPROP 1
+#define USE_GETPROP(...) __VA_ARGS__
 #define CFG_LOAD_POLICY 1
 #define USE_LOAD_POLICY(...) __VA_ARGS__
 #define CFG_RESTORECON 1

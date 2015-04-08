@@ -735,6 +735,14 @@
 #undef FOR_getenforce
 #endif
 
+// getprop >2 >2
+#undef OPTSTR_getprop
+#define OPTSTR_getprop ">2"
+#ifdef CLEANUP_getprop
+#undef CLEANUP_getprop
+#undef FOR_getprop
+#endif
+
 // getty   <2t#<0H:I:l:f:iwnmLh
 #undef OPTSTR_getty
 #define OPTSTR_getty  0 
@@ -3259,6 +3267,12 @@
 #ifdef FOR_getenforce
 #ifndef TT
 #define TT this.getenforce
+#endif
+#endif
+
+#ifdef FOR_getprop
+#ifndef TT
+#define TT this.getprop
 #endif
 #endif
 

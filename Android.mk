@@ -58,6 +58,7 @@ LOCAL_SRC_FILES := \
     lib/xwrap.c \
     main.c \
     toys/android/getenforce.c \
+    toys/android/getprop.c \
     toys/android/load_policy.c \
     toys/android/restorecon.c \
     toys/android/runcon.c \
@@ -251,6 +252,7 @@ ALL_TOOLS := \
     find \
     free \
     getenforce \
+    getprop \
     groups \
     head \
     hostname \

@@ -22,7 +22,7 @@
 
 #define help_toybox "usage: toybox [--long | [command] [arguments...]]\n\nWith no arguments, shows available commands. First argument is\nname of a command to run, followed by any arguments to that command.\n\n--long	Show path to each command\n\nTo install command symlinks, try:\n  for i in $(/bin/toybox --long); do ln -s /bin/toybox $i; done\n\n"
 
-#define help_setprop "usage: setprop KEY VALUE\n\nSets an Android system property.\n\n"
+#define help_setprop "usage: setprop NAME VALUE\n\nSets an Android system property.\n\n"
 
 #define help_setenforce "usage: setenforce [enforcing|permissive|1|0]\n\nSets whether SELinux is enforcing (1) or permissive (0).\n\n"
 
@@ -31,6 +31,8 @@
 #define help_restorecon "usage: restorecon [-D] [-F] [-R] [-n] [-v] FILE...\n\nRestores the default security contexts for the given files.\n\n-D	apply to /data/data too\n-F	force reset\n-R	recurse into directories\n-n	don't make any changes; useful with -v to see what would change\n-v	verbose: show any changes\n\n"
 
 #define help_load_policy "usage: load_policy FILE\n\nLoad the specified policy file.\n\n"
+
+#define help_getprop "usage: getprop [NAME [DEFAULT]]\n\nGets an Android system property, or lists them all.\n\n"
 
 #define help_getenforce "usage: getenforce\n\nShows whether SELinux is disabled, enforcing, or permissive.\n\n"
 
