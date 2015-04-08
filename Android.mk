@@ -302,6 +302,7 @@ ALL_TOOLS := \
     sed \
     seq \
     setenforce \
+    setprop \
     setsid \
     sha1sum \
     sleep \
