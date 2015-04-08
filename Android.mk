@@ -62,6 +62,7 @@ LOCAL_SRC_FILES := \
     toys/android/restorecon.c \
     toys/android/runcon.c \
     toys/android/setenforce.c \
+    toys/android/setprop.c \
     toys/lsb/dmesg.c \
     toys/lsb/hostname.c \
     toys/lsb/killall.c \
@@ -195,6 +196,7 @@ LOCAL_SRC_FILES := \
     toys/posix/xargs.c \
 
 LOCAL_CFLAGS += \
+    -std=c99 \
     -Os \
     -Wno-char-subscripts \
     -Wno-sign-compare \
@@ -205,7 +207,9 @@ LOCAL_CFLAGS += \
     -ffunction-sections -fdata-sections \
     -fno-asynchronous-unwind-tables \
 
-LOCAL_SHARED_LIBRARIES := libselinux
+LOCAL_CLANG := true
+
+LOCAL_SHARED_LIBRARIES := libcutils libselinux
 
 LOCAL_MODULE := toybox
 

@@ -22,6 +22,8 @@
 
 #define help_toybox "usage: toybox [--long | [command] [arguments...]]\n\nWith no arguments, shows available commands. First argument is\nname of a command to run, followed by any arguments to that command.\n\n--long	Show path to each command\n\nTo install command symlinks, try:\n  for i in $(/bin/toybox --long); do ln -s /bin/toybox $i; done\n\n"
 
+#define help_setprop "usage: setprop KEY VALUE\n\nSets an Android system property.\n\n"
+
 #define help_setenforce "usage: setenforce [enforcing|permissive|1|0]\n\nSets whether SELinux is enforcing (1) or permissive (0).\n\n"
 
 #define help_runcon "usage: runcon CONTEXT COMMAND [ARGS...]\n\nRun a command in a specified security context.\n\n"

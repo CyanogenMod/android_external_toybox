@@ -1900,6 +1900,14 @@
 #undef FOR_setenforce
 #endif
 
+// setprop <2>2 <2>2
+#undef OPTSTR_setprop
+#define OPTSTR_setprop "<2>2"
+#ifdef CLEANUP_setprop
+#undef CLEANUP_setprop
+#undef FOR_setprop
+#endif
+
 // setsid ^<1t ^<1t
 #undef OPTSTR_setsid
 #define OPTSTR_setsid "^<1t"
@@ -4220,6 +4228,12 @@
 #ifdef FOR_setenforce
 #ifndef TT
 #define TT this.setenforce
+#endif
+#endif
+
+#ifdef FOR_setprop
+#ifndef TT
+#define TT this.setprop
 #endif
 #endif
 

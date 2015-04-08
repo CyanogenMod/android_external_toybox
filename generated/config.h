@@ -502,6 +502,8 @@
 #define USE_RUNCON(...) __VA_ARGS__
 #define CFG_SETENFORCE 1
 #define USE_SETENFORCE(...) __VA_ARGS__
+#define CFG_SETPROP 1
+#define USE_SETPROP(...) __VA_ARGS__
 #define CFG_TOYBOX 1
 #define USE_TOYBOX(...) __VA_ARGS__
 #define CFG_TOYBOX_SUID 1
