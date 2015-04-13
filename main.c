@@ -5,6 +5,8 @@
 
 #include "toys.h"
 
+#define TOYBOX_VERSION "0.5.2"
+
 // Populate toy_list[].
 
 #undef NEWTOY
@@ -155,12 +157,13 @@ void toybox_main(void)
   if (toys.argv[1]) {
     toys.optc = toys.recursion = 0;
     toy_exec(toys.argv+1);
-    if (toys.argv[1][0] == '-') goto list;
-
-    error_exit("Unknown command %s",toys.argv[1]);
+    if (!strcmp("--version", toys.argv[1])) {
+      xputs(TOYBOX_VERSION);
+      xexit();
+    }
+    if (toys.argv[1][0] != '-') error_exit("Unknown command %s", toys.argv[1]);
   }
 
-list:
   // Output list of command.
   for (i=1; i<ARRAY_LEN(toy_list); i++) {
     int fl = toy_list[i].flags;

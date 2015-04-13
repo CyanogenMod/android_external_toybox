@@ -1,410 +1,286 @@
-/* ps.c - Show running process statistics.
+/* ps.c - show process list
  *
- * Copyright 2013 Sandeep Sharma <sandeep.jack2756@gmail.com>
- * Copyright 2013 Kyungwan Han <asura321@gmail.com>
+ * Copyright 2015 Rob Landley <rob@landley.net>
  *
  * See http://pubs.opengroup.org/onlinepubs/9699919799/utilities/ps.html
+ * And http://kernel.org/doc/Documentation/filesystems/proc.txt Table 1-4
+ * And linux kernel source fs/proc/array.c function do_task_stat()
+ *
+ * Deviation from posix: no -n, "-o tty" called "TTY" not "TT", 
 
-USE_PS(NEWTOY(ps, ">0o*T", TOYFLAG_BIN))
+USE_PS(NEWTOY(ps, "aAdeflo*", TOYFLAG_USR|TOYFLAG_BIN))
 
 config PS
   bool "ps"
   default n
   help
-    usage: ps [-o COL1,COL2=HEADER] [-T]
-    
-    Show list of processes
+    usage: ps [-Aade] [-fl] [-gG GROUP] [-o FIELD] [-p PID] [-t TTY] [-u USER]
 
-    -a	Show all processes with a tty
-    -A  Show all processes
-    -o	Select columns for display
-    -T	Show threads
+    List processes.
+
+    -A	All processes
+    -a	Processes with terminals, except session leaders
+    -d	Processes that aren't session leaders
+    -e	Same as -A
+    -f	Full listing
+    -l	Long listing
+
+    -g  Processes belonging to these session leaders
+    -G	Processes with these real group IDs
+    -o	Show FIELDS for each process
+    -p	select by PID
+    -t	select by TTY
+    -u	select by USER
+    -U	select by USER
+
+     GROUP, FIELD, PID, TTY, and USER are comma separated lists.
+
+    OUTPUT (-o) FIELDS:
+
+      S Linux defines the process state letters as:
+        R (running) S (sleeping) D (disk sleep) T (stopped)  t (tracing stop)
+        Z (zombie)  X (dead)     x (dead)       K (wakekill) W (waking)
+      F Process flags (PF_*) from linux source file include/sched.h
+        (in octal rather than hex because posix inexplicably says so)
+
+    Default is PID,TTY,TIME,CMD  With -f UID,PID,PPID,C,STIME,TTY,TIME,CMD
+    With -l F,S,UID,PID,PPID,C,PRI,NI,ADDR,SZ,WCHAN,TTY,TIME,CMD
 */
 
 #define FOR_ps
 #include "toys.h"
 
 GLOBALS(
-  struct arg_list *llist_o;
-  unsigned screen_width;
+  struct arg_list *o;
 
-  void *o;
+  unsigned width;
+  dev_t tty;
+  void *fields;
+  long uptime;
 )
 
-#define BUFF_SIZE 1024
-struct header_list {
-  struct header_list *next;
-  char *name, *header, *format;
-  int width, position;
+/*
+  l l fl  a   fl   fl l  l  l    l  l     f     a   a    a
+  F S UID PID PPID C PRI NI ADDR SZ WCHAN STIME TTY TIME CMD
+  ruser user rgroup group pid ppid pgid pcpu vsz nice etime time tty comm args
+
+  todo: thread support /proc/$d/task/%d/stat
+    man page: F flags mean...
+*/
+
+struct strawberry {
+  struct strawberry *next, *prev;
+  short which, len;
+  char title[];
 };
 
-// create list of header attributes taking care of -o (-o ooid=MOM..)
-// and width of attributes.
-static void list_add(struct header_list *data, char *c_data)
+// dirtree callback.
+// toybuf used as: 1024 /proc/$PID/stat, 1024 slot[], 2048 /proc/$PID/cmdline
+static int do_ps(struct dirtree *new)
 {
-  struct header_list *temp = TT.o, *new;
+  struct strawberry *field;
+  long long *slot = (void *)(toybuf+1024);
+  char *name, *s, state;
+  int nlen, i, fd, len, width = TT.width;
 
-  memcpy(new = xmalloc(sizeof(*new)), data, sizeof(*new));
-  if (c_data) new->header = c_data;
-  else new->header = xstrdup(data->header);
-  if (c_data && (strlen(c_data) > data->width)) new->width = strlen(c_data);
+  if (!new->parent) return DIRTREE_RECURSE;
+  if (!(*slot = atol(new->name))) return 0;
 
-  if (temp) {
-    while (temp->next) temp = temp->next;
-    temp->next = new;
-  } else TT.o = new;
-}
+  // name field limited to 256 bytes by VFS, plus 40 fields * max 20 chars:
+  // 1000-ish total, but some forced zero so actually there's headroom.
+  sprintf(toybuf, "%lld/stat", *slot);
+  if (!readfileat(dirtree_parentfd(new), toybuf, toybuf, 1024)) return 0;
 
-// parse -o arguments
-static void parse_o(struct header_list *hdr)
-{
-  int i;
-  char *ptr, *str, *temp;
-  struct arg_list *node = TT.llist_o;
+  // parse oddball fields (name and state)
+  if (!(s = strchr(toybuf, '('))) return 0;
+  for (name = ++s; *s != ')'; s++) if (!*s) return 0;
+  nlen = s++-name;
+  if (1>sscanf(++s, " %c%n", &state, &i)) return 0;
 
-  while (node) {
-    char *s = str = xstrdup(node->arg);
+  // parse numeric fields
+  for (len = 1; len<100; len++)
+    if (1>sscanf(s += i, " %lld%n", slot+len, &i)) break;
 
-    i = 0;
-    while (str) {
-      if ((ptr = strsep(&str, ","))) { //seprate list
-        if ((temp = strchr(ptr, '='))) { // Handle ppid = MOM
-          *temp++ = 0;
-          while (hdr[i].name) {
-            // search from default header
-            if (!(strcmp(hdr[i].name, ptr))) {
-              //handle condition like ppid = M,OM
-              if (str) ptr = xmprintf("%s,%s", temp, str);
-              else ptr = xmprintf("%s", temp);
-              list_add(hdr+i, ptr);
-              break;
-            }
-            i++; 
-          }
-          if (!hdr[i].name) perror_exit("Invalid arg for -o option");
+  // skip entries we don't care about.
+  if ((toys.optflags&(FLAG_a|FLAG_d)) && getsid(*slot)==*slot) return 0;
+  if ((toys.optflags&FLAG_a) && !slot[4]) return 0;
+  if (!(toys.optflags*(FLAG_a|FLAG_d|FLAG_A|FLAG_e)) && TT.tty!=slot[4])
+    return 0;
+
+  // 0 "F", "S", "UID", "PID", "PPID", "C", "PRI",
+  // 7 "NI", "ADDR", "SZ", "WCHAN", "STIME", "TTY", "TIME", "CMD",
+  //15 "COMMAND", "ELAPSED", "GROUP", "%CPU", "PGID", "RGROUP",
+  //21 "RUSER", "USER", "VSZ"
+
+  for (field = TT.fields; field; field = field->next) {
+    char *out = toybuf+2048;
+
+    // Default: unsupported (5 "C")
+    sprintf(out, "-");
+
+    // PID, PPID, PRI, NI, ADDR, SZ
+    if (-1 != (i = stridx((char[]){3,4,6,7,8,9,0}, field->which)))
+      sprintf(out, ((1<<i)&0x10) ? "%llx" : "%lld",
+              slot[((char[]){0,2,16,17,22})[i]]>>(((1<<i)&0x20) ? 12 : 0));
+    // F
+    else if (!(i = field->which)) sprintf(out, "%llo", slot[7]);
+    // S
+    else if (i == 1)
+      sprintf(out, "%c", state);
+    // UID and USER
+    else if (i == 2 || i == 22) {
+      sprintf(out, "%d", new->st.st_uid);
+      if (i == 2 || (toys.optflags&FLAG_f)) {
+        struct passwd *pw = getpwuid(new->st.st_uid);
+
+        if (pw) out = pw->pw_name;
+      }
+    // WCHAN
+    } else if (i==10) {
+      sprintf(toybuf+512, "%lld/wchan", *slot);
+      readfileat(dirtree_parentfd(new), toybuf+512, out, 2047);
+
+    // STIME
+    // TTY
+    } else if (i==12) {
+
+      // Can we readlink() our way to a name?
+      for (i=0; i<3; i++) {
+        struct stat st;
+
+        sprintf(toybuf+512, "%lld/fd/%i", *slot, i);
+        fd = dirtree_parentfd(new);
+        if (!fstatat(fd, toybuf+512, &st, 0) && S_ISCHR(st.st_mode)
+          && st.st_rdev == slot[4]
+          && 0<(len = readlinkat(fd, toybuf+512, out, 2047)))
+        {
+          out[len] = 0;
+          if (!strncmp(out, "/dev/", 5)) out += 5;
+
           break;
-        } else {
-          while (hdr[i].name) {
-            if (!(strcmp(hdr[i].name, ptr))) {
-              list_add(hdr+i, 0);
-              break;
-            }
-            i++; 
-          }
-          if (!hdr[i].name) error_exit("bad -o");
-          i = 0;
         }
       }
-    }
-    free(s);
-    node = node->next;
-  }
-}
 
-//get uid/gid for processes.
-static void get_uid_gid(char *p, char *id_str, unsigned *id)
-{
-  FILE *f; 
+      // Couldn't find it, show major:minor
+      if (i==3) {
+        i = slot[4];
+        sprintf(out, "%d:%d", (i>>8)&0xfff, ((i>>12)&0xfff00)|(i&0xff));
+      }
 
-  if(!p) return;
-  f = xfopen(p, "r");
-  while (fgets(toybuf, BUFF_SIZE, f)) {
-    if (!strncmp(toybuf, id_str, strlen(id_str))) {
-      sscanf(toybuf, "%*s %u", id);
-      break;
-    }        
-  }
-  fclose(f);
-}
+    // TIME
+    } else if (i==13 || i==16) {
+      long seconds = (i==16) ? slot[20] : slot[11]+slot[12], ll = 60*60*24;
 
-//get etime for processes.
-void get_etime(unsigned long s_time)
-{
-  unsigned long min;
-  unsigned sec;
-  struct sysinfo info;
-  char *temp;
+      seconds /= sysconf(_SC_CLK_TCK);
+      if (i==16) seconds = TT.uptime-seconds;
+      for (s = out, i = 0; i<4; i++) {
+        if (i>1 || seconds > ll)
+          s += sprintf(s, (i==3) ? "%02ld" : "%ld%c", seconds/ll, "-::"[i]);
+        seconds %= ll;
+        ll /= i ? 60 : 24;
+      }
 
-  sysinfo(&info);
-  min = s_time/sysconf(_SC_CLK_TCK);
-  min = info.uptime - min;
-  sec = min % 60;
-  min = min / 60;
-  temp = xmprintf("%3lu:%02u", min,sec);
-  xprintf("%*.*s",7,7,temp);
-  free(temp);
-}
+  //16 "ELAPSED", "GROUP", "%CPU", "PGID", "RGROUP",
+  //21 "RUSER", -, "VSZ"
 
-//get time attributes for processes.
-void get_time(unsigned long s_time, unsigned long u_time)
-{        
-  unsigned long min;
-  unsigned sec;
-  char *temp;
 
-  min = (s_time + u_time)/sysconf(_SC_CLK_TCK);
-  sec = min % 60;
-  min = min / 60;
-  temp = xmprintf("%3lu:%02u", min,sec);
-  xprintf("%*.*s",6,6,temp);
-  free(temp);
-}
+    // Command line limited to 2k displayable. We could dynamically malloc, but
+    // it'd almost never get used, querying length of a proc file is awkward,
+    // fixed buffer is nommu friendly... Wait for somebody to complain. :)
+    } else if (i == 14 || i == 15) {
+      int fd;
 
-// read command line taking care of in between NUL's in command line
-static void read_cmdline(int fd, char *cmd_ptr)
-{
-  int size = read(fd, cmd_ptr, BUFF_SIZE); //sizeof(cmd_buf)
-
-  cmd_ptr[size] = '\0';
-  while (--size > 0 && cmd_ptr[size] == '\0'); //reach to last char
-
-  while (size >= 0) {
-    if ((unsigned char)cmd_ptr[size] < ' ') cmd_ptr[size] = ' ';
-    size--;
-  }
-}
-
-// get the processes stats and print the stats
-// corresponding to header attributes.
-static void do_ps_line(int pid, int tid)
-{
-  char *stat_buff = toybuf + BUFF_SIZE, *cmd_buff = toybuf + (2*BUFF_SIZE);
-  char state[4] = {0,};
-  int tty, tty_major, tty_minor, fd, n, nice, width_counter = 0;
-  struct stat stats;
-  struct passwd *pw;
-  struct group *gr;
-  char *name, *user, *group, *ruser, *rgroup, *ptr;
-  long rss;
-  unsigned long stime, utime, start_time, vsz;
-  unsigned ppid, ruid, rgid, pgid;
-  struct header_list *p = TT.o;
-
-  sprintf(stat_buff, "/proc/%d", pid);
-  if(stat(stat_buff, &stats)) return;
-
-  if (tid) {
-    if (snprintf(stat_buff, BUFF_SIZE, "/proc/%d/task/%d/stat", pid, tid) >= BUFF_SIZE) return;
-    if (snprintf(cmd_buff, BUFF_SIZE, "/proc/%d/task/%d/cmdline", pid, tid) >= BUFF_SIZE) return;
-  } else {
-    if (snprintf(stat_buff, BUFF_SIZE, "/proc/%d/stat", pid) >= BUFF_SIZE) return;
-    if (snprintf(cmd_buff, BUFF_SIZE, "/proc/%d/cmdline", pid) >= BUFF_SIZE) return;
-  }
-
-  fd = xopen(stat_buff, O_RDONLY);
-  n = readall(fd, stat_buff, BUFF_SIZE);
-  xclose(fd);
-  if (n < 0) return;
-  stat_buff[n] = 0; //Null terminate the buffer.
-  ptr = strchr(stat_buff, '(');
-  ptr++;
-  name = ptr;
-  ptr = strrchr(stat_buff, ')');
-  *ptr = '\0'; //unecessary if?
-  name = xmprintf("[%s]", name);
-  ptr += 2; // goto STATE
-  n = sscanf(ptr, "%c %u %u %*u %d %*s %*s %*s %*s %*s %*s "
-      "%lu %lu %*s %*s %*s %d %*s %*s %lu %lu %ld",            
-      &state[0],&ppid, &pgid, &tty, &utime, &stime,
-      &nice,&start_time, &vsz,&rss);
-
-  if (tid) pid = tid;
-  vsz >>= 10; //Convert into KB
-  rss = rss * 4; //Express in pages
-  tty_major = (tty >> 8) & 0xfff;
-  tty_minor = (tty & 0xff) | ((tty >> 12) & 0xfff00);
-
-  if (vsz == 0 && state[0] != 'Z') state[1] = 'W';
-  else state[1] = ' ';
-  if (nice < 0 ) state[2] = '<';
-  else if (nice) state[2] = 'N';
-  else state[2] = ' ';
-
-  if (tid) {
-    if (snprintf(stat_buff, BUFF_SIZE, "/proc/%d/task/%d/status", pid, tid) >= BUFF_SIZE)
-      goto clean;
-  } else {
-    if (snprintf(stat_buff, BUFF_SIZE, "/proc/%d/status", pid) >= BUFF_SIZE)
-      goto clean;
-  }
-
-  fd = -1;
-  while (p) {
-    int width;
-    width = p->width;
-    width_counter += (width + 1); //how much screen we hv filled, +1, extra space b/w headers
-    switch (p->position) {
-      case 0:
-        pw = getpwuid(stats.st_uid);
-        if (!pw) user = xmprintf("%d",(int)stats.st_uid);
-        else user = xmprintf("%s", pw->pw_name);
-        printf("%-*.*s", width, width, user);
-        free(user);
-        break;
-      case 1:
-        gr = getgrgid(stats.st_gid);
-        if (!gr) group = xmprintf("%d",(int)stats.st_gid);
-        else group = xmprintf("%s", gr->gr_name);
-        printf("%-*.*s", width, width, group);
-        free(group);
-        break;
-      case 2:
-        name[strlen(name) - 1] = '\0';
-        printf("%-*.*s", width,width, name + 1);
-        name[strlen(name)] = ']'; //Refill it for further process.
-        break;
-      case 3:
-        {
-          int j = 0;
-          width_counter -= width;
-          if(p->next) j = width; //is args is in middle. ( -o pid,args,ppid)
-          else j = (TT.screen_width - width_counter % TT.screen_width); //how much screen left.
-          if (fd == -1) fd = open(cmd_buff, O_RDONLY); //don't want to die
-          else xlseek(fd, 0, SEEK_SET);
-          if (fd < 0) cmd_buff[0] = 0;
-          else read_cmdline(fd, cmd_buff); 
-          if (cmd_buff[0]) printf("%-*.*s", j, j, cmd_buff);
-          else printf("%-*.*s", j, j, name);
-          width_counter += width;
-          break;
+      len = 0;
+      sprintf(out, "%lld/cmdline", *slot);
+      fd = openat(dirtree_parentfd(new), out, O_RDONLY);
+ 
+      if (fd != -1) {
+        if (0<(len = read(fd, out, 2047))) {
+          out[len] = 0;
+          for (i = 0; i<len; i++) if (out[i] < ' ') out[i] = ' ';
         }
-      case 4:
-        printf("%*d", width, pid);
-        break;
-      case 5:
-        printf("%*d", width, ppid);
-        break;
-      case 6:
-        printf("%*d", width, pgid);
-        break;
-      case 7:
-        get_etime(start_time);
-        break;
-      case 8:
-        printf("%*d", width, nice);
-        break;
-      case 9:
-        get_uid_gid(stat_buff, "Gid:", &rgid);
-        gr = getgrgid(rgid);
-        if (!gr) rgroup = xmprintf("%d",(int)stats.st_gid);
-        else rgroup = xmprintf("%s", gr->gr_name);
-        printf("%-*.*s", width, width, rgroup);
-        free(rgroup);
-        break;
-      case 10:
-        get_uid_gid(stat_buff, "Uid:", &ruid);
-        pw = getpwuid(ruid);
-        if (!pw) ruser = xmprintf("%d",(int)stats.st_uid);
-        else ruser = xmprintf("%s", pw->pw_name);
-        printf("%-*.*s", width, width, ruser);
-        free(ruser);
-        break;
-      case 11:
-        get_time(utime, stime);
-        break;
-      case 12:
-        if (tty_major) {
-          char *temp = xmprintf("%d,%d", tty_major,tty_minor);
-          printf("%-*s", width, temp);
-          free(temp);
-        } else printf("%-*s", width, "?");
-        break;
-      case 13:
-        printf("%*lu", width, vsz);
-        break;
-      case 14:
-        printf("%-*s", width, state);
-        break;
-      case 15:
-        printf("%*lu", width, rss);
-        break;
+        close(fd);
+      }
+      if (len<1) sprintf(out, "[%.*s]", nlen, name);
     }
-    p = p->next;
-    xputc(' '); //space char
+
+    i = width<field->len ? width : field->len;
+    width -= printf(" %*.*s", i, field->next ? i : width, out);
   }
-  if (fd >= 0) xclose(fd);
   xputc('\n');
-clean:
-  free(name);
-}
 
-// Do stats for threads (for -T option)
-void do_ps_threads(int pid)
-{       
-  DIR *d; 
-  int tid;
-  struct dirent *de;
-  char *tmp = xmprintf("/proc/%d/task",pid);
-
-  if (!(d = opendir(tmp))) {
-    free(tmp);
-    return;
-  }
-  while ((de = readdir(d))) {
-    if (isdigit(de->d_name[0])) {
-      tid = atoi(de->d_name);
-      if (tid == pid) continue;
-      do_ps_line(pid, tid);
-    }
-  }        
-  closedir(d); 
-  free(tmp);
+  return 0;
 }
 
 void ps_main(void)
 {
-  DIR *dp;
-  struct dirent *entry;
-  int pid;
-  struct header_list *hdr, def_header[] = { 
-    {0, "user", "USER", "%-*s ", 8, 0},
-    {0, "group", "GROUP", "%-*s ", 8, 1},
-    {0, "comm", "COMMAND", "%-*s ",16, 2},
-    {0, "args", "COMMAND", "%-*s ",30, 3},
-    {0, "pid", "PID", "%*s ", 5, 4},
-    {0, "ppid","PPID", "%*s ", 5, 5},
-    {0, "pgid", "PGID", "%*s ", 5, 6},
-    {0, "etime","ELAPSED", "%*s ", 7, 7},
-    {0, "nice", "NI", "%*s ", 5, 8},
-    {0, "rgroup","RGROUP", "%-*s ", 8, 9},
-    {0, "ruser","RUSER", "%-*s ", 8, 10},
-    {0, "time", "TIME", "%*s ", 6, 11},
-    {0, "tty", "TT", "%-*s ", 6, 12},
-    {0, "vsz","VSZ", "%*s ", 7, 13},
-    {0, "stat", "STAT", "%-*s ", 4, 14},
-    {0, "rss", "RSS", "%*s ", 4, 15},
-{0,0,0,0,0,0}
+  struct strawberry *field;
+  // Octal output code followed by header name
+  char *typos[] = {
+    "F", "S", "UID", "PID", "PPID", "C", "PRI",
+    "NI", "ADDR", "SZ", "WCHAN", "STIME", "TTY", "TIME", "CMD",
+    "COMMAND", "ELAPSED", "GROUP", "%CPU", "PGID", "RGROUP",
+    "RUSER", "USER", "VSZ"
   };
-  
-  TT.screen_width = 80; //default width
-  terminal_size(&TT.screen_width, NULL);
+  int i, fd = -1;
 
-  // Default pid, user, time, comm
-  if (!TT.llist_o) {
-    list_add(def_header+4, 0);
-    list_add(def_header, 0);
-    list_add(def_header+11, 0);
-    list_add(def_header+3, 0);
-  } else parse_o(def_header); // ARRAY_LEN(def_header)
+  // l l fl  a   fl   fl l  l  l    l  l     f     a   a    a
+  // F S UID PID PPID C PRI NI ADDR SZ WCHAN STIME TTY TIME CMD
+  // 7 
 
-  for (hdr = TT.o; hdr; hdr = hdr->next)
-    printf(hdr->format , hdr->width, hdr->header);
+  TT.width = 80;
+  terminal_size(&TT.width, 0);
+  TT.width--;
+
+  // find controlling tty, falling back to /dev/tty if none
+  for (i = fd = 0; i < 4; i++) {
+    struct stat st;
+
+    if (i != 3 || -1 != (i = fd = open("/dev/tty", O_RDONLY))) {
+      if (isatty(i) && !fstat(i, &st)) {
+        TT.tty = st.st_rdev;
+        break;
+      }
+    }
+  }
+  if (fd != -1) close(fd);
+
+  sysinfo((void *)toybuf);
+  // Because "TT.uptime = *(long *)toybuf;" triggers a bug in gcc.
+  {
+    long *sigh = (long *)toybuf;
+    TT.uptime = *sigh;
+  }
+
+  // Select fields
+  if (toys.optflags&FLAG_o) {
+    printf("todo\n");
+  } else {
+    unsigned short def = 0x7008;
+
+    if (toys.optflags&FLAG_f) def = 0x783c;
+    if (toys.optflags&FLAG_l) def = 0x77ff;
+
+    // order of fields[] matches posix STDOUT section, so add enabled XSI
+    // defaults according to bitmask
+
+    for (i=0; def>>i; i++) {
+      int len = strlen(typos[i]);
+
+      if (!((def>>i)&1)) continue;
+
+      field = xmalloc(sizeof(struct strawberry)+len+1);
+      field->which = i;
+      field->len = len;
+      strcpy(field->title, typos[i]);
+      dlist_add_nomalloc((void *)&TT.fields, (void *)field);
+    }
+  }
+  dlist_terminate(TT.fields);
+
+  for (field = TT.fields; field; field = field->next)
+    printf(" %*s", field->len, field->title);
   xputc('\n');
 
-  if (!(dp = opendir("/proc"))) perror_exit("opendir");
-  while ((entry = readdir(dp))) {
-    if (!isdigit(*entry->d_name)) continue;
-    pid = atoi(entry->d_name);
-    do_ps_line(pid, 0);
-    if (toys.optflags & FLAG_T) do_ps_threads(pid);
-  }
-  closedir(dp);
-
-  while (CFG_TOYBOX_FREE) {
-    struct header_list *temp = llist_pop(&TT.o);
-
-    if (!temp) break;
-    free(temp->header);
-    free(temp);
-  }
+  dirtree_read("/proc", do_ps);
 }

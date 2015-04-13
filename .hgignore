@@ -1,8 +1,0 @@
-syntax: glob
-.config*
-change/
-generated/
-kconfig/mconf
-kconfig/conf
-toybox
-toybox_unstripped

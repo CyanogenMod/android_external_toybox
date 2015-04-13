@@ -1,4 +1,6 @@
+syntax: glob
 /.config.old
+change/
 /generated/build.sh
 /generated/config2help
 /generated/Config.in
@@ -7,5 +9,5 @@
 /generated/obj
 /generated/optlibs.dat
 /kconfig
-/toybox
-/toybox_unstripped
+toybox
+toybox_unstripped
