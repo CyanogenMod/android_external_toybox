@@ -584,13 +584,6 @@ struct logger_data {
   char *ident;
 };
 
-// toys/pending/mdev.c
-
-struct mdev_data {
-  char *devname;
-  int root_maj, root_min, verbose;
-};
-
 // toys/pending/mke2fs.c
 
 struct mke2fs_data {
@@ -668,10 +661,12 @@ struct ping_data {
 // toys/pending/ps.c
 
 struct ps_data {
-  struct arg_list *llist_o;
-  unsigned screen_width;
+  struct arg_list *o;
 
-  void *o;
+  unsigned width;
+  dev_t tty;
+  void *fields;
+  long uptime;
 };
 
 // toys/pending/route.c
@@ -1235,7 +1230,6 @@ extern union global_union {
 	struct klogd_data klogd;
 	struct last_data last;
 	struct logger_data logger;
-	struct mdev_data mdev;
 	struct mke2fs_data mke2fs;
 	struct modprobe_data modprobe;
 	struct more_data more;

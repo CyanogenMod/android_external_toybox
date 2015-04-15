@@ -16,11 +16,11 @@
 
 #define help_toybox_float "Include floating point support infrastructure and commands that\nrequire it.\n\n"
 
-#define help_toybox_selinux "Include SELinux options in commands such as ls, and add\nSELinux-specific commands such as chcon.\n\n"
+#define help_toybox_selinux "Include SELinux options in commands such as ls, and add\nSELinux-specific commands such as chcon to the Android menu.\n\n"
 
 #define help_toybox_suid "Support for the Set User ID bit, to install toybox suid root and drop\npermissions for commands which do not require root access. To use\nthis change ownership of the file to the root user and set the suid\nbit in the file permissions:\n\nchown root:root toybox; chmod +s toybox\n\n"
 
-#define help_toybox "usage: toybox [--long | [command] [arguments...]]\n\nWith no arguments, shows available commands. First argument is\nname of a command to run, followed by any arguments to that command.\n\n--long	Show path to each command\n\nTo install command symlinks, try:\n  for i in $(/bin/toybox --long); do ln -s /bin/toybox $i; done\n\n"
+#define help_toybox "usage: toybox [--long | --version | [command] [arguments...]]\n\nWith no arguments, shows available commands. First argument is\nname of a command to run, followed by any arguments to that command.\n\n--long	Show path to each command\n--version	Show toybox version\n\nTo install command symlinks, try:\n  for i in $(/bin/toybox --long); do ln -s /bin/toybox $i; done\n\n"
 
 #define help_setprop "usage: setprop NAME VALUE\n\nSets an Android system property.\n\n"
 
@@ -252,7 +252,7 @@
 
 #define help_reset "usage: reset\n\nA program to reset the terminal.\n\n"
 
-#define help_ps "usage: ps [-o COL1,COL2=HEADER] [-T]\n\nShow list of processes\n\n-a	Show all processes with a tty\n-A  Show all processes\n-o	Select columns for display\n-T	Show threads\n\n"
+#define help_ps "usage: ps [-Aade] [-fl] [-gG GROUP] [-o FIELD] [-p PID] [-t TTY] [-u USER]\n\nList processes.\n\n-A	All processes\n-a	Processes with terminals, except session leaders\n-d	Processes that aren't session leaders\n-e	Same as -A\n-f	Full listing\n-l	Long listing\n\n-g  Processes belonging to these session leaders\n-G	Processes with these real group IDs\n-o	Show FIELDS for each process\n-p	select by PID\n-t	select by TTY\n-u	select by USER\n-U	select by USER\n\n GROUP, FIELD, PID, TTY, and USER are comma separated lists.\n\nOUTPUT (-o) FIELDS:\n\n  S Linux defines the process state letters as:\n    R (running) S (sleeping) D (disk sleep) T (stopped)  t (tracing stop)\n    Z (zombie)  X (dead)     x (dead)       K (wakekill) W (waking)\n  F Process flags (PF_*) from linux source file include/sched.h\n    (in octal rather than hex because posix inexplicably says so)\n\nDefault is PID,TTY,TIME,CMD  With -f UID,PID,PPID,C,STIME,TTY,TIME,CMD\nWith -l F,S,UID,PID,PPID,C,PRI,NI,ADDR,SZ,WCHAN,TTY,TIME,CMD\n\n"
 
 #define help_ping "usage: ping [OPTIONS] HOST\n\nCheck network connectivity by sending packets to a host and reporting\nits response.\n\nSend ICMP ECHO_REQUEST packets to ipv4 or ipv6 addresses and prints each\necho it receives back, with round trip time.\n\nOptions:\n-4, -6      Force IPv4 or IPv6\n-c CNT      Send CNT many packets\n-I IFACE/IP Source interface or address\n-q          Quiet, only displays output at start and when finished\n-s SIZE     Packet SIZE in bytes (default 56)\n-t TTL      Set Time (number of hops) To Live\n-W SEC      Seconds to wait for response after all packets sent (default 10)\n-w SEC      Exit after this many seconds\n\n"
 

@@ -1709,14 +1709,19 @@
 #undef FOR_printf
 #endif
 
-// ps >0o*T >0o*T
+// ps aAdeflo* aAdeflo*
 #undef OPTSTR_ps
-#define OPTSTR_ps ">0o*T"
+#define OPTSTR_ps "aAdeflo*"
 #ifdef CLEANUP_ps
 #undef CLEANUP_ps
 #undef FOR_ps
-#undef FLAG_T
 #undef FLAG_o
+#undef FLAG_l
+#undef FLAG_f
+#undef FLAG_e
+#undef FLAG_d
+#undef FLAG_A
+#undef FLAG_a
 #endif
 
 // pwd >0LP[-LP] >0LP[-LP]
@@ -4090,8 +4095,13 @@
 #ifndef TT
 #define TT this.ps
 #endif
-#define FLAG_T (1<<0)
-#define FLAG_o (1<<1)
+#define FLAG_o (1<<0)
+#define FLAG_l (1<<1)
+#define FLAG_f (1<<2)
+#define FLAG_e (1<<3)
+#define FLAG_d (1<<4)
+#define FLAG_A (1<<5)
+#define FLAG_a (1<<6)
 #endif
 
 #ifdef FOR_pwd
