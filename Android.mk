@@ -207,6 +207,9 @@ LOCAL_CFLAGS += \
     -ffunction-sections -fdata-sections \
     -fno-asynchronous-unwind-tables \
 
+toybox_version := $(shell git -C $(LOCAL_PATH) rev-parse --short=12 HEAD 2>/dev/null)-android
+LOCAL_CFLAGS += -DTOYBOX_VERSION='"$(toybox_version)"'
+
 LOCAL_CLANG := true
 
 LOCAL_SHARED_LIBRARIES := libcutils libselinux
