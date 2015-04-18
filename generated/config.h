@@ -268,8 +268,8 @@
 #define USE_PGREP(...) __VA_ARGS__
 #define CFG_PING 0
 #define USE_PING(...)
-#define CFG_PS 1
-#define USE_PS(...) __VA_ARGS__
+#define CFG_PS 0
+#define USE_PS(...)
 #define CFG_RESET 0
 #define USE_RESET(...)
 #define CFG_ROUTE 1
@@ -510,8 +510,12 @@
 #define USE_TOYBOX(...) __VA_ARGS__
 #define CFG_TOYBOX_SUID 1
 #define USE_TOYBOX_SUID(...) __VA_ARGS__
+#define CFG_TOYBOX_LSM_NONE 0
+#define USE_TOYBOX_LSM_NONE(...)
 #define CFG_TOYBOX_SELINUX 1
 #define USE_TOYBOX_SELINUX(...) __VA_ARGS__
+#define CFG_TOYBOX_SMACK 0
+#define USE_TOYBOX_SMACK(...)
 #define CFG_TOYBOX_FLOAT 1
 #define USE_TOYBOX_FLOAT(...) __VA_ARGS__
 #define CFG_TOYBOX_HELP 1
