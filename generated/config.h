@@ -326,8 +326,8 @@
 #define USE_CHCON(...) __VA_ARGS__
 #define CFG_CHROOT 1
 #define USE_CHROOT(...) __VA_ARGS__
-#define CFG_CHVT 1
-#define USE_CHVT(...) __VA_ARGS__
+#define CFG_CHVT 0
+#define USE_CHVT(...)
 #define CFG_CLEAR 1
 #define USE_CLEAR(...) __VA_ARGS__
 #define CFG_COUNT 0

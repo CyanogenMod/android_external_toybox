@@ -82,7 +82,6 @@ LOCAL_SRC_FILES := \
     toys/other/bzcat.c \
     toys/other/chcon.c \
     toys/other/chroot.c \
-    toys/other/chvt.c \
     toys/other/clear.c \
     toys/other/dos2unix.c \
     toys/other/fallocate.c \
@@ -217,7 +216,7 @@ LOCAL_SHARED_LIBRARIES := libcutils libselinux
 LOCAL_MODULE := toybox
 
 # dupes: dd df du ls mount renice
-# useless?: chvt freeramdisk fsfreeze install makedevs mkfifo nbd-client
+# useless?: freeramdisk fsfreeze install makedevs mkfifo nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty vconfig
 # prefer BSD netcat instead?: nc netcat
 # prefer efs2progs instead?: blkid chattr lsattr

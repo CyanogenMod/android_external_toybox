@@ -204,9 +204,9 @@
 #undef FOR_chroot
 #endif
 
-// chvt <1 <1
+// chvt   <1
 #undef OPTSTR_chvt
-#define OPTSTR_chvt "<1"
+#define OPTSTR_chvt  0 
 #ifdef CLEANUP_chvt
 #undef CLEANUP_chvt
 #undef FOR_chvt
