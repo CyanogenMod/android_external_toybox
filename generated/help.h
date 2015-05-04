@@ -72,7 +72,7 @@
 
 #define help_hostname "usage: hostname [newname]\n\nGet/Set the current hostname\n\n"
 
-#define help_dmesg "usage: dmesg [-n LEVEL] [-s SIZE] | -c\n\nPrint or control the kernel ring buffer.\n\n-c	Clear the ring buffer after printing\n-n	Set kernel logging LEVEL (1-9)\n-r	Raw output (with <level markers>)\n-s	Show the last SIZE many bytes\n\n"
+#define help_dmesg "usage: dmesg [-c] [-r|-t] [-n LEVEL] [-s SIZE]\n\nPrint or control the kernel ring buffer.\n\n-c	Clear the ring buffer after printing\n-n	Set kernel logging LEVEL (1-9)\n-r	Raw output (with <level markers>)\n-s	Show the last SIZE many bytes\n-t	Don't print kernel's timestamps\n\n"
 
 #define help_yes "usage: yes [args...]\n\nRepeatedly output line until killed. If no args, output 'y'.\n\n\n"
 
@@ -88,7 +88,7 @@
 
 #define help_uptime "usage: uptime\n\nTell how long the system has been running and the system load\naverages for the past 1, 5 and 15 minutes.\n\n"
 
-#define help_truncate "usage: truncate [-c] -s file...\n\nSet length of file(s), extending sparsely if necessary.\n\n-c	Don't create file if it doesn't exist.\n-s	New size\n\n"
+#define help_truncate "usage: truncate [-c] -s SIZE file...\n\nSet length of file(s), extending sparsely if necessary.\n\n-c	Don't create file if it doesn't exist.\n-s	New size (with optional prefix and suffix)\n\nSIZE prefix: + add, - subtract, < shrink to, > expand to,\n             / multiple rounding down, % multiple rounding up\nSIZE suffix: k=1024, m=1024^2, g=1024^3, t=1024^4, p=1024^5, e=1024^6\n\n"
 
 #define help_timeout "usage: timeout [-k LENGTH] [-s SIGNAL] LENGTH COMMAND...\n\nRun command line as a child process, sending child a signal if the\ncommand doesn't exit soon enough.\n\nLength can be a decimal fraction. An optional suffix can be \"m\"\n(minutes), \"h\" (hours), \"d\" (days), or \"s\" (seconds, the default).\n\n-s	Send specified signal (default TERM)\n-k	Send KILL signal if child still running this long after first signal.\n-v	Verbose\n\n"
 
@@ -306,6 +306,8 @@
 
 #define help_host "usage: host [-av] [-t TYPE] NAME [SERVER]\n\nPerform DNS lookup on NAME, which can be a domain name to lookup,\nor an ipv4 dotted or ipv6 colon seprated address to reverse lookup.\nSERVER (if present) is the DNS server to use.\n\n-a	no idea\n-t	not a clue\n-v	verbose\n\n"
 
+#define help_hexedit "usage: hexedit FILENAME\n\nHexadecimal file editor.\n\n-r	Read only (display but don't edit)\n\n"
+
 #define help_groupdel "usage: groupdel [USER] GROUP\n\nDelete a group or remove a user from a group\n\n"
 
 #define help_groupadd "usage: groupadd [-S] [-g GID] [USER] GROUP\n\nAdd a group or add a user to a group\n\n  -g GID Group id\n  -S     Create a system group\n\n"
@@ -427,6 +429,8 @@
 #define help_mkdir "usage: mkdir [-vp] [-m mode] [dirname...]\n\nCreate one or more directories.\n\n-m	set permissions of directory to mode.\n-p	make parent directories as needed.\n-v	verbose\n\n"
 
 #define help_ls_color "--color  device=yellow  symlink=turquoise/red  dir=blue  socket=purple\n         files: exe=green  suid=red  suidfile=redback  stickydir=greenback\n         =auto means detect if output is a tty.\n\nusage: ls --color[=auto] [-ACFHLRSacdfiklmnpqrstux1] [directory...]\n\nlist files\n\nwhat to show:\n-a	all files including .hidden		-c  use ctime for timestamps\n-d	directory, not contents			-i  inode number\n-k	block sizes in kilobytes		-p  put a '/' after dir names\n-q	unprintable chars as '?'		-s  size (in blocks)\n-u	use access time for timestamps		-A  list all files but . and ..\n-H	follow command line symlinks		-L  follow symlinks\n-R	recursively list files in subdirs	-F  append /dir *exe @sym |FIFO\n\noutput formats:\n-1	list one file per line			-C  columns (sorted vertically)\n-g	like -l but no owner			-l  long (show full details)\n-m	comma separated				-n  like -l but numeric uid/gid\n-o	like -l but no group			-x  columns (horizontal sort)\n\nsorting (default is alphabetical):\n-f	unsorted	-r  reverse	-t  timestamp	-S  size\n"
+
+#define help_ls_smack "usage: ls [-Z]\n\n-Z	security context\n\n"
 
 #define help_ls "usage: ls --color[=auto] [-ACFHLRSacdfiklmnpqrstux1] [directory...]\n\nlist files\n\nwhat to show:\n-a	all files including .hidden		-c  use ctime for timestamps\n-d	directory, not contents			-i  inode number\n-k	block sizes in kilobytes		-p  put a '/' after dir names\n-q	unprintable chars as '?'		-s  size (in blocks)\n-u	use access time for timestamps		-A  list all files but . and ..\n-H	follow command line symlinks		-L  follow symlinks\n-R	recursively list files in subdirs	-F  append /dir *exe @sym |FIFO\n\noutput formats:\n-1	list one file per line			-C  columns (sorted vertically)\n-g	like -l but no owner			-l  long (show full details)\n-m	comma separated				-n  like -l but numeric uid/gid\n-o	like -l but no group			-x  columns (horizontal sort)\n\nsorting (default is alphabetical):\n-f	unsorted	-r  reverse	-t  timestamp	-S  size\n--color  device=yellow  symlink=turquoise/red  dir=blue  socket=purple\n         files: exe=green  suid=red  suidfile=redback  stickydir=greenback\n         =auto means detect if output is a tty.\n\n"
 
