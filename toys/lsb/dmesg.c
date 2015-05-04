@@ -5,13 +5,13 @@
  * http://refspecs.linuxfoundation.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic/dmesg.html
 
 // We care that FLAG_c is 1, so keep c at the end.
-USE_DMESG(NEWTOY(dmesg, "rs#<1n#c", TOYFLAG_BIN))
+USE_DMESG(NEWTOY(dmesg, "trs#<1n#c[!tr]", TOYFLAG_BIN))
 
 config DMESG
   bool "dmesg"
   default y
   help
-    usage: dmesg [-n LEVEL] [-s SIZE] | -c
+    usage: dmesg [-c] [-r|-t] [-n LEVEL] [-s SIZE]
 
     Print or control the kernel ring buffer.
 
@@ -19,6 +19,7 @@ config DMESG
     -n	Set kernel logging LEVEL (1-9)
     -r	Raw output (with <level markers>)
     -s	Show the last SIZE many bytes
+    -t	Don't print kernel's timestamps
 */
 
 #define FOR_dmesg
@@ -47,12 +48,14 @@ void dmesg_main(void)
     if (size < 0) error_exit("klogctl");
     data[size] = 0;
 
-    // Filter out level markers.
+    // Filter out level markers and optionally time markers
     if (!(toys.optflags & FLAG_r)) while ((from - data) < size) {
-      if ((from == data || from[-1] == '\n') && *from == '<') {
-        int i = stridx(from, '>');
+      if (from == data || from[-1] == '\n') {
+        char *to;
 
-        if (i>0) from += i+1;
+        if (*from == '<' && (to = strchr(from, '>'))) from = ++to;
+        if ((toys.optflags&FLAG_t) && *from == '[' && (to = strchr(from, ']')))
+          from = to+1+(to[1]==' ');
       }
       *(to++) = *(from++);
     } else to = data+size;
