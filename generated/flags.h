@@ -1182,9 +1182,9 @@
 #undef FLAG_S
 #endif
 
-// ls (color):;goACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL] (color):;ZgoACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL]
+// ls (color):;ZgoACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL] (color):;ZgoACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL]
 #undef OPTSTR_ls
-#define OPTSTR_ls "(color):;goACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL]"
+#define OPTSTR_ls "(color):;ZgoACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL]"
 #ifdef CLEANUP_ls
 #undef CLEANUP_ls
 #undef FOR_ls
@@ -3690,7 +3690,7 @@
 #define FLAG_o (1<<24)
 #define FLAG_g (1<<25)
 #define FLAG_Z (1<<26)
-#define FLAG_color (FORCED_FLAG<<27)
+#define FLAG_color (1<<27)
 #endif
 
 #ifdef FOR_lsattr

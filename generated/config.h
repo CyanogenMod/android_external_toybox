@@ -92,10 +92,10 @@
 #define USE_LN(...) __VA_ARGS__
 #define CFG_LS 1
 #define USE_LS(...) __VA_ARGS__
-#define CFG_LS_SMACK 0
-#define USE_LS_SMACK(...)
 #define CFG_LS_COLOR 1
 #define USE_LS_COLOR(...) __VA_ARGS__
+#define CFG_LS_Z 1
+#define USE_LS_Z(...) __VA_ARGS__
 #define CFG_MKDIR 1
 #define USE_MKDIR(...) __VA_ARGS__
 #define CFG_MKFIFO 1
