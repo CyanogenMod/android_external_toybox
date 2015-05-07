@@ -185,6 +185,9 @@ void toybox_main(void)
 
 int main(int argc, char *argv[])
 {
+  // We check our own stdout errors, disable sigpipe killer
+  signal(SIGPIPE, SIG_IGN);
+
   if (CFG_TOYBOX) {
     // Trim path off of command name
     *argv = basename(*argv);

@@ -2,7 +2,7 @@
 
 struct getprop_data {
   size_t size;
-  size_t capacity;
+  char **nv; // name/value pairs: even=name, odd=value
 };
 
 // toys/example/hello.c
@@ -303,7 +303,10 @@ struct timeout_data {
 // toys/other/truncate.c
 
 struct truncate_data {
+  char *s;
+
   long size;
+  int type;
 };
 
 // toys/pending/arp.c
@@ -511,6 +514,15 @@ struct getty_data {
 
 struct groupadd_data {
   long gid;
+};
+
+// toys/pending/hexedit.c
+
+struct hexedit_data {
+  char *data;
+  long long len, base;
+  int numlen;
+  unsigned height;
 };
 
 // toys/pending/host.c
@@ -1221,6 +1233,7 @@ extern union global_union {
 	struct ftpget_data ftpget;
 	struct getty_data getty;
 	struct groupadd_data groupadd;
+	struct hexedit_data hexedit;
 	struct host_data host;
 	struct hwclock_data hwclock;
 	struct iconv_data iconv;

@@ -7,6 +7,7 @@ USE_SETPROP(NEWTOY(setprop, "<2>2", TOYFLAG_USR|TOYFLAG_SBIN))
 config SETPROP
   bool "setprop"
   default y
+  depends on TOYBOX_ON_ANDROID
   help
     usage: setprop NAME VALUE
 
@@ -17,12 +18,11 @@ config SETPROP
 #include "toys.h"
 
 #if defined(__ANDROID__)
+
 #include <cutils/properties.h>
-#endif
 
 void setprop_main(void)
 {
-#if defined(__ANDROID__)
   char *name = toys.optargs[0], *value = toys.optargs[1];
   char *p;
   size_t name_len = strlen(name), value_len = strlen(value);
@@ -48,5 +48,12 @@ void setprop_main(void)
 
   if (property_set(name, value))
     error_msg("failed to set property '%s' to '%s'", name, value);
-#endif
 }
+
+#else
+
+void setprop_main(void)
+{
+}
+
+#endif

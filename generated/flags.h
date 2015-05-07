@@ -204,9 +204,9 @@
 #undef FOR_chroot
 #endif
 
-// chvt <1 <1
+// chvt   <1
 #undef OPTSTR_chvt
-#define OPTSTR_chvt "<1"
+#define OPTSTR_chvt  0 
 #ifdef CLEANUP_chvt
 #undef CLEANUP_chvt
 #undef FOR_chvt
@@ -491,9 +491,9 @@
 #undef FOR_dirname
 #endif
 
-// dmesg rs#<1n#c rs#<1n#c
+// dmesg trs#<1n#c[!tr] trs#<1n#c[!tr]
 #undef OPTSTR_dmesg
-#define OPTSTR_dmesg "rs#<1n#c"
+#define OPTSTR_dmesg "trs#<1n#c[!tr]"
 #ifdef CLEANUP_dmesg
 #undef CLEANUP_dmesg
 #undef FOR_dmesg
@@ -501,6 +501,7 @@
 #undef FLAG_n
 #undef FLAG_s
 #undef FLAG_r
+#undef FLAG_t
 #endif
 
 // dos2unix    
@@ -883,6 +884,15 @@
 #undef FLAG_a
 #endif
 
+// hexedit   <1>1r
+#undef OPTSTR_hexedit
+#define OPTSTR_hexedit  0 
+#ifdef CLEANUP_hexedit
+#undef CLEANUP_hexedit
+#undef FOR_hexedit
+#undef FLAG_r
+#endif
+
 // host   <1>2avt:
 #undef OPTSTR_host
 #define OPTSTR_host  0 
@@ -1172,9 +1182,9 @@
 #undef FLAG_S
 #endif
 
-// ls (color):;goACFHLRSacdfiklmnpqrstux1[-1Cglmnox][-cu][-ftS][-HL] (color):;goACFHLRSacdfiklmnpqrstux1[-1Cglmnox][-cu][-ftS][-HL]
+// ls (color):;ZgoACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL] (color):;ZgoACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL]
 #undef OPTSTR_ls
-#define OPTSTR_ls "(color):;goACFHLRSacdfiklmnpqrstux1[-1Cglmnox][-cu][-ftS][-HL]"
+#define OPTSTR_ls "(color):;ZgoACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL]"
 #ifdef CLEANUP_ls
 #undef CLEANUP_ls
 #undef FOR_ls
@@ -1204,6 +1214,7 @@
 #undef FLAG_A
 #undef FLAG_o
 #undef FLAG_g
+#undef FLAG_Z
 #undef FLAG_color
 #endif
 
@@ -2401,9 +2412,9 @@
 #undef FOR_true
 #endif
 
-// truncate <1s#|c <1s#|c
+// truncate <1s:|c <1s:|c
 #undef OPTSTR_truncate
-#define OPTSTR_truncate "<1s#|c"
+#define OPTSTR_truncate "<1s:|c"
 #ifdef CLEANUP_truncate
 #undef CLEANUP_truncate
 #undef FOR_truncate
@@ -3085,6 +3096,7 @@
 #define FLAG_n (1<<1)
 #define FLAG_s (1<<2)
 #define FLAG_r (1<<3)
+#define FLAG_t (1<<4)
 #endif
 
 #ifdef FOR_dos2unix
@@ -3401,6 +3413,13 @@
 #define FLAG_a (1<<1)
 #endif
 
+#ifdef FOR_hexedit
+#ifndef TT
+#define TT this.hexedit
+#endif
+#define FLAG_r (FORCED_FLAG<<0)
+#endif
+
 #ifdef FOR_host
 #ifndef TT
 #define TT this.host
@@ -3670,7 +3689,8 @@
 #define FLAG_A (1<<23)
 #define FLAG_o (1<<24)
 #define FLAG_g (1<<25)
-#define FLAG_color (1<<26)
+#define FLAG_Z (1<<26)
+#define FLAG_color (1<<27)
 #endif
 
 #ifdef FOR_lsattr

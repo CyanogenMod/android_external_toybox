@@ -10,6 +10,8 @@
 #define USE_TOYBOX_UTMPX(...) __VA_ARGS__
 #define CFG_TOYBOX_SHADOW 1
 #define USE_TOYBOX_SHADOW(...) __VA_ARGS__
+#define CFG_TOYBOX_ON_ANDROID 1
+#define USE_TOYBOX_ON_ANDROID(...) __VA_ARGS__
 #define CFG_BASENAME 1
 #define USE_BASENAME(...) __VA_ARGS__
 #define CFG_CAL 1
@@ -92,6 +94,8 @@
 #define USE_LS(...) __VA_ARGS__
 #define CFG_LS_COLOR 1
 #define USE_LS_COLOR(...) __VA_ARGS__
+#define CFG_LS_Z 1
+#define USE_LS_Z(...) __VA_ARGS__
 #define CFG_MKDIR 1
 #define USE_MKDIR(...) __VA_ARGS__
 #define CFG_MKFIFO 1
@@ -218,6 +222,8 @@
 #define USE_GROUPADD(...)
 #define CFG_GROUPDEL 0
 #define USE_GROUPDEL(...)
+#define CFG_HEXEDIT 0
+#define USE_HEXEDIT(...)
 #define CFG_HOST 0
 #define USE_HOST(...)
 #define CFG_HWCLOCK 1
@@ -326,8 +332,8 @@
 #define USE_CHCON(...) __VA_ARGS__
 #define CFG_CHROOT 1
 #define USE_CHROOT(...) __VA_ARGS__
-#define CFG_CHVT 1
-#define USE_CHVT(...) __VA_ARGS__
+#define CFG_CHVT 0
+#define USE_CHVT(...)
 #define CFG_CLEAR 1
 #define USE_CLEAR(...) __VA_ARGS__
 #define CFG_COUNT 0
