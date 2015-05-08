@@ -143,6 +143,17 @@
 #undef FLAG_u
 #endif
 
+// catv   vte
+#undef OPTSTR_catv
+#define OPTSTR_catv  0 
+#ifdef CLEANUP_catv
+#undef CLEANUP_catv
+#undef FOR_catv
+#undef FLAG_e
+#undef FLAG_t
+#undef FLAG_v
+#endif
+
 // cd    
 #undef OPTSTR_cd
 #define OPTSTR_cd  0 
@@ -2790,6 +2801,15 @@
 #define FLAG_t (1<<1)
 #define FLAG_v (1<<2)
 #define FLAG_u (1<<3)
+#endif
+
+#ifdef FOR_catv
+#ifndef TT
+#define TT this.catv
+#endif
+#define FLAG_e (FORCED_FLAG<<0)
+#define FLAG_t (FORCED_FLAG<<1)
+#define FLAG_v (FORCED_FLAG<<2)
 #endif
 
 #ifdef FOR_cd
