@@ -492,6 +492,8 @@
 
 #define help_chgrp "usage: chgrp/chown [-RHLP] [-fvh] group file...\n\nChange group of one or more files.\n\n-f	suppress most error messages.\n-h	change symlinks instead of what they point to\n-R	recurse into subdirectories (implies -h).\n-H	with -R change target of symlink, follow command line symlinks\n-L	with -R change target of symlink, follow all symlinks\n-P	with -R change symlink, do not follow symlinks (default)\n-v	verbose output.\n\n"
 
+#define help_catv "usage: catv [-evt] [filename...]\n\nDisplay nonprinting characters as escape sequences. Use M-x for\nhigh ascii characters (>127), and ^x for other nonprinting chars.\n\n-e  Mark each newline with $\n-t  Show tabs as ^I\n-v  Don't use ^x or M-x escapes.\n\n"
+
 #define help_cat "usage: cat [-etuv] [file...]\n\nCopy (concatenate) files to stdout.  If no files listed, copy from stdin.\nFilename \"-\" is a synonym for stdin.\n\n-e	Mark each newline with $\n-t	Show tabs as ^I\n-u	Copy one byte at a time (slow).\n-v	Display nonprinting characters as escape sequences. Use M-x for\n	high ascii characters (>127), and ^x for other nonprinting chars.\n"
 
 #define help_cal "usage: cal [[month] year]\n\nPrint a calendar.\n\nWith one argument, prints all months of the specified year.\nWith two arguments, prints calendar for month and year.\n\n"
