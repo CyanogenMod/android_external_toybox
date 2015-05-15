@@ -160,6 +160,15 @@ struct free_data {
   unsigned long long units;
 };
 
+// toys/other/hexedit.c
+
+struct hexedit_data {
+  char *data;
+  long long len, base;
+  int numlen;
+  unsigned height;
+};
+
 // toys/other/ifconfig.c
 
 struct ifconfig_data {
@@ -514,15 +523,6 @@ struct getty_data {
 
 struct groupadd_data {
   long gid;
-};
-
-// toys/pending/hexedit.c
-
-struct hexedit_data {
-  char *data;
-  long long len, base;
-  int numlen;
-  unsigned height;
 };
 
 // toys/pending/host.c
@@ -1197,6 +1197,7 @@ extern union global_union {
 	struct dos2unix_data dos2unix;
 	struct fallocate_data fallocate;
 	struct free_data free;
+	struct hexedit_data hexedit;
 	struct ifconfig_data ifconfig;
 	struct login_data login;
 	struct losetup_data losetup;
@@ -1233,7 +1234,6 @@ extern union global_union {
 	struct ftpget_data ftpget;
 	struct getty_data getty;
 	struct groupadd_data groupadd;
-	struct hexedit_data hexedit;
 	struct host_data host;
 	struct hwclock_data hwclock;
 	struct iconv_data iconv;

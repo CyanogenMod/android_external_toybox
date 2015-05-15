@@ -116,6 +116,8 @@
 
 #define help_rev "usage: rev [FILE...]\n\nOutput each line reversed, when no files are given stdin is used.\n\n"
 
+#define help_reset "usage: reset\n\nreset the terminal\n\n"
+
 #define help_reboot "usage: reboot/halt/poweroff [-n]\n\nRestart, halt or powerdown the system.\n\n-n	Don't sync before stopping the system.\n\n"
 
 #define help_realpath "usage: realpath FILE...\n\nDisplay the canonical absolute pathname\n\n"
@@ -175,6 +177,8 @@
 #define help_inotifyd "usage: inotifyd PROG FILE[:MASK] ...\n\nWhen a filesystem event matching MASK occurs to a FILE, run PROG as:\n\n  PROG EVENTS FILE [DIRFILE]\n\nIf PROG is \"-\" events are sent to stdout.\n\nThis file is:\n  a  accessed    c  modified    e  metadata change  w  closed (writable)\n  r  opened      D  deleted     M  moved            0  closed (unwritable)\n  u  unmounted   o  overflow    x  unwatchable\n\nA file in this directory is:\n  m  moved in    y  moved out   n  created          d  deleted\n\nWhen x event happens for all FILEs, inotifyd exits (after waiting for PROG).\n\n"
 
 #define help_ifconfig "usage: ifconfig [-a] [INTERFACE [ACTION...]]\n\nDisplay or configure network interface.\n\nWith no arguments, display active interfaces. First argument is interface\nto operate on, one argument by itself displays that interface.\n\n-a	Show all interfaces, not just active ones\n\nAdditional arguments are actions to perform on the interface:\n\nADDRESS[/NETMASK] - set IPv4 address (1.2.3.4/5)\ndefault - unset ipv4 address\nadd|del ADDRESS[/PREFIXLEN] - add/remove IPv6 address (1111::8888/128)\nup - enable interface\ndown - disable interface\n\nnetmask|broadcast|pointopoint ADDRESS - set more IPv4 characteristics\nhw ether|infiniband ADDRESS - set LAN hardware address (AA:BB:CC...)\ntxqueuelen LEN - number of buffered packets before output blocks\nmtu LEN - size of outgoing packets (Maximum Transmission Unit)\n\nFlags you can set on an interface (or -remove by prefixing with -):\narp - don't use Address Resolution Protocol to map LAN routes\npromisc - don't discard packets that aren't to this LAN hardware address\nmulticast - force interface into multicast mode if the driver doesn't\nallmulti - promisc for multicast packets\n\nObsolete fields included for historical purposes:\nirq|io_addr|mem_start ADDR - micromanage obsolete hardware\noutfill|keepalive INTEGER - SLIP analog dialup line quality monitoring\nmetric INTEGER - added to Linux 0.9.10 with comment \"never used\", still true\n\n"
+
+#define help_hexedit "usage: hexedit FILENAME\n\nHexadecimal file editor.\n\n-r	Read only (display but don't edit)\n\n"
 
 #define help_help "usage: help [-ah] [command]\n\nShow usage information for toybox commands.\nRun \"toybox\" with no arguments for a list of available commands.\n\n-h	HTML output\n-a	All commands\n"
 
@@ -254,8 +258,6 @@
 
 #define help_route "usage: route -neA inet{6} / [{add|del}]\n\nDisplay/Edit kernel routing tables.\n\n-n  Don't resolve names\n-e  Display other/more information\n-A  inet{6} Select Address Family\n\n"
 
-#define help_reset "usage: reset\n\nA program to reset the terminal.\n\n"
-
 #define help_ps "usage: ps [-Aade] [-fl] [-gG GROUP] [-o FIELD] [-p PID] [-t TTY] [-u USER]\n\nList processes.\n\n-A	All processes\n-a	Processes with terminals, except session leaders\n-d	Processes that aren't session leaders\n-e	Same as -A\n-f	Full listing\n-l	Long listing\n\n-g  Processes belonging to these session leaders\n-G	Processes with these real group IDs\n-o	Show FIELDS for each process\n-p	select by PID\n-t	select by TTY\n-u	select by USER\n-U	select by USER\n\n GROUP, FIELD, PID, TTY, and USER are comma separated lists.\n\nOUTPUT (-o) FIELDS:\n\n  \"UID\", \"PID\", \"PPID\", \"C\", \"PRI\", \"NI\", \"ADDR\", \"SZ\",\n  \"WCHAN\", \"STIME\", \"TTY\", \"TIME\", \"CMD\", \"COMMAND\", \"ELAPSED\", \"GROUP\",\n  \"%CPU\", \"PGID\", \"RGROUP\", \"RUSER\", \"USER\", \"VSZ\"\n\n  C    Processor utilization for scheduling\n  F    Process flags (PF_*) from linux source file include/sched.h\n       (in octal rather than hex because posix)\n  S    Process state:\n       R (running) S (sleeping) D (disk sleep) T (stopped)  t (tracing stop)\n       Z (zombie)  X (dead)     x (dead)       K (wakekill) W (waking)\n  PID  Process id\n  PPID Parent process id\n  PRI  Priority\n  UID  User id of process owner\n\nDefault output is -o PID,TTY,TIME,CMD\nWith -f USER=UID,PID,PPID,C,STIME,TTY,TIME,CMD\nWith -l F,S,UID,PID,PPID,C,PRI,NI,ADDR,SZ,WCHAN,TTY,TIME,CMD\n\n"
 
 #define help_ping "usage: ping [OPTIONS] HOST\n\nCheck network connectivity by sending packets to a host and reporting\nits response.\n\nSend ICMP ECHO_REQUEST packets to ipv4 or ipv6 addresses and prints each\necho it receives back, with round trip time.\n\nOptions:\n-4, -6      Force IPv4 or IPv6\n-c CNT      Send CNT many packets\n-I IFACE/IP Source interface or address\n-q          Quiet, only displays output at start and when finished\n-s SIZE     Packet SIZE in bytes (default 56)\n-t TTL      Set Time (number of hops) To Live\n-W SEC      Seconds to wait for response after all packets sent (default 10)\n-w SEC      Exit after this many seconds\n\n"
@@ -305,8 +307,6 @@
 #define help_hwclock "usage: hwclock [-rswtluf]\n\n-f FILE Use specified device file instead of /dev/rtc (--rtc)\n-l      Hardware clock uses localtime (--localtime)\n-r      Show hardware clock time (--show)\n-s      Set system time from hardware clock (--hctosys)\n-t      Set the system time based on the current timezone (--systz)\n-u      Hardware clock uses UTC (--utc)\n-w      Set hardware clock from system time (--systohc)\n\n"
 
 #define help_host "usage: host [-av] [-t TYPE] NAME [SERVER]\n\nPerform DNS lookup on NAME, which can be a domain name to lookup,\nor an ipv4 dotted or ipv6 colon seprated address to reverse lookup.\nSERVER (if present) is the DNS server to use.\n\n-a	no idea\n-t	not a clue\n-v	verbose\n\n"
-
-#define help_hexedit "usage: hexedit FILENAME\n\nHexadecimal file editor.\n\n-r	Read only (display but don't edit)\n\n"
 
 #define help_groupdel "usage: groupdel [USER] GROUP\n\nDelete a group or remove a user from a group\n\n"
 
