@@ -376,8 +376,8 @@
 #define USE_CHATTR(...) __VA_ARGS__
 #define CFG_LSMOD 1
 #define USE_LSMOD(...) __VA_ARGS__
-#define CFG_LSPCI 1
-#define USE_LSPCI(...) __VA_ARGS__
+#define CFG_LSPCI 0
+#define USE_LSPCI(...)
 #define CFG_LSPCI_TEXT 1
 #define USE_LSPCI_TEXT(...) __VA_ARGS__
 #define CFG_LSUSB 1
