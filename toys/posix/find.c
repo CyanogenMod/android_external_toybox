@@ -184,7 +184,7 @@ static int do_find(struct dirtree *new)
   struct double_list *argdata = TT.argdata;
   char *s, **ss;
 
-  recurse = DIRTREE_COMEAGAIN|((toys.optflags&FLAG_L) ? DIRTREE_SYMFOLLOW : 0);
+  recurse = DIRTREE_COMEAGAIN|(DIRTREE_SYMFOLLOW*!!(toys.optflags&FLAG_L));
 
   // skip . and .. below topdir, handle -xdev and -depth
   if (new) {
@@ -531,12 +531,9 @@ void find_main(void)
   do_find(0);
 
   // Loop through paths
-  for (i = 0; i < len; i++) {
-    struct dirtree *new;
-
-    new = dirtree_add_node(0, ss[i], toys.optflags&(FLAG_H|FLAG_L));
-    if (new) dirtree_handle_callback(new, do_find);
-  }
+  for (i = 0; i < len; i++)
+    dirtree_handle_callback(dirtree_start(ss[i], toys.optflags&(FLAG_H|FLAG_L)),
+      do_find);
 
   if (CFG_TOYBOX_FREE) {
     close(TT.topdir);
