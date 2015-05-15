@@ -50,6 +50,8 @@ void get_optflags(void);
 #define DIRTREE_COMEAGAIN    4
 // Follow symlinks to directories
 #define DIRTREE_SYMFOLLOW    8
+// Don't warn about failure to stat
+#define DIRTREE_SHUTUP      16
 // Don't look at any more files in this directory.
 #define DIRTREE_ABORT      256
 
@@ -65,7 +67,8 @@ struct dirtree {
   char name[];
 };
 
-struct dirtree *dirtree_add_node(struct dirtree *p, char *name, int symfollow);
+struct dirtree *dirtree_start(char *name, int symfollow);
+struct dirtree *dirtree_add_node(struct dirtree *p, char *name, int flags);
 char *dirtree_path(struct dirtree *node, int *plen);
 int dirtree_notdotdot(struct dirtree *catch);
 int dirtree_parentfd(struct dirtree *node);
@@ -172,12 +175,15 @@ void delete_tempfile(int fdin, int fdout, char **tempname);
 void replace_tempfile(int fdin, int fdout, char **tempname);
 void crc_init(unsigned int *crc_table, int little_endian);
 void base64_init(char *p);
-int terminal_size(unsigned *x, unsigned *y);
-int set_terminal(int fd, int raw, struct termios *old);
 int yesno(char *prompt, int def);
 int human_readable(char *buf, unsigned long long num);
 int qstrcmp(const void *a, const void *b);
 int xpoll(struct pollfd *fds, int nfds, int timeout);
+
+// interestingtimes.c
+int xgettty(void);
+int terminal_size(unsigned *xx, unsigned *yy);
+int set_terminal(int fd, int raw, struct termios *old);
 int scan_key(char *scratch, char **seqs, int block);
 
 // net.c

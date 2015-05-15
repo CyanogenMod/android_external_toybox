@@ -4,7 +4,7 @@
  *
  * No standard
 
-USE_HEXEDIT(NEWTOY(hexedit, "<1>1r", TOYFLAG_USR|TOYFLAG_BIN))
+USE_HEXEDIT(NEWTOY(hexedit, "<1>1r", TOYFLAG_USR|TOYFLAG_BIN|TOYFLAG_LOCALE))
 
 config HEXEDIT
   bool "hexedit"
@@ -46,6 +46,7 @@ static void fix_terminal(void)
   esc("?25h");
   esc("0m");
   jump(0, 999);
+  esc("K");
 }
 
 static void sigttyreset(int i)
@@ -73,20 +74,53 @@ static void draw_char(char broiled)
   } else printf("%c", broiled);
 }
 
+static void draw_tail(void)
+{
+  int i = 0, width = 0, w, len;
+  char *start = *toys.optargs, *end;
+
+  jump(0, TT.height);
+  esc("K");
+
+  // First time, make sure we fit in 71 chars (advancing start as necessary).
+  // Second time, print from start to end, escaping nonprintable chars.
+  for (i=0; i<2; i++) {
+    for (end = start; *end;) {
+      wchar_t wc;
+
+      len = mbrtowc(&wc, end, 99, 0);
+      if (len<0 || wc<32 || (w = wcwidth(wc))<0) {
+        len = w = 1;
+        if (i) draw_char(*end);
+      } else if (i) fwrite(end, len, 1, stdout);
+      end += len;
+
+      if (!i) {
+        width += w;
+        while (width > 71) {
+          len = mbrtowc(&wc, start, 99, 0);
+          if (len<0 || wc<32 || (w = wcwidth(wc))<0) len = w = 1;
+          width -= w;
+          start += len;
+        }
+      }
+    }
+  }
+}
+
 static void draw_line(long long yy)
 {
-  int x;
+  int x, xx = 16;
 
   yy = (TT.base+yy)*16;
+  if (yy+xx>=TT.len) xx = TT.len-yy;
 
   if (yy<TT.len) {
     printf("\r%0*llX ", TT.numlen, yy);
-    for (x=0; x<16; x++) {
-      if (yy+x<TT.len) printf(" %02X", TT.data[yy+x]);
-      else printf("   ");
-    }
-    printf("  ");
-    for (x=0; x<16; x++) draw_char(TT.data[yy+x]);
+    for (x=0; x<xx; x++) printf(" %02X", TT.data[yy+x]);
+    printf("%*s", 2+3*(16-xx), "");
+    for (x=0; x<xx; x++) draw_char(TT.data[yy+x]);
+    printf("%*s", 16-xx, "");
   }
   esc("K");
 }
@@ -100,6 +134,7 @@ static void draw_page(void)
     if (y) printf("\r\n");
     draw_line(y);
   }
+  draw_tail();
 }
 
 // side: 0 = editing left, 1 = editing right, 2 = clear, 3 = read only
@@ -166,12 +201,13 @@ void hexedit_main(void)
     pos = 16*(TT.base+y)+x;
     if (pos>=TT.len) {
       pos = TT.len-1;
-      x = (TT.len-1)%15;
+      x = pos&15;
+      y = (pos/16)-TT.base;
     }
 
     // Display cursor
     highlight(x, y, ro ? 3 : side);
-    fflush(0);
+    xprintf("");
 
     // Wait for next key
     key = scan_key(toybuf, keys, 1);
@@ -204,22 +240,22 @@ void hexedit_main(void)
         if (TT.base) {
           TT.base--;
           esc("1T");
-          jump(0, TT.height);
-          esc("K");
+          draw_tail();
           jump(0, 0);
           draw_line(0);
         }
         y = 0;
       }
     } else if (key==KEY_DOWN) {
-      if (y == TT.height-1 && pos+32<TT.len) {
+      if (y == TT.height-1 && (pos|15)+1<TT.len) {
 down:
         TT.base++;
         esc("1S");
         jump(0, TT.height-1);
         draw_line(TT.height-1);
+        draw_tail();
       }
-      if (pos+16<TT.len && ++y>=TT.height) y--;
+      if (++y>=TT.height) y--;
     } else if (key==KEY_RIGHT) {
       if (x<15 && pos+1<TT.len) x++;
     } else if (key==KEY_LEFT) {
