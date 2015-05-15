@@ -51,6 +51,7 @@ LOCAL_SRC_FILES := \
     lib/dirtree.c \
     lib/getmountlist.c \
     lib/help.c \
+    lib/interestingtimes.c \
     lib/lib.c \
     lib/llist.c \
     lib/net.c \
