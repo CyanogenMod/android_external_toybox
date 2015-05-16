@@ -96,7 +96,6 @@ LOCAL_SRC_FILES := \
     toys/other/losetup.c \
     toys/other/lsattr.c \
     toys/other/lsmod.c \
-    toys/other/lspci.c \
     toys/other/lsusb.c \
     toys/other/makedevs.c \
     toys/other/mkswap.c \
@@ -270,7 +269,6 @@ ALL_TOOLS := \
     logname \
     losetup \
     lsmod \
-    lspci \
     lsusb \
     md5sum \
     mkdir \

@@ -160,7 +160,9 @@
 
 #define help_lsusb "usage: lsusb\n\nList USB hosts/devices.\n\n"
 
-#define help_lspci "usage: lspci [-ekmn] [-i FILE ] \n\nList PCI devices.\n-e	Print all 6 digits in class\n-i	PCI ID database (default /usr/share/misc/pci.ids)\n-k	Print kernel driver\n-m	Machine parseable format\n-n	Numeric output (repeat for readable and numeric)\n"
+#define help_lspci_text "usage: lspci [-n] [-i FILE ]\n\n-n	Numeric output (repeat for readable and numeric)\n-i	PCI ID database (default /usr/share/misc/pci.ids)\n\n\n"
+
+#define help_lspci "usage: lspci [-ekm]\n\nList PCI devices.\n\n-e	Print all 6 digits in class\n-k	Print kernel driver\n-m	Machine parseable format\n\n"
 
 #define help_lsmod "usage: lsmod\n\nDisplay the currently loaded modules, their sizes and their dependencies.\n\n"
 
