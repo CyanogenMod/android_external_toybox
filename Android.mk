@@ -51,6 +51,7 @@ LOCAL_SRC_FILES := \
     lib/dirtree.c \
     lib/getmountlist.c \
     lib/help.c \
+    lib/interestingtimes.c \
     lib/lib.c \
     lib/llist.c \
     lib/net.c \
@@ -95,7 +96,6 @@ LOCAL_SRC_FILES := \
     toys/other/losetup.c \
     toys/other/lsattr.c \
     toys/other/lsmod.c \
-    toys/other/lspci.c \
     toys/other/lsusb.c \
     toys/other/makedevs.c \
     toys/other/mkswap.c \
@@ -215,7 +215,7 @@ LOCAL_SHARED_LIBRARIES := libcutils libselinux
 
 LOCAL_MODULE := toybox
 
-# dupes: dd df du ls mount renice
+# dupes: dd df du mount renice
 # useless?: freeramdisk fsfreeze install makedevs mkfifo nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty vconfig
 # prefer BSD netcat instead?: nc netcat
@@ -268,8 +268,8 @@ ALL_TOOLS := \
     ln \
     logname \
     losetup \
+    ls \
     lsmod \
-    lspci \
     lsusb \
     md5sum \
     mkdir \

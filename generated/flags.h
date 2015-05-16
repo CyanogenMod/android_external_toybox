@@ -1250,9 +1250,9 @@
 #undef FOR_lsmod
 #endif
 
-// lspci emkn@i: emkn@i:
+// lspci   emkn@i:
 #undef OPTSTR_lspci
-#define OPTSTR_lspci "emkn@i:"
+#define OPTSTR_lspci  0 
 #ifdef CLEANUP_lspci
 #undef CLEANUP_lspci
 #undef FOR_lspci
@@ -3734,11 +3734,11 @@
 #ifndef TT
 #define TT this.lspci
 #endif
-#define FLAG_i (1<<0)
-#define FLAG_n (1<<1)
-#define FLAG_k (1<<2)
-#define FLAG_m (1<<3)
-#define FLAG_e (1<<4)
+#define FLAG_i (FORCED_FLAG<<0)
+#define FLAG_n (FORCED_FLAG<<1)
+#define FLAG_k (FORCED_FLAG<<2)
+#define FLAG_m (FORCED_FLAG<<3)
+#define FLAG_e (FORCED_FLAG<<4)
 #endif
 
 #ifdef FOR_lsusb
