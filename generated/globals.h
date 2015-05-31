@@ -979,7 +979,7 @@ struct head_data {
 // toys/posix/id.c
 
 struct id_data {
-  int do_u, do_n, do_G, do_Z, is_groups;
+  int is_groups;
 };
 
 // toys/posix/kill.c
@@ -994,7 +994,7 @@ struct kill_data {
 struct ls_data {
   char *color;
 
-  struct dirtree *files;
+  struct dirtree *files, *singledir;
 
   unsigned screen_width;
   int nl_title;
@@ -1005,6 +1005,7 @@ struct ls_data {
 
 struct mkdir_data {
   char *arg_mode;
+  char *arg_context;
 };
 
 // toys/posix/mkfifo.c

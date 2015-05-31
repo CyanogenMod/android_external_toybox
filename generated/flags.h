@@ -1310,15 +1310,16 @@
 #undef FLAG_c
 #endif
 
-// mkdir <1vpm: <1vpm:
+// mkdir <1Z:vpm: <1Z:vpm:
 #undef OPTSTR_mkdir
-#define OPTSTR_mkdir "<1vpm:"
+#define OPTSTR_mkdir "<1Z:vpm:"
 #ifdef CLEANUP_mkdir
 #undef CLEANUP_mkdir
 #undef FOR_mkdir
 #undef FLAG_m
 #undef FLAG_p
 #undef FLAG_v
+#undef FLAG_Z
 #endif
 
 // mke2fs   <1>2g:Fnqm#N#i#b#
@@ -3785,6 +3786,7 @@
 #define FLAG_m (1<<0)
 #define FLAG_p (1<<1)
 #define FLAG_v (1<<2)
+#define FLAG_Z (1<<3)
 #endif
 
 #ifdef FOR_mke2fs
