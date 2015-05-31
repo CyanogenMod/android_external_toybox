@@ -327,6 +327,7 @@ ALL_TOOLS := \
     tr \
     true \
     truncate \
+    tty \
     umount \
     uname \
     uniq \
