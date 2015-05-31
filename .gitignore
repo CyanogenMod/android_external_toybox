@@ -2,6 +2,7 @@ syntax: glob
 /.config.old
 change/
 /generated/build.sh
+/generated/cflags
 /generated/config2help
 /generated/Config.in
 /generated/Config.probed
