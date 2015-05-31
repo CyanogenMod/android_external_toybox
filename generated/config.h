@@ -76,8 +76,8 @@
 #define USE_HEAD(...) __VA_ARGS__
 #define CFG_ID 1
 #define USE_ID(...) __VA_ARGS__
-#define CFG_ID_SELINUX 1
-#define USE_ID_SELINUX(...) __VA_ARGS__
+#define CFG_ID_Z 1
+#define USE_ID_Z(...) __VA_ARGS__
 #define CFG_GROUPS 1
 #define USE_GROUPS(...) __VA_ARGS__
 #define CFG_LOGNAME 1
@@ -100,6 +100,8 @@
 #define USE_LS_Z(...) __VA_ARGS__
 #define CFG_MKDIR 1
 #define USE_MKDIR(...) __VA_ARGS__
+#define CFG_MKDIR_Z 1
+#define USE_MKDIR_Z(...) __VA_ARGS__
 #define CFG_MKFIFO 1
 #define USE_MKFIFO(...) __VA_ARGS__
 #define CFG_NICE 1
