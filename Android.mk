@@ -215,7 +215,7 @@ LOCAL_SHARED_LIBRARIES := libcutils libselinux
 
 LOCAL_MODULE := toybox
 
-# dupes: dd df du ls mount renice
+# dupes: dd df du ls renice
 # useless?: freeramdisk fsfreeze install makedevs mkfifo nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty vconfig
 # prefer BSD netcat instead?: nc netcat
@@ -277,6 +277,7 @@ ALL_TOOLS := \
     mktemp \
     modinfo \
     more \
+    mount \
     mountpoint \
     mv \
     netstat \
