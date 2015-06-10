@@ -213,6 +213,10 @@ LOCAL_CLANG := true
 
 LOCAL_SHARED_LIBRARIES := libcutils libselinux
 
+# This doesn't actually prevent us from dragging in libc++ at runtime
+# because libnetd_client.so is C++.
+LOCAL_CXX_STL := none
+
 LOCAL_MODULE := toybox
 
 # dupes: dd df du ls renice
