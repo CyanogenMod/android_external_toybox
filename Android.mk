@@ -93,6 +93,7 @@ LOCAL_SRC_FILES := \
     toys/other/ifconfig.c \
     toys/other/inotifyd.c \
     toys/other/insmod.c \
+    toys/other/ionice.c \
     toys/other/losetup.c \
     toys/other/lsattr.c \
     toys/other/lsmod.c \
@@ -127,6 +128,7 @@ LOCAL_SRC_FILES := \
     toys/other/vconfig.c \
     toys/other/vmstat.c \
     toys/other/which.c \
+    toys/other/xxd.c \
     toys/other/yes.c \
     toys/pending/dd.c \
     toys/pending/expr.c \

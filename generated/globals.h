@@ -64,6 +64,7 @@ struct md5sum_data {
 // toys/lsb/mknod.c
 
 struct mknod_data {
+  char *arg_context;
   char *m;
 };
 
@@ -165,7 +166,7 @@ struct free_data {
 struct hexedit_data {
   char *data;
   long long len, base;
-  int numlen;
+  int numlen, undo, undolen;
   unsigned height;
 };
 
@@ -173,6 +174,14 @@ struct hexedit_data {
 
 struct ifconfig_data {
   int sockfd;
+};
+
+// toys/other/ionice.c
+
+struct ionice_data {
+  long pid;
+  long level;
+  long class;
 };
 
 // toys/other/login.c
@@ -297,6 +306,12 @@ struct switch_root_data {
   dev_t rootdev;
 };
 
+// toys/other/taskset.c
+
+struct taskset_data {
+  int nproc;
+};
+
 // toys/other/timeout.c
 
 struct timeout_data {
@@ -316,6 +331,14 @@ struct truncate_data {
 
   long size;
   int type;
+};
+
+// toys/other/xxd.c
+
+struct xxd_data {
+  long g;
+  long l;
+  long c;
 };
 
 // toys/pending/arp.c
@@ -433,6 +456,7 @@ struct dhcp_data {
 // toys/pending/dhcpd.c
 
 struct dhcpd_data {
+    char *iface;
     long port;
 };;
 
@@ -883,16 +907,24 @@ struct cmp_data {
 // toys/posix/cp.c
 
 struct cp_data {
-  // install's options
-  char *group;
-  char *user;
-  char *mode;
+  union {
+    struct {
+      // install's options
+      char *group;
+      char *user;
+      char *mode;
+    } i;
+    struct {
+      char *preserve;
+    } c;
+  };
 
   char *destname;
   struct stat top;
   int (*callback)(struct dirtree *try);
   uid_t uid;
   gid_t gid;
+  int pflags;
 };
 
 // toys/posix/cpio.c
@@ -1012,6 +1044,8 @@ struct mkdir_data {
 
 struct mkfifo_data {
   char *m_string;
+  char *Z;
+
   mode_t mode;
 };
 
@@ -1200,6 +1234,7 @@ extern union global_union {
 	struct free_data free;
 	struct hexedit_data hexedit;
 	struct ifconfig_data ifconfig;
+	struct ionice_data ionice;
 	struct login_data login;
 	struct losetup_data losetup;
 	struct lspci_data lspci;
@@ -1214,8 +1249,10 @@ extern union global_union {
 	struct stat_data stat;
 	struct swapon_data swapon;
 	struct switch_root_data switch_root;
+	struct taskset_data taskset;
 	struct timeout_data timeout;
 	struct truncate_data truncate;
+	struct xxd_data xxd;
 	struct arp_data arp;
 	struct arping_data arping;
 	struct bootchartd_data bootchartd;
