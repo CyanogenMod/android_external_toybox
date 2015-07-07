@@ -1,17 +1,19 @@
 #define CFG_TOYBOX_CONTAINER 1
 #define USE_TOYBOX_CONTAINER(...) __VA_ARGS__
-#define CFG_TOYBOX_FIFREEZE 1
-#define USE_TOYBOX_FIFREEZE(...) __VA_ARGS__
-#define CFG_TOYBOX_ICONV 1
-#define USE_TOYBOX_ICONV(...) __VA_ARGS__
 #define CFG_TOYBOX_FALLOCATE 1
 #define USE_TOYBOX_FALLOCATE(...) __VA_ARGS__
-#define CFG_TOYBOX_UTMPX 1
-#define USE_TOYBOX_UTMPX(...) __VA_ARGS__
-#define CFG_TOYBOX_SHADOW 1
-#define USE_TOYBOX_SHADOW(...) __VA_ARGS__
+#define CFG_TOYBOX_FIFREEZE 1
+#define USE_TOYBOX_FIFREEZE(...) __VA_ARGS__
+#define CFG_TOYBOX_FORK 1
+#define USE_TOYBOX_FORK(...) __VA_ARGS__
+#define CFG_TOYBOX_ICONV 1
+#define USE_TOYBOX_ICONV(...) __VA_ARGS__
 #define CFG_TOYBOX_ON_ANDROID 1
 #define USE_TOYBOX_ON_ANDROID(...) __VA_ARGS__
+#define CFG_TOYBOX_SHADOW 1
+#define USE_TOYBOX_SHADOW(...) __VA_ARGS__
+#define CFG_TOYBOX_UTMPX 1
+#define USE_TOYBOX_UTMPX(...) __VA_ARGS__
 #define CFG_BASENAME 1
 #define USE_BASENAME(...) __VA_ARGS__
 #define CFG_CAL 1
@@ -38,6 +40,8 @@
 #define USE_CP(...) __VA_ARGS__
 #define CFG_CP_MORE 1
 #define USE_CP_MORE(...) __VA_ARGS__
+#define CFG_CP_PRESERVE 1
+#define USE_CP_PRESERVE(...) __VA_ARGS__
 #define CFG_MV 1
 #define USE_MV(...) __VA_ARGS__
 #define CFG_MV_MORE 1
@@ -78,6 +82,10 @@
 #define USE_ID(...) __VA_ARGS__
 #define CFG_ID_Z 1
 #define USE_ID_Z(...) __VA_ARGS__
+#define CFG_IONICE 1
+#define USE_IONICE(...) __VA_ARGS__
+#define CFG_IORENICE 1
+#define USE_IORENICE(...) __VA_ARGS__
 #define CFG_GROUPS 1
 #define USE_GROUPS(...) __VA_ARGS__
 #define CFG_LOGNAME 1
@@ -104,12 +112,20 @@
 #define USE_MKDIR_Z(...) __VA_ARGS__
 #define CFG_MKFIFO 1
 #define USE_MKFIFO(...) __VA_ARGS__
+#define CFG_MKFIFO_Z 1
+#define USE_MKFIFO_Z(...) __VA_ARGS__
+#define CFG_MKNOD 1
+#define USE_MKNOD(...) __VA_ARGS__
+#define CFG_MKNOD_Z 1
+#define USE_MKNOD_Z(...) __VA_ARGS__
 #define CFG_NICE 1
 #define USE_NICE(...) __VA_ARGS__
 #define CFG_NL 1
 #define USE_NL(...) __VA_ARGS__
 #define CFG_NOHUP 1
 #define USE_NOHUP(...) __VA_ARGS__
+#define CFG_NPROC 0
+#define USE_NPROC(...)
 #define CFG_OD 1
 #define USE_OD(...) __VA_ARGS__
 #define CFG_PASTE 1
@@ -146,6 +162,8 @@
 #define USE_TAIL(...) __VA_ARGS__
 #define CFG_TAIL_SEEK 1
 #define USE_TAIL_SEEK(...) __VA_ARGS__
+#define CFG_TASKSET 1
+#define USE_TASKSET(...) __VA_ARGS__
 #define CFG_TEE 1
 #define USE_TEE(...) __VA_ARGS__
 #define CFG_TIME 1
@@ -466,6 +484,8 @@
 #define USE_W(...)
 #define CFG_WHICH 1
 #define USE_WHICH(...) __VA_ARGS__
+#define CFG_XXD 1
+#define USE_XXD(...) __VA_ARGS__
 #define CFG_YES 1
 #define USE_YES(...) __VA_ARGS__
 #define CFG_DMESG 1
