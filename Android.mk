@@ -269,6 +269,7 @@ ALL_TOOLS := \
     inotifyd \
     insmod \
     kill \
+    killall \
     load_policy \
     ln \
     logname \
