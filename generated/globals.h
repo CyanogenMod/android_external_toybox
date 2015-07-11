@@ -170,6 +170,14 @@ struct hexedit_data {
   unsigned height;
 };
 
+// toys/other/hwclock.c
+
+struct hwclock_data {
+  char *fname;
+
+  int utc;
+};
+
 // toys/other/ifconfig.c
 
 struct ifconfig_data {
@@ -553,14 +561,6 @@ struct groupadd_data {
 
 struct host_data {
   char *type_str;
-};
-
-// toys/pending/hwclock.c
-
-struct hwclock_data {
-  char *fname;
-
-  int utc;
 };
 
 // toys/pending/iconv.c
@@ -1233,6 +1233,7 @@ extern union global_union {
 	struct fallocate_data fallocate;
 	struct free_data free;
 	struct hexedit_data hexedit;
+	struct hwclock_data hwclock;
 	struct ifconfig_data ifconfig;
 	struct ionice_data ionice;
 	struct login_data login;
@@ -1273,7 +1274,6 @@ extern union global_union {
 	struct getty_data getty;
 	struct groupadd_data groupadd;
 	struct host_data host;
-	struct hwclock_data hwclock;
 	struct iconv_data iconv;
 	struct ip_data ip;
 	struct ipcrm_data ipcrm;
