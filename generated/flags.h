@@ -445,12 +445,14 @@
 #undef FLAG_V
 #endif
 
-// dhcpd   >1P#<0>65535=67fi:S
+// dhcpd   >1P#<0>65535=67fi:S46[!46]
 #undef OPTSTR_dhcpd
 #define OPTSTR_dhcpd  0 
 #ifdef CLEANUP_dhcpd
 #undef CLEANUP_dhcpd
 #undef FOR_dhcpd
+#undef FLAG_6
+#undef FLAG_4
 #undef FLAG_S
 #undef FLAG_i
 #undef FLAG_f
@@ -1360,9 +1362,9 @@
 #undef FLAG_g
 #endif
 
-// mkfifo <1Zm: <1Zm:
+// mkfifo <1Z:m: <1Z:m:
 #undef OPTSTR_mkfifo
-#define OPTSTR_mkfifo "<1Zm:"
+#define OPTSTR_mkfifo "<1Z:m:"
 #ifdef CLEANUP_mkfifo
 #undef CLEANUP_mkfifo
 #undef FOR_mkfifo
@@ -3106,10 +3108,12 @@
 #ifndef TT
 #define TT this.dhcpd
 #endif
-#define FLAG_S (FORCED_FLAG<<0)
-#define FLAG_i (FORCED_FLAG<<1)
-#define FLAG_f (FORCED_FLAG<<2)
-#define FLAG_P (FORCED_FLAG<<3)
+#define FLAG_6 (FORCED_FLAG<<0)
+#define FLAG_4 (FORCED_FLAG<<1)
+#define FLAG_S (FORCED_FLAG<<2)
+#define FLAG_i (FORCED_FLAG<<3)
+#define FLAG_f (FORCED_FLAG<<4)
+#define FLAG_P (FORCED_FLAG<<5)
 #endif
 
 #ifdef FOR_diff

@@ -90,6 +90,7 @@ LOCAL_SRC_FILES := \
     toys/other/freeramdisk.c \
     toys/other/fsfreeze.c \
     toys/other/help.c \
+    toys/other/hwclock.c \
     toys/other/ifconfig.c \
     toys/other/inotifyd.c \
     toys/other/insmod.c \
@@ -132,7 +133,6 @@ LOCAL_SRC_FILES := \
     toys/other/yes.c \
     toys/pending/dd.c \
     toys/pending/expr.c \
-    toys/pending/hwclock.c \
     toys/pending/more.c \
     toys/pending/pgrep.c \
     toys/pending/netstat.c \
