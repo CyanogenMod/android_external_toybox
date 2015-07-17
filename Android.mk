@@ -345,6 +345,7 @@ ALL_TOOLS := \
     which \
     whoami \
     xargs \
+    xxd \
     yes \
 
 # Install the symlinks.
