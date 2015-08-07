@@ -72,9 +72,9 @@
 #undef FOR_basename
 #endif
 
-// blkid <1 <1
+// blkid    
 #undef OPTSTR_blkid
-#define OPTSTR_blkid "<1"
+#define OPTSTR_blkid  0 
 #ifdef CLEANUP_blkid
 #undef CLEANUP_blkid
 #undef FOR_blkid
@@ -730,6 +730,15 @@
 #undef FOR_fstype
 #endif
 
+// fsync   <1d
+#undef OPTSTR_fsync
+#define OPTSTR_fsync  0 
+#ifdef CLEANUP_fsync
+#undef CLEANUP_fsync
+#undef FOR_fsync
+#undef FLAG_d
+#endif
+
 // ftpget   <2cvu:p:P#<0=21>65535
 #undef OPTSTR_ftpget
 #define OPTSTR_ftpget  0 
@@ -917,6 +926,14 @@
 #undef FLAG_t
 #undef FLAG_v
 #undef FLAG_a
+#endif
+
+// hostid   >0
+#undef OPTSTR_hostid
+#define OPTSTR_hostid  0 
+#ifdef CLEANUP_hostid
+#undef CLEANUP_hostid
+#undef FOR_hostid
 #endif
 
 // hostname    
@@ -1179,7 +1196,7 @@
 #undef FLAG_s
 #endif
 
-// login   >1fph:
+// login   >1f:ph:
 #undef OPTSTR_login
 #define OPTSTR_login  0 
 #ifdef CLEANUP_login
@@ -1829,13 +1846,14 @@
 #undef FOR_realpath
 #endif
 
-// reboot   n
+// reboot   fn
 #undef OPTSTR_reboot
 #define OPTSTR_reboot  0 
 #ifdef CLEANUP_reboot
 #undef CLEANUP_reboot
 #undef FOR_reboot
 #undef FLAG_n
+#undef FLAG_f
 #endif
 
 // renice <1gpun#| <1gpun#|
@@ -2342,6 +2360,19 @@
 #ifdef CLEANUP_test
 #undef CLEANUP_test
 #undef FOR_test
+#endif
+
+// tftp   <1b#<8>65464r:l:g|p|[!gp]
+#undef OPTSTR_tftp
+#define OPTSTR_tftp  0 
+#ifdef CLEANUP_tftp
+#undef CLEANUP_tftp
+#undef FOR_tftp
+#undef FLAG_p
+#undef FLAG_g
+#undef FLAG_l
+#undef FLAG_r
+#undef FLAG_b
 #endif
 
 // tftpd   rcu:l
@@ -3341,6 +3372,13 @@
 #endif
 #endif
 
+#ifdef FOR_fsync
+#ifndef TT
+#define TT this.fsync
+#endif
+#define FLAG_d (FORCED_FLAG<<0)
+#endif
+
 #ifdef FOR_ftpget
 #ifndef TT
 #define TT this.ftpget
@@ -3498,6 +3536,12 @@
 #define FLAG_t (FORCED_FLAG<<0)
 #define FLAG_v (FORCED_FLAG<<1)
 #define FLAG_a (FORCED_FLAG<<2)
+#endif
+
+#ifdef FOR_hostid
+#ifndef TT
+#define TT this.hostid
+#endif
 #endif
 
 #ifdef FOR_hostname
@@ -4263,6 +4307,7 @@
 #define TT this.reboot
 #endif
 #define FLAG_n (FORCED_FLAG<<0)
+#define FLAG_f (FORCED_FLAG<<1)
 #endif
 
 #ifdef FOR_renice
@@ -4685,6 +4730,17 @@
 #ifndef TT
 #define TT this.test
 #endif
+#endif
+
+#ifdef FOR_tftp
+#ifndef TT
+#define TT this.tftp
+#endif
+#define FLAG_p (FORCED_FLAG<<0)
+#define FLAG_g (FORCED_FLAG<<1)
+#define FLAG_l (FORCED_FLAG<<2)
+#define FLAG_r (FORCED_FLAG<<3)
+#define FLAG_b (FORCED_FLAG<<4)
 #endif
 
 #ifdef FOR_tftpd
