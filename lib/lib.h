@@ -160,6 +160,7 @@ long xstrtol(char *str, char **end, int base);
 long atolx(char *c);
 long atolx_range(char *numstr, long low, long high);
 int stridx(char *haystack, char needle);
+char *strlower(char *s);
 int unescape(char c);
 int strstart(char **a, char *b);
 off_t fdlength(int fd);
@@ -204,6 +205,8 @@ void tty_sigreset(int i);
 // net.c
 int xsocket(int domain, int type, int protocol);
 void xsetsockopt(int fd, int level, int opt, void *val, socklen_t len);
+int xconnect(char *host, char *port, int family, int socktype, int protocol,
+  int flags);
 
 // password.c
 int get_salt(char *salt, char * algo);
