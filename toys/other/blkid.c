@@ -4,7 +4,7 @@
  *
  * See ftp://ftp.kernel.org/pub/linux/utils/util-linux/v2.24/libblkid-docs/api-index-full.html
 
-USE_BLKID(NEWTOY(blkid, "<1", TOYFLAG_BIN))
+USE_BLKID(NEWTOY(blkid, 0, TOYFLAG_BIN))
 USE_FSTYPE(NEWTOY(fstype, "<1", TOYFLAG_BIN))
 
 config BLKID
@@ -34,6 +34,7 @@ struct fstype {
 };
 
 static const struct fstype fstypes[] = {
+  {"swap", 0x4341505350415753, 8, 4086, 1036, 15, 1052},
   {"ext2", 0xEF53, 2, 1080, 1128, 16, 1144}, // keep this first for ext3/4 check
   // NTFS label actually 8/16 0x4d80 but horrible: 16 bit wide characters via
   // codepage, something called a uuid that's only 8 bytes long...
@@ -56,8 +57,7 @@ static const struct fstype fstypes[] = {
   {"vfat", 0x31544146, 4, 54, 39+(4<<24), 11, 43}     // fat1
 };
 
-/* TODO if no args use proc/partitions */
-void do_blkid(int fd, char *name)
+static void do_blkid(int fd, char *name)
 {
   int off, i, j;
   char *type;
@@ -89,7 +89,7 @@ void do_blkid(int fd, char *name)
       if (test == fstypes[i].magic) break;
     }
 
-    if (i == sizeof(fstypes)/sizeof(struct fstype)) {
+    if (i == ARRAY_LEN(fstypes)) {
       off += len;
       if (pass) continue;
       return;
@@ -136,10 +136,30 @@ void do_blkid(int fd, char *name)
 
 void blkid_main(void)
 {
-  loopfiles(toys.optargs, do_blkid);
+  if (*toys.optargs) loopfiles(toys.optargs, do_blkid);
+  else {
+    unsigned int ma, mi, sz, fd;
+    char *name = toybuf, *buffer = toybuf+1024, device[32];
+    FILE *fp = xfopen("/proc/partitions", "r");
+
+    while (fgets(buffer, 1024, fp)) {
+      *name = 0;
+      if (sscanf(buffer, " %u %u %u %[^\n ]", &ma, &mi, &sz, name) != 4)
+        continue;
+
+      sprintf(device, "/dev/%.20s", name);
+      if (-1 == (fd = open(device, O_RDONLY))) {
+        if (errno != ENOMEDIUM) perror_msg("%s", device);
+      } else {
+        do_blkid(fd, device);
+        close(fd);
+      }
+    }
+    if (CFG_TOYBOX_FREE) fclose(fp);
+  }
 }
 
 void fstype_main(void)
 {
-  blkid_main();
+  loopfiles(toys.optargs, do_blkid);
 }
