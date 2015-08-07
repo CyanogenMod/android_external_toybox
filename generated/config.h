@@ -322,6 +322,8 @@
 #define USE_TELNETD(...)
 #define CFG_TEST 0
 #define USE_TEST(...)
+#define CFG_TFTP 0
+#define USE_TFTP(...)
 #define CFG_TFTPD 0
 #define USE_TFTPD(...)
 #define CFG_TOP 1
@@ -376,10 +378,14 @@
 #define USE_FREERAMDISK(...) __VA_ARGS__
 #define CFG_FSFREEZE 1
 #define USE_FSFREEZE(...) __VA_ARGS__
+#define CFG_FSYNC 0
+#define USE_FSYNC(...)
 #define CFG_HELP 1
 #define USE_HELP(...) __VA_ARGS__
 #define CFG_HELP_EXTRAS 1
 #define USE_HELP_EXTRAS(...) __VA_ARGS__
+#define CFG_HOSTID 0
+#define USE_HOSTID(...)
 #define CFG_IFCONFIG 1
 #define USE_IFCONFIG(...) __VA_ARGS__
 #define CFG_INOTIFYD 1

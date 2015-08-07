@@ -2,7 +2,7 @@
 
 #define help_toybox_uid_sys "When commands like useradd/groupadd allocate system IDs, start here.\n\n"
 
-#define help_toybox_debug "Enable extra checks for debugging purposes. All of them catch\n       things that can only go wrong at development time, not runtime.\n\n"
+#define help_toybox_debug "Enable extra checks for debugging purposes. All of them catch\nthings that can only go wrong at development time, not runtime.\n\n"
 
 #define help_toybox_norecurse "When one toybox command calls another, usually it just calls the new\ncommand's main() function rather than searching the $PATH and calling\nexec on another file (which is much slower).\n\nThis disables that optimization, so toybox will run external commands\n       even when it has a built-in version of that command. This requires\n       toybox symlinks to be installed in the $PATH, or re-invoking the\n       \"toybox\" multiplexer command by name.\n\n"
 
@@ -124,7 +124,7 @@
 
 #define help_reset "usage: reset\n\nreset the terminal\n\n"
 
-#define help_reboot "usage: reboot/halt/poweroff [-n]\n\nRestart, halt or powerdown the system.\n\n-n	Don't sync before stopping the system.\n\n"
+#define help_reboot "usage: reboot/halt/poweroff [-fn]\n\nRestart, halt or powerdown the system.\n\n-f	Don't signal init\n-n	Don't sync before stopping the system.\n\n"
 
 #define help_realpath "usage: realpath FILE...\n\nDisplay the canonical absolute pathname\n\n"
 
@@ -178,7 +178,7 @@
 
 #define help_losetup "usage: losetup [-cdrs] [-o OFFSET] [-S SIZE] {-d DEVICE...|-j FILE|-af|{DEVICE FILE}}\n\nAssociate a loopback device with a file, or show current file (if any)\nassociated with a loop device.\n\nInstead of a device:\n-a	Iterate through all loopback devices\n-f	Find first unused loop device (may create one)\n-j	Iterate through all loopback devices associated with FILE\n\nexisting:\n-c	Check capacity (file size changed)\n-d	Detach loopback device\n\nnew:\n-s	Show device name (alias --show)\n-o	Start assocation at OFFSET into FILE\n-r	Read only\n-S	Limit SIZE of loopback association (alias --sizelimit)\n\n"
 
-#define help_login "usage: login [-p] [-h host] [[-f] username]\n\nEstablish a new session with the system.\n\n-p	Preserve environment\n-h	The name of the remote host for this login\n-f	Do not perform authentication\n\n"
+#define help_login "usage: login [-p] [-h host] [-f USERNAME] [USERNAME]\n\nLog in as a user, prompting for username and password if necessary.\n\n-p	Preserve environment\n-h	The name of the remote host for this login\n-f	login as USERNAME without authentication\n\n"
 
 #define help_iorenice "usage: iorenice PID [CLASS] [PRIORITY]\n\nDisplay or change I/O priority of existing process. CLASS can be\n\"rt\" for realtime, \"be\" for best effort, \"idle\" for only when idle, or\n\"none\" to leave it alone. PRIORITY can be 0-7 (0 is highest, default 4).\n\n"
 
@@ -192,9 +192,13 @@
 
 #define help_hwclock "usage: hwclock [-rswtluf]\n\n-f FILE Use specified device file instead of /dev/rtc (--rtc)\n-l      Hardware clock uses localtime (--localtime)\n-r      Show hardware clock time (--show)\n-s      Set system time from hardware clock (--hctosys)\n-t      Set the system time based on the current timezone (--systz)\n-u      Hardware clock uses UTC (--utc)\n-w      Set hardware clock from system time (--systohc)\n\n"
 
+#define help_hostid "usage: hostid\n\nPrint the numeric identifier for the current host.\n\n"
+
 #define help_hexedit "usage: hexedit FILENAME\n\nHexadecimal file editor.\n\n-r	Read only (display but don't edit)\n\n"
 
 #define help_help "usage: help [-ah] [command]\n\nShow usage information for toybox commands.\nRun \"toybox\" with no arguments for a list of available commands.\n\n-h	HTML output\n-a	All commands\n"
+
+#define help_fsync "usage: fsync [-d] [FILE...]\n\nSynchronize a file's in-core state with storage device.\n\n-d	Avoid syncing metadata.\n\n"
 
 #define help_fsfreeze "usage: fsfreeze {-f | -u} MOUNTPOINT\n\nFreeze or unfreeze a filesystem.\n\n-f	freeze\n-u	unfreeze\n\n"
 
@@ -249,6 +253,8 @@
 #define help_top "\n"
 
 #define help_tftpd "usage: tftpd [-cr] [-u USER] [DIR]\n\nTransfer file from/to tftp server.\n\n-r	read only\n-c	Allow file creation via upload\n-u	run as USER\n-l	Log to syslog (inetd mode requires this)\n\n"
+
+#define help_tftp "usage: tftp [OPTIONS] HOST [PORT]\n\nTransfer file from/to tftp server.\n\n-l FILE Local FILE\n-r FILE Remote FILE\n-g    Get file\n-p    Put file\n-b SIZE Transfer blocks of SIZE octets(8 <= SIZE <= 65464)\n\n"
 
 #define help_test "usage: test [-bcdefghLPrSsuwx PATH] [-nz STRING] [-t FD] [X ?? Y]\n\nReturn true or false by performing tests. (With no arguments return false.)\n\n--- Tests with a single argument (after the option):\nPATH is/has:\n  -b  block device   -f  regular file   -p  fifo           -u  setuid bit\n  -c  char device    -g  setgid         -r  read bit       -w  write bit\n  -d  directory      -h  symlink        -S  socket         -x  execute bit\n  -e  exists         -L  symlink        -s  nonzero size\nSTRING is:\n  -n  nonzero size   -z  zero size      (STRING by itself implies -n)\nFD (integer file descriptor) is:\n  -t  a TTY\n\n--- Tests with one argument on each side of an operator:\nTwo strings:\n  =  are identical	 !=  differ\nTwo integers:\n  -eq  equal         -gt  first > second    -lt  first < second\n  -ne  not equal     -ge  first >= second   -le  first <= second\n\n--- Modify or combine tests:\n  ! EXPR     not (swap true/false)   EXPR -a EXPR    and (are both true)\n  ( EXPR )   evaluate this first     EXPR -o EXPR    or (is either true)\n\n"
 

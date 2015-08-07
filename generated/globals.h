@@ -123,10 +123,7 @@ struct umount_data {
 // toys/other/acpi.c
 
 struct acpi_data {
-  int ac;
-  int bat;
-  int therm;
-  int cool;
+  int ac, bat, therm, cool;
   char *cpath;
 };
 
@@ -196,6 +193,7 @@ struct ionice_data {
 
 struct login_data {
   char *hostname;
+  char *username;
 
   int login_timeout, login_fail_timeout;
 };
@@ -802,6 +800,17 @@ struct telnetd_data {
     pid_t fork_pid;
 };
 
+// toys/pending/tftp.c
+
+struct tftp_data {
+  char *local_file;
+  char *remote_file;
+  long block_size;
+
+  struct sockaddr_storage inaddr;
+  int af;
+};
+
 // toys/pending/tftpd.c
 
 struct tftpd_data {
@@ -1296,6 +1305,7 @@ extern union global_union {
 	struct tcpsvd_data tcpsvd;
 	struct telnet_data telnet;
 	struct telnetd_data telnetd;
+	struct tftp_data tftp;
 	struct tftpd_data tftpd;
 	struct top_data top;
 	struct tr_data tr;
