@@ -350,6 +350,8 @@
 #define USE_FSTYPE(...)
 #define CFG_BLOCKDEV 1
 #define USE_BLOCKDEV(...) __VA_ARGS__
+#define CFG_BUNZIP2 1
+#define USE_BUNZIP2(...) __VA_ARGS__
 #define CFG_BZCAT 1
 #define USE_BZCAT(...) __VA_ARGS__
 #define CFG_CHCON 1

@@ -963,6 +963,9 @@ struct date_data {
   char *file;
   char *setfmt;
   char *showdate;
+
+  char *tz;
+  unsigned nano;
 };
 
 // toys/posix/df.c
