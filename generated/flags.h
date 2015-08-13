@@ -115,6 +115,19 @@
 #undef FOR_brctl
 #endif
 
+// bunzip2 cftkv cftkv
+#undef OPTSTR_bunzip2
+#define OPTSTR_bunzip2 "cftkv"
+#ifdef CLEANUP_bunzip2
+#undef CLEANUP_bunzip2
+#undef FOR_bunzip2
+#undef FLAG_v
+#undef FLAG_k
+#undef FLAG_t
+#undef FLAG_f
+#undef FLAG_c
+#endif
+
 // bzcat    
 #undef OPTSTR_bzcat
 #define OPTSTR_bzcat  0 
@@ -374,15 +387,15 @@
 #undef FLAG_b
 #endif
 
-// date d:s:r:u[!dr] d:s:r:u[!dr]
+// date d:D:r:u[!dr] d:D:r:u[!dr]
 #undef OPTSTR_date
-#define OPTSTR_date "d:s:r:u[!dr]"
+#define OPTSTR_date "d:D:r:u[!dr]"
 #ifdef CLEANUP_date
 #undef CLEANUP_date
 #undef FOR_date
 #undef FLAG_u
 #undef FLAG_r
-#undef FLAG_s
+#undef FLAG_D
 #undef FLAG_d
 #endif
 
@@ -2859,6 +2872,17 @@
 #endif
 #endif
 
+#ifdef FOR_bunzip2
+#ifndef TT
+#define TT this.bunzip2
+#endif
+#define FLAG_v (1<<0)
+#define FLAG_k (1<<1)
+#define FLAG_t (1<<2)
+#define FLAG_f (1<<3)
+#define FLAG_c (1<<4)
+#endif
+
 #ifdef FOR_bzcat
 #ifndef TT
 #define TT this.bzcat
@@ -3080,7 +3104,7 @@
 #endif
 #define FLAG_u (1<<0)
 #define FLAG_r (1<<1)
-#define FLAG_s (1<<2)
+#define FLAG_D (1<<2)
 #define FLAG_d (1<<3)
 #endif
 
