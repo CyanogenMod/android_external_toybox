@@ -221,7 +221,7 @@ LOCAL_CXX_STL := none
 
 LOCAL_MODULE := toybox
 
-# dupes: dd df du ls renice
+# dupes: dd df du ls
 # useless?: freeramdisk fsfreeze install makedevs mkfifo nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty vconfig
 # prefer BSD netcat instead?: nc netcat
@@ -268,6 +268,8 @@ ALL_TOOLS := \
     ifconfig \
     inotifyd \
     insmod \
+    ionice \
+    iorenice \
     kill \
     killall \
     load_policy \
@@ -302,6 +304,7 @@ ALL_TOOLS := \
     pwd \
     readlink \
     realpath \
+    renice \
     restorecon \
     rm \
     rmdir \
