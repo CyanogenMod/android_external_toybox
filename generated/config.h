@@ -10,10 +10,10 @@
 #define USE_TOYBOX_ICONV(...) __VA_ARGS__
 #define CFG_TOYBOX_ON_ANDROID 1
 #define USE_TOYBOX_ON_ANDROID(...) __VA_ARGS__
-#define CFG_TOYBOX_SHADOW 1
-#define USE_TOYBOX_SHADOW(...) __VA_ARGS__
-#define CFG_TOYBOX_UTMPX 1
-#define USE_TOYBOX_UTMPX(...) __VA_ARGS__
+#define CFG_TOYBOX_SHADOW 0
+#define USE_TOYBOX_SHADOW(...)
+#define CFG_TOYBOX_UTMPX 0
+#define USE_TOYBOX_UTMPX(...)
 #define CFG_BASENAME 1
 #define USE_BASENAME(...) __VA_ARGS__
 #define CFG_CAL 1
@@ -480,8 +480,8 @@
 #define USE_TIMEOUT(...) __VA_ARGS__
 #define CFG_TRUNCATE 1
 #define USE_TRUNCATE(...) __VA_ARGS__
-#define CFG_UPTIME 0
-#define USE_UPTIME(...)
+#define CFG_UPTIME 1
+#define USE_UPTIME(...) __VA_ARGS__
 #define CFG_USLEEP 1
 #define USE_USLEEP(...) __VA_ARGS__
 #define CFG_VCONFIG 1
