@@ -229,6 +229,7 @@ LOCAL_MODULE := toybox
 
 ALL_TOOLS := \
     acpi \
+    base64 \
     basename \
     blockdev \
     bzcat \
