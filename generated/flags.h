@@ -1056,9 +1056,9 @@
 #undef FLAG_c
 #endif
 
-// ionice ^tc#<0>3n#<0>7=5p# ^tc#<0>3n#<0>7=5p#
+// ionice ^tc#<0>3=2n#<0>7=5p# ^tc#<0>3=2n#<0>7=5p#
 #undef OPTSTR_ionice
-#define OPTSTR_ionice "^tc#<0>3n#<0>7=5p#"
+#define OPTSTR_ionice "^tc#<0>3=2n#<0>7=5p#"
 #ifdef CLEANUP_ionice
 #undef CLEANUP_ionice
 #undef FOR_ionice
@@ -2373,6 +2373,17 @@
 #ifdef CLEANUP_test
 #undef CLEANUP_test
 #undef FOR_test
+#endif
+
+// test_human_readable   <1>1ibs
+#undef OPTSTR_test_human_readable
+#define OPTSTR_test_human_readable  0 
+#ifdef CLEANUP_test_human_readable
+#undef CLEANUP_test_human_readable
+#undef FOR_test_human_readable
+#undef FLAG_s
+#undef FLAG_b
+#undef FLAG_i
 #endif
 
 // tftp   <1b#<8>65464r:l:g|p|[!gp]
@@ -4754,6 +4765,15 @@
 #ifndef TT
 #define TT this.test
 #endif
+#endif
+
+#ifdef FOR_test_human_readable
+#ifndef TT
+#define TT this.test_human_readable
+#endif
+#define FLAG_s (FORCED_FLAG<<0)
+#define FLAG_b (FORCED_FLAG<<1)
+#define FLAG_i (FORCED_FLAG<<2)
 #endif
 
 #ifdef FOR_tftp
