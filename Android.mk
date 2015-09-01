@@ -125,6 +125,7 @@ LOCAL_SRC_FILES := \
     toys/other/taskset.c \
     toys/other/timeout.c \
     toys/other/truncate.c \
+    toys/other/uptime.c \
     toys/other/usleep.c \
     toys/other/vconfig.c \
     toys/other/vmstat.c \
@@ -342,6 +343,7 @@ ALL_TOOLS := \
     uname \
     uniq \
     unix2dos \
+    uptime \
     usleep \
     vmstat \
     wc \
