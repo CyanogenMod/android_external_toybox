@@ -222,7 +222,7 @@ LOCAL_CXX_STL := none
 
 LOCAL_MODULE := toybox
 
-# dupes: dd df du ls
+# dupes: dd df du
 # useless?: freeramdisk fsfreeze install makedevs mkfifo nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root tty vconfig
 # prefer BSD netcat instead?: nc netcat
@@ -277,6 +277,7 @@ ALL_TOOLS := \
     ln \
     logname \
     losetup \
+    ls \
     lsmod \
     lsusb \
     md5sum \
