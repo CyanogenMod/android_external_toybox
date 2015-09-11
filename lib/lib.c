@@ -630,11 +630,11 @@ void base64_init(char *p)
   *(p++) = '/';
 }
 
-int yesno(char *prompt, int def)
+int yesno(int def)
 {
   char buf;
 
-  fprintf(stderr, "%s (%c/%c):", prompt, def ? 'Y' : 'y', def ? 'n' : 'N');
+  fprintf(stderr, " (%c/%c):", def ? 'Y' : 'y', def ? 'n' : 'N');
   fflush(stderr);
   while (fread(&buf, 1, 1, stdin)) {
     int new;
@@ -866,27 +866,36 @@ void names_to_pid(char **names, int (*callback)(pid_t pid, char *name))
   closedir(dp);
 }
 
-// display first few digits of number with power of two units, except we're
-// actually just counting decimal digits and showing mil/bil/trillions.
+// display first few digits of number with power of two units
 int human_readable(char *buf, unsigned long long num, int style)
 {
-  int end, len;
+  unsigned long long snap = 0;
+  int len, unit, divisor = (style&HR_1000) ? 1000 : 1024;
 
-  len = sprintf(buf, "%lld", num)-1;
-  end = (len%3)+1;
-  len /= 3;
-
-  if (len && end == 1) {
-    buf[2] = buf[1];
-    buf[1] = '.';
-    end = 3;
+  // Divide rounding up until we have 3 or fewer digits. Since the part we
+  // print is decimal, the test is 999 even when we divide by 1024.
+  // We can't run out of units because 2<<64 is 18 exabytes.
+  // test 5675 is 5.5k not 5.6k.
+  for (unit = 0; num > 999; unit++) num = ((snap = num)+(divisor/2))/divisor;
+  len = sprintf(buf, "%llu", num);
+  if (unit && len == 1) {
+    // Redo rounding for 1.2M case, this works with and without HR_1000.
+    num = snap/divisor;
+    snap -= num*divisor;
+    snap = ((snap*100)+50)/divisor;
+    snap /= 10;
+    len = sprintf(buf, "%llu.%llu", num, snap);
   }
-  if (style & HR_SPACE) buf[end++] = ' ';
-  if (len) buf[end++] = " KMGTPE"[len];
-  if (style & HR_B) buf[end++] = 'B';
-  buf[end++] = 0;
+  if (style & HR_SPACE) buf[len++] = ' ';
+  if (unit) {
+    unit = " kMGTPE"[unit];
 
-  return end;
+    if (!(style&HR_1000)) unit = toupper(unit);
+    buf[len++] = unit;
+  } else if (style & HR_B) buf[len++] = 'B';
+  buf[len] = 0;
+
+  return len;
 }
 
 // The qsort man page says you can use alphasort, the posix committee
