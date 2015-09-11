@@ -281,6 +281,7 @@ ALL_TOOLS := \
     losetup \
     ls \
     lsmod \
+    lsof \
     lsusb \
     md5sum \
     mkdir \
