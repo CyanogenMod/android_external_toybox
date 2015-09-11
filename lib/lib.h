@@ -176,12 +176,14 @@ void delete_tempfile(int fdin, int fdout, char **tempname);
 void replace_tempfile(int fdin, int fdout, char **tempname);
 void crc_init(unsigned int *crc_table, int little_endian);
 void base64_init(char *p);
-int yesno(char *prompt, int def);
-#define HR_SPACE 1
-#define HR_B 2
-int human_readable(char *buf, unsigned long long num, int style);
+int yesno(int def);
 int qstrcmp(const void *a, const void *b);
 int xpoll(struct pollfd *fds, int nfds, int timeout);
+
+#define HR_SPACE 1 // Space between number and units
+#define HR_B     2 // Use "B" for single byte units
+#define HR_1000  4 // Use decimal instead of binary units
+int human_readable(char *buf, unsigned long long num, int style);
 
 // interestingtimes.c
 int xgettty(void);
