@@ -415,16 +415,18 @@
 #undef FOR_deallocvt
 #endif
 
-// df Pkt*a[-Pk] Pkt*a[-Pk]
+// df HPkht*a[-HPkh] HPkht*a[-HPkh]
 #undef OPTSTR_df
-#define OPTSTR_df "Pkt*a[-Pk]"
+#define OPTSTR_df "HPkht*a[-HPkh]"
 #ifdef CLEANUP_df
 #undef CLEANUP_df
 #undef FOR_df
 #undef FLAG_a
 #undef FLAG_t
+#undef FLAG_h
 #undef FLAG_k
 #undef FLAG_P
+#undef FLAG_H
 #endif
 
 // dhcp   V:H:F:x*r:O*A#<0T#<0t#<0s:p:i:SBRCaovqnbf
@@ -1247,9 +1249,9 @@
 #undef FLAG_S
 #endif
 
-// ls (color):;ZgoACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL] (color):;ZgoACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL]
+// ls (color):;ZgoACFHLRSacdfhiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL] (color):;ZgoACFHLRSacdfhiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL]
 #undef OPTSTR_ls
-#define OPTSTR_ls "(color):;ZgoACFHLRSacdfiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL]"
+#define OPTSTR_ls "(color):;ZgoACFHLRSacdfhiklmnpqrstux1[-Cxm1][-Cxml][-Cxmo][-Cxmg][-cu][-ftS][-HL]"
 #ifdef CLEANUP_ls
 #undef CLEANUP_ls
 #undef FOR_ls
@@ -1266,6 +1268,7 @@
 #undef FLAG_l
 #undef FLAG_k
 #undef FLAG_i
+#undef FLAG_h
 #undef FLAG_f
 #undef FLAG_d
 #undef FLAG_c
@@ -1302,6 +1305,17 @@
 #ifdef CLEANUP_lsmod
 #undef CLEANUP_lsmod
 #undef FOR_lsmod
+#endif
+
+// lsof lp:t lp:t
+#undef OPTSTR_lsof
+#define OPTSTR_lsof "lp:t"
+#ifdef CLEANUP_lsof
+#undef CLEANUP_lsof
+#undef FOR_lsof
+#undef FLAG_t
+#undef FLAG_p
+#undef FLAG_l
 #endif
 
 // lspci   emkn@i:
@@ -3137,8 +3151,10 @@
 #endif
 #define FLAG_a (1<<0)
 #define FLAG_t (1<<1)
-#define FLAG_k (1<<2)
-#define FLAG_P (1<<3)
+#define FLAG_h (1<<2)
+#define FLAG_k (1<<3)
+#define FLAG_P (1<<4)
+#define FLAG_H (1<<5)
 #endif
 
 #ifdef FOR_dhcp
@@ -3842,21 +3858,22 @@
 #define FLAG_l (1<<10)
 #define FLAG_k (1<<11)
 #define FLAG_i (1<<12)
-#define FLAG_f (1<<13)
-#define FLAG_d (1<<14)
-#define FLAG_c (1<<15)
-#define FLAG_a (1<<16)
-#define FLAG_S (1<<17)
-#define FLAG_R (1<<18)
-#define FLAG_L (1<<19)
-#define FLAG_H (1<<20)
-#define FLAG_F (1<<21)
-#define FLAG_C (1<<22)
-#define FLAG_A (1<<23)
-#define FLAG_o (1<<24)
-#define FLAG_g (1<<25)
-#define FLAG_Z (1<<26)
-#define FLAG_color (1<<27)
+#define FLAG_h (1<<13)
+#define FLAG_f (1<<14)
+#define FLAG_d (1<<15)
+#define FLAG_c (1<<16)
+#define FLAG_a (1<<17)
+#define FLAG_S (1<<18)
+#define FLAG_R (1<<19)
+#define FLAG_L (1<<20)
+#define FLAG_H (1<<21)
+#define FLAG_F (1<<22)
+#define FLAG_C (1<<23)
+#define FLAG_A (1<<24)
+#define FLAG_o (1<<25)
+#define FLAG_g (1<<26)
+#define FLAG_Z (1<<27)
+#define FLAG_color (1<<28)
 #endif
 
 #ifdef FOR_lsattr
@@ -3874,6 +3891,15 @@
 #ifndef TT
 #define TT this.lsmod
 #endif
+#endif
+
+#ifdef FOR_lsof
+#ifndef TT
+#define TT this.lsof
+#endif
+#define FLAG_t (1<<0)
+#define FLAG_p (1<<1)
+#define FLAG_l (1<<2)
 #endif
 
 #ifdef FOR_lspci
