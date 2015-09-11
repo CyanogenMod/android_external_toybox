@@ -25,8 +25,8 @@ LOCAL_PATH := $(call my-dir)
 #  git merge toybox/master
 #  mm -j32
 #  # (Make any necessary Android.mk changes and test the new toybox.)
+#  repo upload .
 #  git push aosp HEAD:master  # Push directly, avoiding gerrit.
-#  git push aosp HEAD:refs/for/master  # Push to gerrit.
 #
 #  # Now commit any necessary Android.mk changes like normal:
 #  repo start post-sync .
