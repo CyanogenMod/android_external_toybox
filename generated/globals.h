@@ -618,6 +618,18 @@ struct logger_data {
   char *ident;
 };
 
+// toys/pending/lsof.c
+
+struct lsof_data {
+  char *pids;
+
+  struct stat *sought_files;
+
+  struct double_list *files;
+  int last_shown_pid;
+  int shown_header;
+};
+
 // toys/pending/mke2fs.c
 
 struct mke2fs_data {
@@ -664,6 +676,13 @@ struct more_data {
   struct termios inf;
   int cin_fd;
 };
+
+// toys/pending/netstat.c
+
+struct netstat_data {
+  char current_name[21];
+  int some_process_unidentified;
+};;
 
 // toys/pending/openvt.c
 
@@ -1293,9 +1312,11 @@ extern union global_union {
 	struct klogd_data klogd;
 	struct last_data last;
 	struct logger_data logger;
+	struct lsof_data lsof;
 	struct mke2fs_data mke2fs;
 	struct modprobe_data modprobe;
 	struct more_data more;
+	struct netstat_data netstat;
 	struct openvt_data openvt;
 	struct pgrep_data pgrep;
 	struct ping_data ping;
