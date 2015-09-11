@@ -268,6 +268,8 @@
 #define USE_LAST(...)
 #define CFG_LOGGER 0
 #define USE_LOGGER(...)
+#define CFG_LSOF 1
+#define USE_LSOF(...) __VA_ARGS__
 #define CFG_MDEV 0
 #define USE_MDEV(...)
 #define CFG_MDEV_CONF 0
