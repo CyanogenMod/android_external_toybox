@@ -6,6 +6,7 @@ change/
 /generated/config2help
 /generated/Config.in
 /generated/Config.probed
+/generated/flags.raw
 /generated/mkflags
 /generated/obj
 /generated/optlibs.dat
