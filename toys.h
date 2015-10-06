@@ -132,7 +132,7 @@ extern struct toy_context {
 
   // This is at the end so toy_init() doesn't zero it.
   jmp_buf *rebound;        // longjmp here instead of exit when do_rebound set
-  int recursion;           // How many nested calls to toy_exec()
+  void *stacktop;          // nested toy_exec() call count, or -1 if vforked
 } toys;
 
 // Two big temporary buffers: one for use by commands, one for library functions
