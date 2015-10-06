@@ -86,6 +86,7 @@ LOCAL_SRC_FILES := \
     toys/other/clear.c \
     toys/other/dos2unix.c \
     toys/other/fallocate.c \
+    toys/other/flock.c \
     toys/other/free.c \
     toys/other/freeramdisk.c \
     toys/other/fsfreeze.c \
@@ -261,6 +262,7 @@ ALL_TOOLS := \
     fallocate \
     false \
     find \
+    flock \
     free \
     getenforce \
     getprop \

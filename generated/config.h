@@ -376,6 +376,8 @@
 #define USE_FACTOR(...)
 #define CFG_FALLOCATE 1
 #define USE_FALLOCATE(...) __VA_ARGS__
+#define CFG_FLOCK 1
+#define USE_FLOCK(...) __VA_ARGS__
 #define CFG_FREE 1
 #define USE_FREE(...) __VA_ARGS__
 #define CFG_FREERAMDISK 1

@@ -106,7 +106,7 @@
 
 #define help_tac "usage: tac [FILE...]\n\nOutput lines in reverse order.\n\n"
 
-#define help_sysctl "usage: sysctl [-aAeNnqw] [-p [FILE] | KEY[=VALUE]...]\n\nRead/write system control data (under /proc/sys).\n\n-a,A	Show all values\n-e	Don't warn about unknown keys\n-N	Don't print key values\n-n	Don't print key names\n-p [FILE]	Read values from FILE (default /etc/sysctl.conf)\n-q	Don't show value after write\n-w	Only write values (object to reading)\n\n"
+#define help_sysctl "usage: sysctl [-aAeNnqw] [-p [FILE] | KEY[=VALUE]...]\n\nRead/write system control data (under /proc/sys).\n\n-a,A	Show all values\n-e	Don't warn about unknown keys\n-N	Don't print key values\n-n	Don't print key names\n-p	Read values from FILE (default /etc/sysctl.conf)\n-q	Don't show value after write\n-w	Only write values (object to reading)\n\n"
 
 #define help_switch_root "usage: switch_root [-c /dev/console] NEW_ROOT NEW_INIT...\n\nUse from PID 1 under initramfs to free initramfs, chroot to NEW_ROOT,\nand exec NEW_INIT.\n\n-c	Redirect console to device in NEW_ROOT\n-h	Hang instead of exiting on failure (avoids kernel panic)\n\n"
 
@@ -152,7 +152,9 @@
 
 #define help_unshare "usage: unshare [-imnpuUr] COMMAND...\n\nCreate new container namespace(s) for this process and its children, so\nsome attribute is not shared with the parent process.\n\n-i	SysV IPC (message queues, semaphores, shared memory)\n-m	Mount/unmount tree\n-n	Network address, sockets, routing, iptables\n-p	Process IDs and init\n-r	Become root (map current euid/egid to 0/0, implies -U)\n-u	Host and domain names\n-U	UIDs, GIDs, capabilities\n\nA namespace allows a set of processes to have a different view of the\nsystem than other sets of processes.\n\n"
 
-#define help_netcat "usage: netcat [-tu] [-lL COMMAND...] [-wpq #] [-s addr] {IPADDR PORTNUM|-f FILENAME}\n\n-L	listen for multiple incoming connections (server mode).\n-f	use FILENAME (ala /dev/ttyS0) instead of network\n-l	listen for one incoming connection.\n-p	local port number\n-q	SECONDS quit this many seconds after EOF on stdin.\n-s	local ipv4 address\n-t	allocate tty (must come before -l or -L)\n-w	SECONDS timeout for connection\n\nUse \"stty 115200 -F /dev/ttyS0 && stty raw -echo -ctlecho\" with\nnetcat -f to connect to a serial port.\n\nThe command line after -l or -L is executed to handle each incoming\nconnection. If none, the connection is forwarded to stdin/stdout.\n\nFor a quick-and-dirty server, try something like:\nnetcat -s 127.0.0.1 -p 1234 -tL /bin/bash -l\n"
+#define help_netcat_listen_tty "usage: netcat [-t]\n\n-t	allocate tty (must come before -l or -L)\n\n"
+
+#define help_netcat "usage: netcat [-lL COMMAND...] [-u] [-wpq #] [-s addr] {IPADDR PORTNUM|-f FILENAME}\n\n-L	listen for multiple incoming connections (server mode).\n-f	use FILENAME (ala /dev/ttyS0) instead of network\n-l	listen for one incoming connection.\n-p	local port number\n-q	SECONDS quit this many seconds after EOF on stdin.\n-s	local ipv4 address\n-w	SECONDS timeout for connection\n\nUse \"stty 115200 -F /dev/ttyS0 && stty raw -echo -ctlecho\" with\nnetcat -f to connect to a serial port.\n\nThe command line after -l or -L is executed to handle each incoming\nconnection. If none, the connection is forwarded to stdin/stdout.\n\nFor a quick-and-dirty server, try something like:\nnetcat -s 127.0.0.1 -p 1234 -tL /bin/bash -l\n"
 
 #define help_nbd_client "usage: nbd-client [-ns] HOST PORT DEVICE\n\n-n	Do not fork into background\n-s	nbd swap support (lock server into memory)\n\n"
 
@@ -209,6 +211,8 @@
 #define help_freeramdisk "usage: freeramdisk [RAM device]\n\nFree all memory allocated to specified ramdisk\n\n"
 
 #define help_free "usage: free [-bkmgt]\n\nDisplay the total, free and used amount of physical memory and swap space.\n\n-bkmgt	Output units (default is bytes)\n\n"
+
+#define help_flock "usage: flock [-sxun] fd\n\nManage advisory file locks.\n\n-s	Shared lock.\n-x	Exclusive lock (default).\n-u	Unlock.\n-n	Non-blocking: fail rather than wait for the lock.\n\n"
 
 #define help_fallocate "usage: fallocate [-l size] file\n\nTell the filesystem to allocate space for a file.\n\n"
 
@@ -310,7 +314,7 @@
 
 #define help_mke2fs "usage: mke2fs [-Fnq] [-b ###] [-N|i ###] [-m ###] device\n\nCreate an ext2 filesystem on a block device or filesystem image.\n\n-F         Force to run on a mounted device\n-n         Don't write to device\n-q         Quiet (no output)\n-b size    Block size (1024, 2048, or 4096)\n-N inodes  Allocate this many inodes\n-i bytes   Allocate one inode for every XXX bytes of device\n-m percent Reserve this percent of filesystem space for root user\n\n"
 
-#define help_mdev_conf "The mdev config file (/etc/mdev.conf) contains lines that look like:\nhd[a-z][0-9]* 0:3 660\n\nEach line must contain three whitespace separated fields. The first\nfield is a regular expression matching one or more device names, and\nthe second and third fields are uid:gid and file permissions for\nmatching devies.\n\n"
+#define help_mdev_conf "The mdev config file (/etc/mdev.conf) contains lines that look like:\nhd[a-z][0-9]* 0:3 660\n\nEach line must contain three whitespace separated fields. The first\nfield is a regular expression matching one or more device names,\nthe second and third fields are uid:gid and file permissions for\nmatching devies.\n\n"
 
 #define help_mdev "usage: mdev [-s]\n\nCreate devices in /dev using information from /sys.\n\n-s	Scan all entries in /sys to populate /dev.\n\n"
 
