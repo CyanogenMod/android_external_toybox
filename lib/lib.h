@@ -98,6 +98,7 @@ void xputc(char c);
 void xflush(void);
 void xexec(char **argv);
 pid_t xpopen_both(char **argv, int *pipes);
+int xwaitpid(pid_t pid);
 int xpclose_both(pid_t pid, int *pipes);
 pid_t xpopen(char **argv, int *pipe, int stdout);
 pid_t xpclose(pid_t pid, int pipe);
@@ -245,6 +246,9 @@ mode_t string_to_mode(char *mode_str, mode_t base);
 void mode_to_string(mode_t mode, char *buf);
 char *basename_r(char *name);
 void names_to_pid(char **names, int (*callback)(pid_t pid, char *name));
+
+pid_t xvforkwrap(pid_t pid);
+#define XVFORK() xvforkwrap(vfork())
 
 // Functions in need of further review/cleanup
 #include "lib/pending.h"
