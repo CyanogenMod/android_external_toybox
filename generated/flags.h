@@ -677,6 +677,18 @@
 #undef FLAG_H
 #endif
 
+// flock <1>1nsux[-sux] <1>1nsux[-sux]
+#undef OPTSTR_flock
+#define OPTSTR_flock "<1>1nsux[-sux]"
+#ifdef CLEANUP_flock
+#undef CLEANUP_flock
+#undef FOR_flock
+#undef FLAG_x
+#undef FLAG_u
+#undef FLAG_s
+#undef FLAG_n
+#endif
+
 // fold   bsuw#<1
 #undef OPTSTR_fold
 #define OPTSTR_fold  0 
@@ -3365,6 +3377,16 @@
 #endif
 #define FLAG_L (1<<0)
 #define FLAG_H (1<<1)
+#endif
+
+#ifdef FOR_flock
+#ifndef TT
+#define TT this.flock
+#endif
+#define FLAG_x (1<<0)
+#define FLAG_u (1<<1)
+#define FLAG_s (1<<2)
+#define FLAG_n (1<<3)
 #endif
 
 #ifdef FOR_fold
