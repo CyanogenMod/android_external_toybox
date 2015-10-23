@@ -29,7 +29,7 @@ config STAT
     %a  Available blocks    |%b  Total blocks       |%c  Total inodes
     %d  Free inodes         |%f  Free blocks        |%i  File system ID
     %l  Max filename length |%n  File name          |%s  Fragment size
-    %S  Best transfer size  |%t  File system type
+    %S  Best transfer size  |%t  Filesystem type    |%T  Filesystem type name
 */
 
 #define FOR_stat
@@ -70,8 +70,8 @@ static void print_stat(char type)
     xprintf("%s", str);
   } else if (type == 'b') xprintf("%llu", stat->st_blocks);
   else if (type == 'B') xprintf("%lu", stat->st_blksize);
-  else if (type == 'd') xprintf("%ldd", stat->st_dev);
-  else if (type == 'D') xprintf("%llxh", stat->st_dev);
+  else if (type == 'd') xprintf("%ld", stat->st_dev);
+  else if (type == 'D') xprintf("%llx", stat->st_dev);
   else if (type == 'f') xprintf("%lx", stat->st_mode);
   else if (type == 'F') {
     char *t = "character device\0directory\0block device\0" \
@@ -113,7 +113,24 @@ static void print_statfs(char type) {
   else if (type == 'f') xprintf("%llu", statfs->f_bfree);
   else if (type == 'l') xprintf("%ld", statfs->f_namelen);
   else if (type == 't') xprintf("%lx", statfs->f_type);
-  else if (type == 'i')
+  else if (type == 'T') {
+    char *s = "unknown";
+    struct {unsigned num; char *name;} nn[] = {
+      {0xADFF, "affs"}, {0x5346544e, "ntfs"}, {0x1Cd1, "devpts"},
+      {0x137D, "ext"}, {0xEF51, "ext2"}, {0xEF53, "ext3"},
+      {0x1BADFACE, "bfs"}, {0x9123683E, "btrfs"}, {0x28cd3d45, "cramfs"},
+      {0x3153464a, "jfs"}, {0x7275, "romfs"}, {0x01021994, "tmpfs"},
+      {0x3434, "nilfs"}, {0x6969, "nfs"}, {0x9fa0, "proc"},
+      {0x534F434B, "sockfs"}, {0x62656572, "sysfs"}, {0x517B, "smb"},
+      {0x4d44, "msdos"}, {0x4006, "fat"}, {0x43415d53, "smackfs"},
+      {0x73717368, "squashfs"}
+    };
+    int i;
+
+    for (i=0; i<ARRAY_LEN(nn); i++)
+      if (nn[i].num == statfs->f_type) s = nn[i].name;
+    xprintf(s);
+  } else if (type == 'i')
     xprintf("%08x%08x", statfs->f_fsid.__val[0], statfs->f_fsid.__val[1]);
   else if (type == 's') xprintf("%d", statfs->f_frsize);
   else if (type == 'S') xprintf("%d", statfs->f_bsize);
@@ -129,7 +146,7 @@ void stat_main(void)
       "Blocks: Total: %b\tFree: %f\tAvailable: %a\n"
       "Inodes: Total: %c\tFree: %d"
     : "  File: %N\n  Size: %s\t Blocks: %b\t IO Blocks: %B\t%F\n"
-      "Device: %D\t Inode: %i\t Links: %h\n"
+      "Device: %Dh/%dd\t Inode: %i\t Links: %h\n"
       "Access: (%a/%A)\tUid: (%u/%U)\tGid: (%g/%G)\n"
       "Access: %x\nModify: %y\nChange: %z";
 
