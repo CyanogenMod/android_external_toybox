@@ -224,7 +224,7 @@ LOCAL_CXX_STL := none
 
 LOCAL_MODULE := toybox
 
-# dupes: dd df
+# dupes: dd
 # useless?: freeramdisk fsfreeze install makedevs mkfifo nbd-client
 #           partprobe pivot_root pwdx rev rfkill switch_root vconfig
 # prefer BSD netcat instead?: nc netcat
@@ -251,6 +251,7 @@ ALL_TOOLS := \
     cpio \
     cut \
     date \
+    df \
     dirname \
     dmesg \
     dos2unix \
