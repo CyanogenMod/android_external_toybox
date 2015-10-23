@@ -689,6 +689,7 @@ struct openvt_data {
 struct pgrep_data {
   long sid;       //-s
   long ppid;      //-P
+
   char *signame;
 };
 
@@ -708,12 +709,19 @@ struct ping_data {
 // toys/pending/ps.c
 
 struct ps_data {
+  struct arg_list *G;
+  struct arg_list *g;
+  struct arg_list *U;
+  struct arg_list *u;
+  struct arg_list *t;
+  struct arg_list *p;
   struct arg_list *o;
 
   unsigned width;
   dev_t tty;
   void *fields;
-  long uptime;
+  long pidlen, *pids, ttylen, *ttys;
+  long long ticks;
 };
 
 // toys/pending/route.c
@@ -987,6 +995,8 @@ struct df_data {
   struct arg_list *fstype;
 
   long units;
+  int column_widths[5];
+  int header_shown;
 };
 
 // toys/posix/du.c
