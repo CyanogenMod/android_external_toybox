@@ -460,7 +460,7 @@
 #undef FLAG_V
 #endif
 
-// dhcpd   >1P#<0>65535=67fi:S46[!46]
+// dhcpd   >1P#<0>65535fi:S46[!46]
 #undef OPTSTR_dhcpd
 #define OPTSTR_dhcpd  0 
 #ifdef CLEANUP_dhcpd

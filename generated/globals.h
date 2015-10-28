@@ -312,12 +312,6 @@ struct switch_root_data {
   dev_t rootdev;
 };
 
-// toys/other/taskset.c
-
-struct taskset_data {
-  int nproc;
-};
-
 // toys/other/timeout.c
 
 struct timeout_data {
@@ -720,7 +714,7 @@ struct ps_data {
   unsigned width;
   dev_t tty;
   void *fields;
-  long pidlen, *pids, ttylen, *ttys;
+  long pidlen, *pids, ttylen, *ttys, bits;
   long long ticks;
 };
 
@@ -1285,7 +1279,6 @@ extern union global_union {
 	struct stat_data stat;
 	struct swapon_data swapon;
 	struct switch_root_data switch_root;
-	struct taskset_data taskset;
 	struct timeout_data timeout;
 	struct truncate_data truncate;
 	struct xxd_data xxd;

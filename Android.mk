@@ -137,8 +137,8 @@ LOCAL_SRC_FILES := \
     toys/pending/expr.c \
     toys/pending/lsof.c \
     toys/pending/more.c \
-    toys/pending/pgrep.c \
     toys/pending/netstat.c \
+    toys/pending/pgrep.c \
     toys/pending/route.c \
     toys/pending/tar.c \
     toys/pending/top.c \
