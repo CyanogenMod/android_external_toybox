@@ -1823,9 +1823,9 @@
 #undef FOR_printf
 #endif
 
-// ps   aAdeflo*p*s*t*u*U*g*G*w[!ol][+Ae]
+// ps aAdeflo*p*s*t*u*U*g*G*w[!ol][+Ae] aAdeflo*p*s*t*u*U*g*G*w[!ol][+Ae]
 #undef OPTSTR_ps
-#define OPTSTR_ps  0 
+#define OPTSTR_ps "aAdeflo*p*s*t*u*U*g*G*w[!ol][+Ae]"
 #ifdef CLEANUP_ps
 #undef CLEANUP_ps
 #undef FOR_ps
@@ -4347,21 +4347,21 @@
 #ifndef TT
 #define TT this.ps
 #endif
-#define FLAG_w (FORCED_FLAG<<0)
-#define FLAG_G (FORCED_FLAG<<1)
-#define FLAG_g (FORCED_FLAG<<2)
-#define FLAG_U (FORCED_FLAG<<3)
-#define FLAG_u (FORCED_FLAG<<4)
-#define FLAG_t (FORCED_FLAG<<5)
-#define FLAG_s (FORCED_FLAG<<6)
-#define FLAG_p (FORCED_FLAG<<7)
-#define FLAG_o (FORCED_FLAG<<8)
-#define FLAG_l (FORCED_FLAG<<9)
-#define FLAG_f (FORCED_FLAG<<10)
-#define FLAG_e (FORCED_FLAG<<11)
-#define FLAG_d (FORCED_FLAG<<12)
-#define FLAG_A (FORCED_FLAG<<13)
-#define FLAG_a (FORCED_FLAG<<14)
+#define FLAG_w (1<<0)
+#define FLAG_G (1<<1)
+#define FLAG_g (1<<2)
+#define FLAG_U (1<<3)
+#define FLAG_u (1<<4)
+#define FLAG_t (1<<5)
+#define FLAG_s (1<<6)
+#define FLAG_p (1<<7)
+#define FLAG_o (1<<8)
+#define FLAG_l (1<<9)
+#define FLAG_f (1<<10)
+#define FLAG_e (1<<11)
+#define FLAG_d (1<<12)
+#define FLAG_A (1<<13)
+#define FLAG_a (1<<14)
 #endif
 
 #ifdef FOR_pwd
