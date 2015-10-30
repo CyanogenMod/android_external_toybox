@@ -134,6 +134,8 @@
 #define USE_PATCH(...) __VA_ARGS__
 #define CFG_PRINTF 1
 #define USE_PRINTF(...) __VA_ARGS__
+#define CFG_PS 1
+#define USE_PS(...) __VA_ARGS__
 #define CFG_PWD 1
 #define USE_PWD(...) __VA_ARGS__
 #define CFG_RENICE 1
@@ -298,8 +300,6 @@
 #define USE_PGREP(...) __VA_ARGS__
 #define CFG_PING 0
 #define USE_PING(...)
-#define CFG_PS 0
-#define USE_PS(...)
 #define CFG_RESET 0
 #define USE_RESET(...)
 #define CFG_ROUTE 1

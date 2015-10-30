@@ -179,6 +179,7 @@ LOCAL_SRC_FILES := \
     toys/posix/paste.c \
     toys/posix/patch.c \
     toys/posix/printf.c \
+    toys/posix/ps.c \
     toys/posix/pwd.c \
     toys/posix/renice.c \
     toys/posix/rm.c \
