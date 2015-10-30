@@ -700,24 +700,6 @@ struct ping_data {
   int sock;
 };
 
-// toys/pending/ps.c
-
-struct ps_data {
-  struct arg_list *G;
-  struct arg_list *g;
-  struct arg_list *U;
-  struct arg_list *u;
-  struct arg_list *t;
-  struct arg_list *p;
-  struct arg_list *o;
-
-  unsigned width;
-  dev_t tty;
-  void *fields;
-  long pidlen, *pids, ttylen, *ttys, bits;
-  long long ticks;
-};
-
 // toys/pending/route.c
 
 struct route_data {
@@ -1132,6 +1114,26 @@ struct patch_data {
   char *tempname;
 };
 
+// toys/posix/ps.c
+
+struct ps_data {
+  struct arg_list *G;
+  struct arg_list *g;
+  struct arg_list *U;
+  struct arg_list *u;
+  struct arg_list *t;
+  struct arg_list *s;
+  struct arg_list *p;
+  struct arg_list *o;
+
+  struct ptr_len gg, GG, pp, ss, tt, uu, UU, *parsing;
+  unsigned width;
+  dev_t tty;
+  void *fields;
+  long bits;
+  long long ticks;
+};
+
 // toys/posix/renice.c
 
 struct renice_data {
@@ -1317,7 +1319,6 @@ extern union global_union {
 	struct openvt_data openvt;
 	struct pgrep_data pgrep;
 	struct ping_data ping;
-	struct ps_data ps;
 	struct route_data route;
 	struct sh_data sh;
 	struct sulogin_data sulogin;
@@ -1357,6 +1358,7 @@ extern union global_union {
 	struct od_data od;
 	struct paste_data paste;
 	struct patch_data patch;
+	struct ps_data ps;
 	struct renice_data renice;
 	struct sed_data sed;
 	struct sort_data sort;
