@@ -1008,8 +1008,6 @@ struct grep_data {
   long m;
   struct arg_list *f;
   struct arg_list *e;
-
-  struct arg_list *regex;
 };
 
 // toys/posix/head.c
@@ -1125,13 +1123,15 @@ struct ps_data {
   struct arg_list *s;
   struct arg_list *p;
   struct arg_list *o;
+  struct arg_list *ppid;
 
-  struct ptr_len gg, GG, pp, ss, tt, uu, UU, *parsing;
+  struct ptr_len gg, GG, pp, ppids, ss, tt, uu, UU, *parsing;
   unsigned width;
   dev_t tty;
   void *fields;
   long bits;
   long long ticks;
+  size_t header_len;
 };
 
 // toys/posix/renice.c
