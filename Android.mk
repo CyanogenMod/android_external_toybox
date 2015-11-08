@@ -386,3 +386,12 @@ LOCAL_CXX_STL := none
 LOCAL_CLANG := true
 LOCAL_MODULE := libtoybox_driver
 include $(BUILD_STATIC_LIBRARY)
+
+# Host binary to enumerate the toys
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := scripts/install.c
+LOCAL_MODULE_TAGS := optional
+LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CLANG := true
+LOCAL_MODULE := toybox-instlist
+include $(BUILD_HOST_EXECUTABLE)
