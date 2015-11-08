@@ -16,6 +16,22 @@
 
 LOCAL_PATH := $(call my-dir)
 
+
+common_cflags := \
+    -std=c99 \
+    -Os \
+    -Wno-char-subscripts \
+    -Wno-sign-compare \
+    -Wno-string-plus-int \
+    -Wno-uninitialized \
+    -Wno-unused-parameter \
+    -funsigned-char \
+    -ffunction-sections -fdata-sections \
+    -fno-asynchronous-unwind-tables \
+
+toybox_version := $(shell git -C $(LOCAL_PATH) rev-parse --short=12 HEAD 2>/dev/null)-android
+common_cflags  += -DTOYBOX_VERSION='"$(toybox_version)"'
+
 #
 # To update:
 #
@@ -57,7 +73,6 @@ LOCAL_SRC_FILES := \
     lib/net.c \
     lib/portability.c \
     lib/xwrap.c \
-    main.c \
     toys/android/getenforce.c \
     toys/android/getprop.c \
     toys/android/load_policy.c \
@@ -200,29 +215,24 @@ LOCAL_SRC_FILES := \
     toys/posix/wc.c \
     toys/posix/xargs.c \
 
-LOCAL_CFLAGS += \
-    -std=c99 \
-    -Os \
-    -Wno-char-subscripts \
-    -Wno-sign-compare \
-    -Wno-string-plus-int \
-    -Wno-uninitialized \
-    -Wno-unused-parameter \
-    -funsigned-char \
-    -ffunction-sections -fdata-sections \
-    -fno-asynchronous-unwind-tables \
-
-toybox_version := $(shell git -C $(LOCAL_PATH) rev-parse --short=12 HEAD 2>/dev/null)-android
-LOCAL_CFLAGS += -DTOYBOX_VERSION='"$(toybox_version)"'
-
+LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CLANG := true
-
-LOCAL_SHARED_LIBRARIES := libcutils libselinux
 
 # This doesn't actually prevent us from dragging in libc++ at runtime
 # because libnetd_client.so is C++.
 LOCAL_CXX_STL := none
 
+LOCAL_MODULE := libtoybox
+
+include $(BUILD_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := main.c
+LOCAL_STATIC_LIBRARIES := libtoybox
+LOCAL_SHARED_LIBRARIES := libcutils libselinux
+LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CXX_STL := none
+LOCAL_CLANG := true
 LOCAL_MODULE := toybox
 
 # dupes: dd
@@ -365,3 +375,14 @@ ALL_TOOLS := \
 LOCAL_POST_INSTALL_CMD := $(hide) $(foreach t,$(ALL_TOOLS),ln -sf toybox $(TARGET_OUT)/bin/$(t);)
 
 include $(BUILD_EXECUTABLE)
+
+# This is used by the recovery system
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := main.c
+LOCAL_WHOLE_STATIC_LIBRARIES := libtoybox
+LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CFLAGS += -Dmain=toybox_driver
+LOCAL_CXX_STL := none
+LOCAL_CLANG := true
+LOCAL_MODULE := libtoybox_driver
+include $(BUILD_STATIC_LIBRARY)
