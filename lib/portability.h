@@ -9,7 +9,7 @@
 
 // Test for gcc (using compiler builtin #define)
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__APPLE__)
 #define noreturn	__attribute__((noreturn))
 #if CFG_TOYBOX_DEBUG
 #define printf_format	__attribute__((format(printf, 1, 2)))
@@ -26,7 +26,9 @@
 
 // This isn't in the spec, but it's how we determine what libc we're using.
 
+#ifndef __APPLE__
 #include <features.h>
+#endif
 
 // Types various replacement prototypes need
 #include <sys/types.h>
@@ -210,13 +212,16 @@ int clearenv(void);
 
 #if defined(__APPLE__) \
     || (defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ < 10)
+#include <stdio.h>
 ssize_t getdelim(char **lineptr, size_t *n, int delim, FILE *stream);
 ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 #endif
 
 // Linux headers not listed by POSIX or LSB
 #include <sys/mount.h>
+#ifndef __APPLE__
 #include <sys/swap.h>
+#endif
 
 // Android is missing some headers and functions
 // "generated/config.h" is included first

@@ -62,10 +62,12 @@
 #include <wctype.h>
 
 // LSB 4.1 headers
+#ifndef __APPLE__
 #include <pty.h>
-#include <sys/ioctl.h>
 #include <sys/statfs.h>
 #include <sys/sysinfo.h>
+#endif
+#include <sys/ioctl.h>
 
 #include "lib/lib.h"
 #include "lib/lsm.h"
