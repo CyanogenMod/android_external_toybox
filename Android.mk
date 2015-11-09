@@ -215,6 +215,8 @@ LOCAL_SRC_FILES := \
     toys/posix/wc.c \
     toys/posix/xargs.c \
 
+LOCAL_C_INCLUDES := bionic/libc/include
+
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CLANG := true
 
