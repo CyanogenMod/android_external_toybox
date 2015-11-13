@@ -6,7 +6,8 @@
  * And http://kernel.org/doc/Documentation/filesystems/proc.txt Table 1-4
  * And linux kernel source fs/proc/array.c function do_task_stat()
  *
- * Deviations from posix: no -n because /proc/self/wchan exists.
+ * Deviations from posix: no -n because /proc/self/wchan exists; we use -n to
+ * mean "show numeric users and groups" instead.
  * Posix says default output should have field named "TTY" but if you "-o tty"
  * the same field should be called "TT" which is _INSANE_ and I'm not doing it.
  * Similarly -f outputs USER but calls it UID (we call it USER).
@@ -26,7 +27,7 @@
  * TODO: ps aux (att & bsd style "ps -ax" vs "ps ax" behavior difference)
  * TODO: finalize F, remove C
  *       switch -fl to -y, use "string" instead of constants to set, remove C
- * TODO: --sort -Z
+ * TODO: --sort
  * TODO: way too many hardwired constants here, how can I generate them?
  * TODO: thread support /proc/$d/task/%d/stat (and -o stat has "l")
  *
@@ -34,13 +35,13 @@
  * significant. The array index is used in strawberry->which (consumed
  * in do_ps()) and in the bitmasks enabling default fields in ps_main().
 
-USE_PS(NEWTOY(ps, "(ppid)*aAdeflo*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae]", TOYFLAG_USR|TOYFLAG_BIN))
+USE_PS(NEWTOY(ps, "P(ppid)*aAdeflno*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae]", TOYFLAG_USR|TOYFLAG_BIN))
 
 config PS
   bool "ps"
   default y
   help
-    usage: ps [-AadeflwZ] [-gG GROUP] [-o FIELD] [-p PID] [-t TTY] [-uU USER]
+    usage: ps [-AadeflnwZ] [-gG GROUP] [-o FIELD] [-p PID] [-t TTY] [-uU USER]
 
     List processes.
 
@@ -52,12 +53,16 @@ config PS
     -e	Same as -A
     -g	Belonging to GROUPs
     -G	Belonging to real GROUPs (before sgid)
-    -p	PIDs
-    --ppid	Parent PIDs
+    -p	PIDs (--pid)
+    -P	Parent PIDs (--ppid)
     -s	In session IDs
     -t	Attached to selected TTYs
     -u	Owned by USERs
     -U	Owned by real USERs (before suid)
+
+    Output modifiers:
+
+    -n	Show numeric USER and GROUP
     -w	Wide output (don't truncate at terminal width)
 
     Which FIELDs to show. (Default = -o PID,TTY,TIME,CMD)
@@ -69,42 +74,43 @@ config PS
 
     Available -o FIELDs:
 
-      ADDR   Instruction pointer
-      CMD    Command line (including args)
-      COMM   Command name (no args)
-      ETIME  Elapsed time since process start
-      F      Process flags (PF_*) from linux source file include/sched.h
-             (in octal rather than hex because posix)
-      GID    Group id
-      GROUP  Group name
-      LABEL  Security label
-      MAJFL  Major page faults
-      MINFL  Minor page faults
-      NI     Niceness of process (lower niceness is higher priority)
-      PCPU   Percentage of CPU time used
-      PGID   Process Group ID
-      PID    Process ID
-      PPID   Parent Process ID
-      PRI    Priority
-      RGID   Real (before sgid) group ID
-      RGROUP Real (before sgid) group name
-      RSS    Resident Set Size (memory currently used)
-      RUID   Real (before suid) user ID
-      RUSER  Real (before suid) user name
-      S      Process state:
-             R (running) S (sleeping) D (disk sleep) T (stopped)  t (traced)
-             Z (zombie)  X (dead)     x (dead)       K (wakekill) W (waking)
-      STAT   Process state (S) plus:
-             < high priority          N low priority L locked memory
-             s session leader         + foreground   l multithreaded
-      STIME  Start time of process in hh:mm (size :19 shows yyyy-mm-dd hh:mm:ss)
-      SZ     Memory Size (4k pages needed to completely swap out process)
-      TIME   CPU time consumed
-      TTY    Controlling terminal
-      UID    User id
-      USER   User name
-      VSZ    Virtual memory size (1k units)
-      WCHAN  Waiting in kernel for
+      ADDR    Instruction pointer
+      CMD     Command line (from /proc/pid/cmdline, including args)
+      CMDLINE Command line (from /proc/pid/cmdline, no args)
+      COMM    Command name (from /proc/pid/stat, no args)
+      ETIME   Elapsed time since process start
+      F       Process flags (PF_*) from linux source file include/sched.h
+              (in octal rather than hex because posix)
+      GID     Group id
+      GROUP   Group name
+      LABEL   Security label
+      MAJFL   Major page faults
+      MINFL   Minor page faults
+      NI      Niceness of process (lower niceness is higher priority)
+      PCPU    Percentage of CPU time used
+      PGID    Process Group ID
+      PID     Process ID
+      PPID    Parent Process ID
+      PRI     Priority
+      RGID    Real (before sgid) group ID
+      RGROUP  Real (before sgid) group name
+      RSS     Resident Set Size (memory currently used)
+      RUID    Real (before suid) user ID
+      RUSER   Real (before suid) user name
+      S       Process state:
+              R (running) S (sleeping) D (disk sleep) T (stopped)  t (traced)
+              Z (zombie)  X (dead)     x (dead)       K (wakekill) W (waking)
+      STAT    Process state (S) plus:
+              < high priority          N low priority L locked memory
+              s session leader         + foreground   l multithreaded
+      STIME   Start time of process in hh:mm (size :19 shows yyyy-mm-dd hh:mm:ss)
+      SZ      Memory Size (4k pages needed to completely swap out process)
+      TIME    CPU time consumed
+      TTY     Controlling terminal
+      UID     User id
+      USER    User name
+      VSZ     Virtual memory size (1k units)
+      WCHAN   Waiting in kernel for
 */
 
 #define FOR_ps
@@ -119,9 +125,9 @@ GLOBALS(
   struct arg_list *s;
   struct arg_list *p;
   struct arg_list *o;
-  struct arg_list *ppid;
+  struct arg_list *P;
 
-  struct ptr_len gg, GG, pp, ppids, ss, tt, uu, UU, *parsing;
+  struct ptr_len gg, GG, pp, PP, ss, tt, uu, UU, *parsing;
   unsigned width;
   dev_t tty;
   void *fields;
@@ -150,12 +156,12 @@ static time_t get_uptime(void)
 static int match_process(long long *slot)
 {
   struct ptr_len *match[] = {
-    &TT.gg, &TT.GG, &TT.pp, &TT.ppids, &TT.ss, &TT.tt, &TT.uu, &TT.UU
+    &TT.gg, &TT.GG, &TT.pp, &TT.PP, &TT.ss, &TT.tt, &TT.uu, &TT.UU
   };
   int i, j, mslot[] = {33, 34, 0, 1, 3, 4, 31, 32};
   long *ll = 0;
 
-  // Do we have -g -G -p --ppid -s -t -u -U options selecting processes?
+  // Do we have -g -G -p -P -s -t -u -U options selecting processes?
   for (i = 0; i < ARRAY_LEN(match); i++) {
     if (match[i]->len) {
       ll = match[i]->ptr;
@@ -255,7 +261,7 @@ static int do_ps(struct dirtree *new)
 
       // Even entries are numbers, odd are names
       sprintf(out, "%d", id);
-      if (i&1) {
+      if (!(toys.optflags&FLAG_n) && i&1) {
         if (i>3) {
           struct group *gr = getgrgid(id);
 
@@ -309,28 +315,48 @@ static int do_ps(struct dirtree *new)
 
     // TTY
     } else if (i==12) {
+      int rdev = slot[4];
+      struct stat st;
 
-      // Can we readlink() our way to a name?
-      for (i=0; i<3; i++) {
-        struct stat st;
-
-        sprintf(scratch, "%lld/fd/%i", *slot, i);
-        fd = dirtree_parentfd(new);
-        if (!fstatat(fd, scratch, &st, 0) && S_ISCHR(st.st_mode)
-          && st.st_rdev == slot[4]
-          && 0<(len = readlinkat(fd, scratch, out, 2047)))
-        {
-          out[len] = 0;
-          if (!strncmp(out, "/dev/", 5)) out += 5;
-
-          break;
+      // Call no tty "?" rather than "0:0".
+      if (!rdev) strcpy(out, "?");
+      else {
+        // Can we readlink() our way to a name?
+        for (i=0; i<3; i++) {
+          sprintf(scratch, "%lld/fd/%i", *slot, i);
+          fd = dirtree_parentfd(new);
+          if (!fstatat(fd, scratch, &st, 0) && S_ISCHR(st.st_mode)
+            && st.st_rdev == rdev
+            && 0<(len = readlinkat(fd, scratch, out, 2047)))
+          {
+            out[len] = 0;
+            break;
+          }
         }
-      }
 
-      // Couldn't find it, show major:minor
-      if (i==3) {
-        i = slot[4];
-        sprintf(out, "%d:%d", (i>>8)&0xfff, ((i>>12)&0xfff00)|(i&0xff));
+        // Couldn't find it, try all the tty drivers.
+        if (i == 3) {
+          FILE *fp = fopen("/proc/tty/drivers", "r");
+          int tty_major = 0, maj = major(rdev), min = minor(rdev);
+
+          if (fp) {
+            while (fscanf(fp, "%*s %256s %d %*s %*s", out, &tty_major) == 2) {
+              // TODO: we could parse the minor range too.
+              if (tty_major == maj) {
+                sprintf(out + strlen(out), "%d", min);
+                if (!stat(out, &st) && S_ISCHR(st.st_mode) && st.st_rdev==rdev)
+                  break;
+              }
+              tty_major = 0;
+            }
+            fclose(fp);
+          }
+
+          // Really couldn't find it, so just show major:minor.
+          if (!tty_major) sprintf(out, "%d:%d", maj, min);
+        }
+
+        strstart(&out, "/dev/");
       }
 
     // TIME ELAPSED
@@ -354,7 +380,8 @@ static int do_ps(struct dirtree *new)
     // Command line limited to 2k displayable. We could dynamically malloc, but
     // it'd almost never get used, querying length of a proc file is awkward,
     // fixed buffer is nommu friendly... Wait for somebody to complain. :)
-    } else if (i==14) {
+    // CMDLINE - command line from /proc/pid/cmdline without arguments
+    } else if (i==14 || i==32) {
       int fd;
 
       len = 0;
@@ -365,7 +392,7 @@ static int do_ps(struct dirtree *new)
         if (0<(len = read(fd, out, 2047))) {
           if (!out[len-1]) len--;
           else out[len] = 0;
-          for (i = 0; i<len; i++) if (out[i] < ' ') out[i] = ' ';
+          if (i==14) for (i = 0; i<len; i++) if (out[i] < ' ') out[i] = ' ';
         }
         close(fd);
       }
@@ -411,9 +438,8 @@ void comma_args(struct arg_list *al, char *err,
     arg = al->arg;
     while ((next = comma_iterate(&arg, &len)))
       if ((next = callback(next, len)))
-        perror_exit("%s '%s'\n% *c", err, al->arg,
-                    strlen(toys.which->name) + 2 +
-                    strlen(err) + 2 + 1+next-al->arg, '^');
+        perror_exit("%s '%s'\n%*c", err, al->arg,
+          (int)(5+strlen(toys.which->name)+strlen(err)+next-al->arg), '^');
     al = al->next;
   }
 }
@@ -425,13 +451,13 @@ static char *parse_o(char *type, int length)
          "F", "S", "UID", "PID", "PPID", "C", "PRI", "NI", "ADDR", "SZ",
          "WCHAN", "STIME", "TTY", "TIME", "CMD", "COMMAND", "ELAPSED", "GROUP",
          "%CPU", "PGID", "RGROUP", "RUSER", "USER", "VSZ", "RSS", "MAJFL",
-         "GID", "STAT", "RUID", "RGID", "MINFL", "LABEL"
+         "GID", "STAT", "RUID", "RGID", "MINFL", "LABEL", "CMDLINE"
   };
   // TODO: Android uses -30 for LABEL, but ideally it would auto-size.
   signed char widths[] = {1,-1,5,5,5,2,3,3,4+sizeof(long),5,
                           -6,5,-8,8,-27,-27,11,-8,
                           4,5,-8,-8,-8,6,5,6,
-                          8,-5,4,4,6,-30};
+                          8,-5,4,4,6,-30,-27};
   int i, j, k;
 
   // Get title, length of title, type, end of type, and display width
@@ -590,8 +616,8 @@ void ps_main(void)
   }
 
   // parse command line options other than -o
-  TT.parsing = &TT.ppids;
-  comma_args(TT.ppid, "bad --ppid", parse_rest);
+  TT.parsing = &TT.PP;
+  comma_args(TT.P, "bad -P", parse_rest);
   TT.parsing = &TT.pp;
   comma_args(TT.p, "bad -p", parse_rest);
   TT.parsing = &TT.tt;
@@ -623,6 +649,8 @@ void ps_main(void)
       al.arg = "USER:8=UID,PID,PPID,C,STIME,TTY,TIME,CMD";
     else if (toys.optflags&FLAG_l)
       al.arg = "F,S,UID,PID,PPID,C,PRI,NI,ADDR,SZ,WCHAN,TTY,TIME,CMD";
+    else if (CFG_TOYBOX_ON_ANDROID)
+      al.arg = "USER,PID,PPID,VSIZE,RSS,WCHAN:10,ADDR:10=PC,S,CMDLINE";
     else al.arg = "PID,TTY,TIME,CMD";
 
     comma_args(&al, 0, parse_o);
@@ -636,7 +664,7 @@ void ps_main(void)
     free(TT.gg.ptr);
     free(TT.GG.ptr);
     free(TT.pp.ptr);
-    free(TT.ppids.ptr);
+    free(TT.PP.ptr);
     free(TT.ss.ptr);
     free(TT.tt.ptr);
     free(TT.uu.ptr);
