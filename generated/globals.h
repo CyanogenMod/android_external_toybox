@@ -447,6 +447,18 @@ struct dhcp_data {
     char *vendor_cls;
 };
 
+// toys/pending/dhcp6.c
+
+struct dhcp6_data {
+  char *interface_name, *pidfile, *script;
+  long retry, timeout, errortimeout;
+  char *req_ip;
+  int length, state, request_length, sock, sock1, status, retval, retries;
+  struct timeval tv;
+  uint8_t transction_id[3];
+  struct sockaddr_in6 input_socket6;
+};
+
 // toys/pending/dhcpd.c
 
 struct dhcpd_data {
@@ -1123,9 +1135,9 @@ struct ps_data {
   struct arg_list *s;
   struct arg_list *p;
   struct arg_list *o;
-  struct arg_list *ppid;
+  struct arg_list *P;
 
-  struct ptr_len gg, GG, pp, ppids, ss, tt, uu, UU, *parsing;
+  struct ptr_len gg, GG, pp, PP, ss, tt, uu, UU, *parsing;
   unsigned width;
   dev_t tty;
   void *fields;
@@ -1293,6 +1305,7 @@ extern union global_union {
 	struct crontab_data crontab;
 	struct dd_data dd;
 	struct dhcp_data dhcp;
+	struct dhcp6_data dhcp6;
 	struct dhcpd_data dhcpd;
 	struct diff_data diff;
 	struct dumpleases_data dumpleases;
