@@ -10,7 +10,6 @@ USE_UPTIME(NEWTOY(uptime, NULL, TOYFLAG_USR|TOYFLAG_BIN))
 config UPTIME
   bool "uptime"
   default y
-  depends on TOYBOX_UTMPX
   help
     usage: uptime
 
