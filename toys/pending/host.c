@@ -29,6 +29,7 @@ GLOBALS(
 )
 
 #include <resolv.h>
+#include "resolv_private.h"
 
 #define PL_IP 1
 #define PL_NAME 2
