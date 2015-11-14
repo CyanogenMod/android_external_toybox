@@ -71,8 +71,10 @@ LOCAL_SRC_FILES := \
     lib/lib.c \
     lib/llist.c \
     lib/net.c \
+    lib/password.c \
     lib/portability.c \
     lib/xwrap.c \
+    main.c \
     toys/android/getenforce.c \
     toys/android/getprop.c \
     toys/android/load_policy.c \
@@ -126,8 +128,10 @@ LOCAL_SRC_FILES := \
     toys/other/pmap.c \
     toys/other/printenv.c \
     toys/other/pwdx.c \
+    toys/other/readahead.c \
     toys/other/readlink.c \
     toys/other/realpath.c \
+    toys/other/reset.c \
     toys/other/rev.c \
     toys/other/rfkill.c \
     toys/other/rmmod.c \
@@ -148,17 +152,26 @@ LOCAL_SRC_FILES := \
     toys/other/which.c \
     toys/other/xxd.c \
     toys/other/yes.c \
+    toys/pending/arp.c \
     toys/pending/dd.c \
+    toys/pending/diff.c \
     toys/pending/expr.c \
+    toys/pending/fdisk.c \
+    toys/pending/ftpget.c \
+    toys/pending/host.c \
     toys/pending/lsof.c \
     toys/pending/more.c \
     toys/pending/netstat.c \
     toys/pending/pgrep.c \
     toys/pending/route.c \
     toys/pending/tar.c \
+    toys/pending/telnet.c \
+    toys/pending/test.c \
     toys/pending/top.c \
     toys/pending/tr.c \
     toys/pending/traceroute.c \
+    toys/pending/watch.c \
+    toys/pending/xzcat.c \
     toys/posix/basename.c \
     toys/posix/cal.c \
     toys/posix/cat.c \
@@ -213,7 +226,7 @@ LOCAL_SRC_FILES := \
     toys/posix/uname.c \
     toys/posix/uniq.c \
     toys/posix/wc.c \
-    toys/posix/xargs.c \
+    toys/posix/xargs.c
 
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CLANG := true
@@ -222,9 +235,22 @@ LOCAL_CLANG := true
 # because libnetd_client.so is C++.
 LOCAL_CXX_STL := none
 
+LOCAL_C_INCLUDES += bionic/libc/dns/include
+
 LOCAL_MODULE := libtoybox
 
 include $(BUILD_STATIC_LIBRARY)
+
+
+# Host binary to enumerate the toys
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := scripts/install.c
+LOCAL_MODULE_TAGS := optional
+LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CLANG := true
+LOCAL_MODULE := toybox-instlist
+include $(BUILD_HOST_EXECUTABLE)
+
 
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := main.c
@@ -235,146 +261,19 @@ LOCAL_CXX_STL := none
 LOCAL_CLANG := true
 LOCAL_MODULE := toybox
 
-# dupes: dd
-# useless?: freeramdisk fsfreeze install makedevs mkfifo nbd-client
-#           partprobe pivot_root pwdx rev rfkill switch_root vconfig
-# prefer BSD netcat instead?: nc netcat
-# prefer efs2progs instead?: blkid chattr lsattr
-
-ALL_TOOLS := \
-    acpi \
-    base64 \
-    basename \
-    blockdev \
-    bzcat \
-    cal \
-    cat \
-    chcon \
-    chgrp \
-    chmod \
-    chown \
-    chroot \
-    cksum \
-    clear \
-    comm \
-    cmp \
-    cp \
-    cpio \
-    cut \
-    date \
-    df \
-    dirname \
-    dmesg \
-    dos2unix \
-    du \
-    echo \
-    env \
-    expand \
-    expr \
-    fallocate \
-    false \
-    find \
-    flock \
-    free \
-    getenforce \
-    getprop \
-    groups \
-    head \
-    hostname \
-    hwclock \
-    id \
-    ifconfig \
-    inotifyd \
-    insmod \
-    ionice \
-    iorenice \
-    kill \
-    load_policy \
-    ln \
-    logname \
-    losetup \
-    ls \
-    lsmod \
-    lsof \
-    lsusb \
-    md5sum \
-    mkdir \
-    mknod \
-    mkswap \
-    mktemp \
-    modinfo \
-    more \
-    mount \
-    mountpoint \
-    mv \
-    netstat \
-    nice \
-    nl \
-    nohup \
-    od \
-    paste \
-    patch \
-    pgrep \
-    pidof \
-    pkill \
-    pmap \
-    printenv \
-    printf \
-    pwd \
-    readlink \
-    realpath \
-    renice \
-    restorecon \
-    rm \
-    rmdir \
-    rmmod \
-    route \
-    runcon \
-    sed \
-    seq \
-    setenforce \
-    setprop \
-    setsid \
-    sha1sum \
-    sleep \
-    sort \
-    split \
-    stat \
-    strings \
-    swapoff \
-    swapon \
-    sync \
-    sysctl \
-    tac \
-    tail \
-    tar \
-    taskset \
-    tee \
-    time \
-    timeout \
-    touch \
-    tr \
-    true \
-    truncate \
-    tty \
-    umount \
-    uname \
-    uniq \
-    unix2dos \
-    uptime \
-    usleep \
-    vmstat \
-    wc \
-    which \
-    whoami \
-    xargs \
-    xxd \
-    yes \
-
-# Install the symlinks.
-LOCAL_POST_INSTALL_CMD := $(hide) $(foreach t,$(ALL_TOOLS),ln -sf toybox $(TARGET_OUT)/bin/$(t);)
+# for dumping the list of toys
+TOYBOX_INSTLIST := $(HOST_OUT_EXECUTABLES)/toybox-instlist
+LOCAL_ADDITIONAL_DEPENDENCIES := toybox_links
 
 include $(BUILD_EXECUTABLE)
+
+toybox_links: $(TOYBOX_INSTLIST) toybox
+toybox_links: TOY_LIST=$(shell $(TOYBOX_INSTLIST))
+toybox_links: TOYBOX_BINARY := $(TARGET_OUT)/bin/toybox
+toybox_links:
+	@echo -e ${CL_CYN}"Generate Toybox links:"${CL_RST} $(TOY_LIST)
+	@mkdir -p $(TARGET_OUT)/bin
+	$(hide) $(foreach t,$(TOY_LIST),ln -sf toybox $(TARGET_OUT)/bin/$(t);)
 
 # This is used by the recovery system
 include $(CLEAR_VARS)
@@ -387,11 +286,4 @@ LOCAL_CLANG := true
 LOCAL_MODULE := libtoybox_driver
 include $(BUILD_STATIC_LIBRARY)
 
-# Host binary to enumerate the toys
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := scripts/install.c
-LOCAL_MODULE_TAGS := optional
-LOCAL_CFLAGS := $(common_cflags)
-LOCAL_CLANG := true
-LOCAL_MODULE := toybox-instlist
-include $(BUILD_HOST_EXECUTABLE)
+
