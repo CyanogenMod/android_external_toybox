@@ -278,7 +278,7 @@ toybox_links:
 	@echo -e ${CL_CYN}"Generate Toybox links:"${CL_RST} $(TOY_LIST)
 	@mkdir -p $(TARGET_OUT)/bin
 	@mkdir -p $(TARGET_OUT)/xbin
-	$(hide) $(foreach t,$(filter-out $(TOYS_FOR_XBIN),TOY_LIST),ln -sf toybox $(TARGET_OUT_EXECUTABLES)/$(t);)
+	$(hide) $(foreach t,$(filter-out $(TOYS_FOR_XBIN),$(TOY_LIST)),ln -sf toybox $(TARGET_OUT_EXECUTABLES)/$(t);)
 	$(hide) $(foreach t,$(TOYS_FOR_XBIN),ln -sf /system/bin/toybox $(TARGET_OUT_OPTIONAL_EXECUTABLES)/$(t);)
 
 
