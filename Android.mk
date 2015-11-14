@@ -265,6 +265,10 @@ LOCAL_MODULE := toybox
 TOYBOX_INSTLIST := $(HOST_OUT_EXECUTABLES)/toybox-instlist
 LOCAL_ADDITIONAL_DEPENDENCIES := toybox_links
 
+# we still want a link for ps, but the toolbox version needs to
+# stick around for compatibility reasons, for now.
+TOYS_FOR_XBIN := ps
+
 include $(BUILD_EXECUTABLE)
 
 toybox_links: $(TOYBOX_INSTLIST) toybox
@@ -273,7 +277,9 @@ toybox_links: TOYBOX_BINARY := $(TARGET_OUT)/bin/toybox
 toybox_links:
 	@echo -e ${CL_CYN}"Generate Toybox links:"${CL_RST} $(TOY_LIST)
 	@mkdir -p $(TARGET_OUT)/bin
-	$(hide) $(foreach t,$(TOY_LIST),ln -sf toybox $(TARGET_OUT)/bin/$(t);)
+	$(hide) $(foreach t,$(filter-out $(TOYS_FOR_XBIN),TOY_LIST),ln -sf toybox $(TARGET_OUT_EXECUTABLES)/$(t);)
+	$(hide) $(foreach t,$(TOYS_FOR_XBIN),ln -sf /system/bin/toybox $(TARGET_OUT_OPTIONAL_EXECUTABLES)/$(t);)
+
 
 # This is used by the recovery system
 include $(CLEAR_VARS)
