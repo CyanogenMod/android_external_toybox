@@ -17,9 +17,9 @@
 #undef FLAG_a
 #endif
 
-// arp   vi:nDsdap:A:H:[+Ap][!sd]
+// arp vi:nDsdap:A:H:[+Ap][!sd] vi:nDsdap:A:H:[+Ap][!sd]
 #undef OPTSTR_arp
-#define OPTSTR_arp  0 
+#define OPTSTR_arp "vi:nDsdap:A:H:[+Ap][!sd]"
 #ifdef CLEANUP_arp
 #undef CLEANUP_arp
 #undef FOR_arp
@@ -115,9 +115,9 @@
 #undef FOR_brctl
 #endif
 
-// bunzip2 cftkv cftkv
+// bunzip2   cftkv
 #undef OPTSTR_bunzip2
-#define OPTSTR_bunzip2 "cftkv"
+#define OPTSTR_bunzip2  0 
 #ifdef CLEANUP_bunzip2
 #undef CLEANUP_bunzip2
 #undef FOR_bunzip2
@@ -496,9 +496,9 @@
 #undef FLAG_P
 #endif
 
-// diff   <2>2B(ignore-blank-lines)d(minimal)b(ignore-space-change)ut(expand-tabs)w(ignore-all-space)i(ignore-case)T(initial-tab)s(report-identical-files)q(brief)a(text)L(label)*S(starting-file):N(new-file)r(recursive)U(unified)#<0=3
+// diff <2>2B(ignore-blank-lines)d(minimal)b(ignore-space-change)ut(expand-tabs)w(ignore-all-space)i(ignore-case)T(initial-tab)s(report-identical-files)q(brief)a(text)L(label)*S(starting-file):N(new-file)r(recursive)U(unified)#<0=3 <2>2B(ignore-blank-lines)d(minimal)b(ignore-space-change)ut(expand-tabs)w(ignore-all-space)i(ignore-case)T(initial-tab)s(report-identical-files)q(brief)a(text)L(label)*S(starting-file):N(new-file)r(recursive)U(unified)#<0=3
 #undef OPTSTR_diff
-#define OPTSTR_diff  0 
+#define OPTSTR_diff "<2>2B(ignore-blank-lines)d(minimal)b(ignore-space-change)ut(expand-tabs)w(ignore-all-space)i(ignore-case)T(initial-tab)s(report-identical-files)q(brief)a(text)L(label)*S(starting-file):N(new-file)r(recursive)U(unified)#<0=3"
 #ifdef CLEANUP_diff
 #undef CLEANUP_diff
 #undef FOR_diff
@@ -675,9 +675,9 @@
 #undef FOR_false
 #endif
 
-// fdisk   C#<0H#<0S#<0b#<512ul
+// fdisk C#<0H#<0S#<0b#<512ul C#<0H#<0S#<0b#<512ul
 #undef OPTSTR_fdisk
-#define OPTSTR_fdisk  0 
+#define OPTSTR_fdisk "C#<0H#<0S#<0b#<512ul"
 #ifdef CLEANUP_fdisk
 #undef CLEANUP_fdisk
 #undef FOR_fdisk
@@ -771,9 +771,9 @@
 #undef FLAG_f
 #endif
 
-// fstype   <1
+// fstype <1 <1
 #undef OPTSTR_fstype
-#define OPTSTR_fstype  0 
+#define OPTSTR_fstype "<1"
 #ifdef CLEANUP_fstype
 #undef CLEANUP_fstype
 #undef FOR_fstype
@@ -788,9 +788,9 @@
 #undef FLAG_d
 #endif
 
-// ftpget   <2cvu:p:P#<0=21>65535
+// ftpget <2cvu:p:P#<0=21>65535 <2cvu:p:P#<0=21>65535
 #undef OPTSTR_ftpget
-#define OPTSTR_ftpget  0 
+#define OPTSTR_ftpget "<2cvu:p:P#<0=21>65535"
 #ifdef CLEANUP_ftpget
 #undef CLEANUP_ftpget
 #undef FOR_ftpget
@@ -966,9 +966,9 @@
 #undef FLAG_r
 #endif
 
-// host   <1>2avt:
+// host <1>2avt: <1>2avt:
 #undef OPTSTR_host
-#define OPTSTR_host  0 
+#define OPTSTR_host "<1>2avt:"
 #ifdef CLEANUP_host
 #undef CLEANUP_host
 #undef FOR_host
@@ -1647,9 +1647,9 @@
 #undef FOR_nohup
 #endif
 
-// nproc   (all)
+// nproc (all) (all)
 #undef OPTSTR_nproc
-#define OPTSTR_nproc  0 
+#define OPTSTR_nproc "(all)"
 #ifdef CLEANUP_nproc
 #undef CLEANUP_nproc
 #undef FOR_nproc
@@ -2403,9 +2403,9 @@
 #undef FLAG_i
 #endif
 
-// telnet   <1>2
+// telnet <1>2 <1>2
 #undef OPTSTR_telnet
-#define OPTSTR_telnet  0 
+#define OPTSTR_telnet "<1>2"
 #ifdef CLEANUP_telnet
 #undef CLEANUP_telnet
 #undef FOR_telnet
@@ -2757,9 +2757,9 @@
 #undef FOR_w
 #endif
 
-// watch   ^<1n#<0=2te
+// watch ^<1n#<0=2te ^<1n#<0=2te
 #undef OPTSTR_watch
-#define OPTSTR_watch  0 
+#define OPTSTR_watch "^<1n#<0=2te"
 #ifdef CLEANUP_watch
 #undef CLEANUP_watch
 #undef FOR_watch
@@ -2866,16 +2866,16 @@
 #ifndef TT
 #define TT this.arp
 #endif
-#define FLAG_H (FORCED_FLAG<<0)
-#define FLAG_A (FORCED_FLAG<<1)
-#define FLAG_p (FORCED_FLAG<<2)
-#define FLAG_a (FORCED_FLAG<<3)
-#define FLAG_d (FORCED_FLAG<<4)
-#define FLAG_s (FORCED_FLAG<<5)
-#define FLAG_D (FORCED_FLAG<<6)
-#define FLAG_n (FORCED_FLAG<<7)
-#define FLAG_i (FORCED_FLAG<<8)
-#define FLAG_v (FORCED_FLAG<<9)
+#define FLAG_H (1<<0)
+#define FLAG_A (1<<1)
+#define FLAG_p (1<<2)
+#define FLAG_a (1<<3)
+#define FLAG_d (1<<4)
+#define FLAG_s (1<<5)
+#define FLAG_D (1<<6)
+#define FLAG_n (1<<7)
+#define FLAG_i (1<<8)
+#define FLAG_v (1<<9)
 #endif
 
 #ifdef FOR_arping
@@ -2948,11 +2948,11 @@
 #ifndef TT
 #define TT this.bunzip2
 #endif
-#define FLAG_v (1<<0)
-#define FLAG_k (1<<1)
-#define FLAG_t (1<<2)
-#define FLAG_f (1<<3)
-#define FLAG_c (1<<4)
+#define FLAG_v (FORCED_FLAG<<0)
+#define FLAG_k (FORCED_FLAG<<1)
+#define FLAG_t (FORCED_FLAG<<2)
+#define FLAG_f (FORCED_FLAG<<3)
+#define FLAG_c (FORCED_FLAG<<4)
 #endif
 
 #ifdef FOR_bzcat
@@ -3269,37 +3269,37 @@
 #ifndef TT
 #define TT this.diff
 #endif
-#define FLAG_unified (FORCED_FLAG<<0)
-#define FLAG_U (FORCED_FLAG<<0)
-#define FLAG_recursive (FORCED_FLAG<<1)
-#define FLAG_r (FORCED_FLAG<<1)
-#define FLAG_new_file (FORCED_FLAG<<2)
-#define FLAG_N (FORCED_FLAG<<2)
-#define FLAG_starting_file (FORCED_FLAG<<3)
-#define FLAG_S (FORCED_FLAG<<3)
-#define FLAG_label (FORCED_FLAG<<4)
-#define FLAG_L (FORCED_FLAG<<4)
-#define FLAG_text (FORCED_FLAG<<5)
-#define FLAG_a (FORCED_FLAG<<5)
-#define FLAG_brief (FORCED_FLAG<<6)
-#define FLAG_q (FORCED_FLAG<<6)
-#define FLAG_report_identical_files (FORCED_FLAG<<7)
-#define FLAG_s (FORCED_FLAG<<7)
-#define FLAG_initial_tab (FORCED_FLAG<<8)
-#define FLAG_T (FORCED_FLAG<<8)
-#define FLAG_ignore_case (FORCED_FLAG<<9)
-#define FLAG_i (FORCED_FLAG<<9)
-#define FLAG_ignore_all_space (FORCED_FLAG<<10)
-#define FLAG_w (FORCED_FLAG<<10)
-#define FLAG_expand_tabs (FORCED_FLAG<<11)
-#define FLAG_t (FORCED_FLAG<<11)
-#define FLAG_u (FORCED_FLAG<<12)
-#define FLAG_ignore_space_change (FORCED_FLAG<<13)
-#define FLAG_b (FORCED_FLAG<<13)
-#define FLAG_minimal (FORCED_FLAG<<14)
-#define FLAG_d (FORCED_FLAG<<14)
-#define FLAG_ignore_blank_lines (FORCED_FLAG<<15)
-#define FLAG_B (FORCED_FLAG<<15)
+#define FLAG_unified (1<<0)
+#define FLAG_U (1<<0)
+#define FLAG_recursive (1<<1)
+#define FLAG_r (1<<1)
+#define FLAG_new_file (1<<2)
+#define FLAG_N (1<<2)
+#define FLAG_starting_file (1<<3)
+#define FLAG_S (1<<3)
+#define FLAG_label (1<<4)
+#define FLAG_L (1<<4)
+#define FLAG_text (1<<5)
+#define FLAG_a (1<<5)
+#define FLAG_brief (1<<6)
+#define FLAG_q (1<<6)
+#define FLAG_report_identical_files (1<<7)
+#define FLAG_s (1<<7)
+#define FLAG_initial_tab (1<<8)
+#define FLAG_T (1<<8)
+#define FLAG_ignore_case (1<<9)
+#define FLAG_i (1<<9)
+#define FLAG_ignore_all_space (1<<10)
+#define FLAG_w (1<<10)
+#define FLAG_expand_tabs (1<<11)
+#define FLAG_t (1<<11)
+#define FLAG_u (1<<12)
+#define FLAG_ignore_space_change (1<<13)
+#define FLAG_b (1<<13)
+#define FLAG_minimal (1<<14)
+#define FLAG_d (1<<14)
+#define FLAG_ignore_blank_lines (1<<15)
+#define FLAG_B (1<<15)
 #endif
 
 #ifdef FOR_dirname
@@ -3418,12 +3418,12 @@
 #ifndef TT
 #define TT this.fdisk
 #endif
-#define FLAG_l (FORCED_FLAG<<0)
-#define FLAG_u (FORCED_FLAG<<1)
-#define FLAG_b (FORCED_FLAG<<2)
-#define FLAG_S (FORCED_FLAG<<3)
-#define FLAG_H (FORCED_FLAG<<4)
-#define FLAG_C (FORCED_FLAG<<5)
+#define FLAG_l (1<<0)
+#define FLAG_u (1<<1)
+#define FLAG_b (1<<2)
+#define FLAG_S (1<<3)
+#define FLAG_H (1<<4)
+#define FLAG_C (1<<5)
 #endif
 
 #ifdef FOR_find
@@ -3511,11 +3511,11 @@
 #ifndef TT
 #define TT this.ftpget
 #endif
-#define FLAG_P (FORCED_FLAG<<0)
-#define FLAG_p (FORCED_FLAG<<1)
-#define FLAG_u (FORCED_FLAG<<2)
-#define FLAG_v (FORCED_FLAG<<3)
-#define FLAG_c (FORCED_FLAG<<4)
+#define FLAG_P (1<<0)
+#define FLAG_p (1<<1)
+#define FLAG_u (1<<2)
+#define FLAG_v (1<<3)
+#define FLAG_c (1<<4)
 #endif
 
 #ifdef FOR_getenforce
@@ -3661,9 +3661,9 @@
 #ifndef TT
 #define TT this.host
 #endif
-#define FLAG_t (FORCED_FLAG<<0)
-#define FLAG_v (FORCED_FLAG<<1)
-#define FLAG_a (FORCED_FLAG<<2)
+#define FLAG_t (1<<0)
+#define FLAG_v (1<<1)
+#define FLAG_a (1<<2)
 #endif
 
 #ifdef FOR_hostid
@@ -4228,7 +4228,7 @@
 #ifndef TT
 #define TT this.nproc
 #endif
-#define FLAG_all (FORCED_FLAG<<0)
+#define FLAG_all (1<<0)
 #endif
 
 #ifdef FOR_nsenter
@@ -5152,9 +5152,9 @@
 #ifndef TT
 #define TT this.watch
 #endif
-#define FLAG_e (FORCED_FLAG<<0)
-#define FLAG_t (FORCED_FLAG<<1)
-#define FLAG_n (FORCED_FLAG<<2)
+#define FLAG_e (1<<0)
+#define FLAG_t (1<<1)
+#define FLAG_n (1<<2)
 #endif
 
 #ifdef FOR_wc
