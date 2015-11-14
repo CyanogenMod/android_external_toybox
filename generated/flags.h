@@ -429,7 +429,7 @@
 #undef FLAG_H
 #endif
 
-// dhcp   V:H:F:x*r:O*A#<0T#<0t#<0s:p:i:SBRCaovqnbf
+// dhcp   V:H:F:x*r:O*A#<0=20T#<0=3t#<0=3s:p:i:SBRCaovqnbf
 #undef OPTSTR_dhcp
 #define OPTSTR_dhcp  0 
 #ifdef CLEANUP_dhcp
@@ -458,6 +458,28 @@
 #undef FLAG_F
 #undef FLAG_H
 #undef FLAG_V
+#endif
+
+// dhcp6   r:A#<0T#<0t#<0s:p:i:SRvqnbf
+#undef OPTSTR_dhcp6
+#define OPTSTR_dhcp6  0 
+#ifdef CLEANUP_dhcp6
+#undef CLEANUP_dhcp6
+#undef FOR_dhcp6
+#undef FLAG_f
+#undef FLAG_b
+#undef FLAG_n
+#undef FLAG_q
+#undef FLAG_v
+#undef FLAG_R
+#undef FLAG_S
+#undef FLAG_i
+#undef FLAG_p
+#undef FLAG_s
+#undef FLAG_t
+#undef FLAG_T
+#undef FLAG_A
+#undef FLAG_r
 #endif
 
 // dhcpd   >1P#<0>65535fi:S46[!46]
@@ -1823,9 +1845,9 @@
 #undef FOR_printf
 #endif
 
-// ps (ppid)*aAdeflo*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae] (ppid)*aAdeflo*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae]
+// ps P(ppid)*aAdeflno*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae] P(ppid)*aAdeflno*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae]
 #undef OPTSTR_ps
-#define OPTSTR_ps "(ppid)*aAdeflo*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae]"
+#define OPTSTR_ps "P(ppid)*aAdeflno*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae]"
 #ifdef CLEANUP_ps
 #undef CLEANUP_ps
 #undef FOR_ps
@@ -1840,6 +1862,7 @@
 #undef FLAG_pid
 #undef FLAG_p
 #undef FLAG_o
+#undef FLAG_n
 #undef FLAG_l
 #undef FLAG_f
 #undef FLAG_e
@@ -1847,6 +1870,7 @@
 #undef FLAG_A
 #undef FLAG_a
 #undef FLAG_ppid
+#undef FLAG_P
 #endif
 
 // pwd >0LP[-LP] >0LP[-LP]
@@ -3209,6 +3233,26 @@
 #define FLAG_V (FORCED_FLAG<<22)
 #endif
 
+#ifdef FOR_dhcp6
+#ifndef TT
+#define TT this.dhcp6
+#endif
+#define FLAG_f (FORCED_FLAG<<0)
+#define FLAG_b (FORCED_FLAG<<1)
+#define FLAG_n (FORCED_FLAG<<2)
+#define FLAG_q (FORCED_FLAG<<3)
+#define FLAG_v (FORCED_FLAG<<4)
+#define FLAG_R (FORCED_FLAG<<5)
+#define FLAG_S (FORCED_FLAG<<6)
+#define FLAG_i (FORCED_FLAG<<7)
+#define FLAG_p (FORCED_FLAG<<8)
+#define FLAG_s (FORCED_FLAG<<9)
+#define FLAG_t (FORCED_FLAG<<10)
+#define FLAG_T (FORCED_FLAG<<11)
+#define FLAG_A (FORCED_FLAG<<12)
+#define FLAG_r (FORCED_FLAG<<13)
+#endif
+
 #ifdef FOR_dhcpd
 #ifndef TT
 #define TT this.dhcpd
@@ -4361,13 +4405,15 @@
 #define FLAG_pid (1<<8)
 #define FLAG_p (1<<8)
 #define FLAG_o (1<<9)
-#define FLAG_l (1<<10)
-#define FLAG_f (1<<11)
-#define FLAG_e (1<<12)
-#define FLAG_d (1<<13)
-#define FLAG_A (1<<14)
-#define FLAG_a (1<<15)
-#define FLAG_ppid (1<<16)
+#define FLAG_n (1<<10)
+#define FLAG_l (1<<11)
+#define FLAG_f (1<<12)
+#define FLAG_e (1<<13)
+#define FLAG_d (1<<14)
+#define FLAG_A (1<<15)
+#define FLAG_a (1<<16)
+#define FLAG_ppid (1<<17)
+#define FLAG_P (1<<17)
 #endif
 
 #ifdef FOR_pwd
