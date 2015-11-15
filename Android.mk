@@ -293,4 +293,18 @@ LOCAL_CLANG := true
 LOCAL_MODULE := libtoybox_driver
 include $(BUILD_STATIC_LIBRARY)
 
-
+# static executable for use in limited environments
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := main.c
+LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CXX_STL := none
+LOCAL_CLANG := true
+LOCAL_UNSTRIPPED_PATH := $(PRODUCT_OUT)/symbols/utilities
+LOCAL_MODULE := toybox_static
+LOCAL_MODULE_CLASS := UTILITY_EXECUTABLES
+LOCAL_MODULE_PATH := $(PRODUCT_OUT)/utilities
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_STEM := toybox
+LOCAL_STATIC_LIBRARIES := libc libtoybox libcutils libselinux libmincrypt
+LOCAL_FORCE_STATIC_EXECUTABLE := true
+include $(BUILD_EXECUTABLE)
