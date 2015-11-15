@@ -338,7 +338,12 @@ void mount_main(void)
         TT.okuser = comma_scan(mm->opts, "user", 1);
         aflags = flag_opts(mm->opts, flags, &aopts);
         aflags = flag_opts(opts, aflags, &aopts);
-
+        if (remount) {
+            // clear type and opts for remount
+            aflags |= MS_REMOUNT;
+            strcpy(mm->type, "none");
+            aopts = NULL;
+        }
         mount_filesystem(mm->device, mm->dir, mm->type, aflags, aopts);
       } // TODO else if (getuid()) error_msg("already there") ?
       free(aopts);
