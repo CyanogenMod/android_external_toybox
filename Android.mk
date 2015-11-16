@@ -269,6 +269,11 @@ LOCAL_ADDITIONAL_DEPENDENCIES := toybox_links
 # stick around for compatibility reasons, for now.
 TOYS_FOR_XBIN := ps
 
+# skip links for these toys in the system image, they already have
+# a full-blown counterpart. we still want them for the recovery
+# image though.
+TOYS_WITHOUT_LINKS := blkid
+
 include $(BUILD_EXECUTABLE)
 
 toybox_links: $(TOYBOX_INSTLIST) toybox
@@ -278,7 +283,7 @@ toybox_links:
 	@echo -e ${CL_CYN}"Generate Toybox links:"${CL_RST} $(TOY_LIST)
 	@mkdir -p $(TARGET_OUT)/bin
 	@mkdir -p $(TARGET_OUT)/xbin
-	$(hide) $(foreach t,$(filter-out $(TOYS_FOR_XBIN),$(TOY_LIST)),ln -sf toybox $(TARGET_OUT_EXECUTABLES)/$(t);)
+	$(hide) $(foreach t,$(filter-out $(TOYS_FOR_XBIN) $(TOYS_WITHOUT_LINKS),$(TOY_LIST)),ln -sf toybox $(TARGET_OUT_EXECUTABLES)/$(t);)
 	$(hide) $(foreach t,$(TOYS_FOR_XBIN),ln -sf /system/bin/toybox $(TARGET_OUT_OPTIONAL_EXECUTABLES)/$(t);)
 
 
