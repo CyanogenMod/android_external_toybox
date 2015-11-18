@@ -1950,6 +1950,17 @@
 #undef FOR_reset
 #endif
 
+// resize c#<1>63sw c#<1>63sw
+#undef OPTSTR_resize
+#define OPTSTR_resize "c#<1>63sw"
+#ifdef CLEANUP_resize
+#undef CLEANUP_resize
+#undef FOR_resize
+#undef FLAG_w
+#undef FLAG_s
+#undef FLAG_c
+#endif
+
 // restorecon <1DFnRrv <1DFnRrv
 #undef OPTSTR_restorecon
 #define OPTSTR_restorecon "<1DFnRrv"
@@ -4475,6 +4486,15 @@
 #ifndef TT
 #define TT this.reset
 #endif
+#endif
+
+#ifdef FOR_resize
+#ifndef TT
+#define TT this.resize
+#endif
+#define FLAG_w (1<<0)
+#define FLAG_s (1<<1)
+#define FLAG_c (1<<2)
 #endif
 
 #ifdef FOR_restorecon

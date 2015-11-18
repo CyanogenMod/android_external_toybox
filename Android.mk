@@ -163,6 +163,7 @@ LOCAL_SRC_FILES := \
     toys/pending/more.c \
     toys/pending/netstat.c \
     toys/pending/pgrep.c \
+    toys/pending/resize.c \
     toys/pending/route.c \
     toys/pending/tar.c \
     toys/pending/telnet.c \

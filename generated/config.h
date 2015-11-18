@@ -284,6 +284,8 @@
 #define USE_PGREP(...) __VA_ARGS__
 #define CFG_PING 0
 #define USE_PING(...)
+#define CFG_RESIZE 1
+#define USE_RESIZE(...) __VA_ARGS__
 #define CFG_ROUTE 1
 #define USE_ROUTE(...) __VA_ARGS__
 #define CFG_SH 0
