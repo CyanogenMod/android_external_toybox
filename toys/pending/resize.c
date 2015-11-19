@@ -2,7 +2,7 @@
  *
  *
 
-USE_RESIZE(NEWTOY(resize, "c#<1>63sw", TOYFLAG_BIN|TOYFLAG_NEEDROOT))
+USE_RESIZE(NEWTOY(resize, "c#<1>63sw", TOYFLAG_BIN|TOYFLAG_USR))
 
 config RESIZE
   bool "resize"
