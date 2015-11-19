@@ -2,7 +2,7 @@
  *
  *
 
-USE_RESIZE(NEWTOY(resize, "c#<1>63sw", TOYFLAG_BIN|TOYFLAG_NEEDROOT))
+USE_RESIZE(NEWTOY(resize, "c#<1>63sw", TOYFLAG_BIN|TOYFLAG_USR))
 
 config RESIZE
   bool "resize"
@@ -34,6 +34,6 @@ void resize_main(void)
   scanf("\033[%hu;%huR", &w.ws_row, &w.ws_col);
   fprintf(stderr, "\0338");
 
-  ioctl(2, TIOCSWINSZ, &w);
-  tcsetattr(2, TCSANOW, old);
+//  ioctl(2, TIOCSWINSZ, &w);
+//  tcsetattr(2, TCSANOW, old);
 }
