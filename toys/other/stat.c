@@ -2,18 +2,19 @@
  * Copyright 2012 <warior.linux@gmail.com>
  * Copyright 2013 <anand.sinha85@gmail.com>
 
-USE_STAT(NEWTOY(stat, "c:f", TOYFLAG_BIN)) 
+USE_STAT(NEWTOY(stat, "c:tf", TOYFLAG_BIN)) 
 
 config STAT
   bool stat
   default y
   help
-    usage: stat [-f] [-c FORMAT] FILE...
+    usage: stat [-f] [-t] [-c FORMAT] FILE...
 
     Display status of files or filesystems.
 
     -f display filesystem status instead of file status
     -c Output specified FORMAT string instead of default
+    -t Display info in terse form
 
     The valid format escape sequences for files:
     %a  Access bits (octal) |%A  Access bits (flags)|%b  Blocks allocated
@@ -149,8 +150,10 @@ void stat_main(void)
       "Device: %Dh/%dd\t Inode: %i\t Links: %h\n"
       "Access: (%a/%A)\tUid: (%u/%U)\tGid: (%g/%G)\n"
       "Access: %x\nModify: %y\nChange: %z";
+  char *terse_format = "%n %s %b %f %u %g %D %i %h %t %T %X %Y %Z %o";
 
   if (toys.optflags & FLAG_c) format = TT.fmt;
+  if (toys.optflags & FLAG_t) format = terse_format;
 
   for (; *toys.optargs; toys.optargs++) {
     char *f;
