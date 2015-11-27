@@ -194,9 +194,10 @@ static void mount_filesystem(char *dev, char *dir, char *type,
     if (toys.optflags & FLAG_v)
       printf("try '%s' type '%s' on '%s'\n", dev, type, dir);
     for (;;) {
+      errno = 0;
       rc = mount(dev, dir, type, flags, opts);
-      if ((rc != EACCES && rc != EROFS) || (flags & MS_RDONLY)) break;
-      if (rc == EROFS && fd == -1) {
+      if ((errno != EACCES && errno != EROFS) || (flags & MS_RDONLY)) break;
+      if ((errno == EACCES || errno == EROFS) && fd == -1) {
         if (-1 != (fd = open(dev, O_RDONLY))) {
           ioctl(fd, BLKROSET, &ro);
           close(fd);
