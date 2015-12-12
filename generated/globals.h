@@ -156,6 +156,7 @@ struct fallocate_data {
 struct free_data {
   unsigned bits;
   unsigned long long units;
+  char *buf;
 };
 
 // toys/other/hexedit.c
@@ -1127,23 +1128,33 @@ struct patch_data {
 // toys/posix/ps.c
 
 struct ps_data {
-  struct arg_list *G;
-  struct arg_list *g;
-  struct arg_list *U;
-  struct arg_list *u;
-  struct arg_list *t;
-  struct arg_list *s;
-  struct arg_list *p;
-  struct arg_list *o;
-  struct arg_list *P;
+  union {
+    struct {
+      struct arg_list *G;
+      struct arg_list *g;
+      struct arg_list *U;
+      struct arg_list *u;
+      struct arg_list *t;
+      struct arg_list *s;
+      struct arg_list *p;
+      struct arg_list *o;
+      struct arg_list *P;
+      struct arg_list *k;
+    } ps;
+    struct {
+      long n;
+      long d;
+    } ttop;
+  };
 
-  struct ptr_len gg, GG, pp, PP, ss, tt, uu, UU, *parsing;
+  struct sysinfo si;
+  struct ptr_len gg, GG, pp, PP, ss, tt, uu, UU;
   unsigned width;
   dev_t tty;
-  void *fields;
-  long bits;
-  long long ticks;
+  void *fields, *kfields;
+  long long ticks, bits;
   size_t header_len;
+  int kcount;
 };
 
 // toys/posix/renice.c
