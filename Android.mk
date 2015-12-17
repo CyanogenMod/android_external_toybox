@@ -266,9 +266,9 @@ LOCAL_MODULE := toybox
 TOYBOX_INSTLIST := $(HOST_OUT_EXECUTABLES)/toybox-instlist
 LOCAL_ADDITIONAL_DEPENDENCIES := toybox_links
 
-# we still want a link for ps, but the toolbox version needs to
+# we still want a link for ls/ps, but the toolbox version needs to
 # stick around for compatibility reasons, for now.
-TOYS_FOR_XBIN := ps
+TOYS_FOR_XBIN := ls ps
 
 # skip links for these toys in the system image, they already have
 # a full-blown counterpart. we still want them for the recovery
