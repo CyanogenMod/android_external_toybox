@@ -279,6 +279,7 @@ ALL_TOOLS := \
     ionice \
     iorenice \
     kill \
+    killall \
     load_policy \
     ln \
     logname \
