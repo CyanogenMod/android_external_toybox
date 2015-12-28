@@ -124,6 +124,8 @@
 #define USE_PRINTF(...) __VA_ARGS__
 #define CFG_PS 1
 #define USE_PS(...) __VA_ARGS__
+#define CFG_TTOP 0
+#define USE_TTOP(...)
 #define CFG_PWD 1
 #define USE_PWD(...) __VA_ARGS__
 #define CFG_RENICE 1
@@ -536,6 +538,8 @@
 #define USE_SKELETON_ALIAS(...)
 #define CFG_TEST_HUMAN_READABLE 0
 #define USE_TEST_HUMAN_READABLE(...)
+#define CFG_TEST_MANY_OPTIONS 0
+#define USE_TEST_MANY_OPTIONS(...)
 #define CFG_GETENFORCE 1
 #define USE_GETENFORCE(...) __VA_ARGS__
 #define CFG_GETPROP 1
