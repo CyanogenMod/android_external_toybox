@@ -1147,7 +1147,9 @@ struct ps_data {
     } ttop;
   };
 
+#ifndef __APPLE__
   struct sysinfo si;
+#endif
   struct ptr_len gg, GG, pp, PP, ss, tt, uu, UU;
   unsigned width;
   dev_t tty;
