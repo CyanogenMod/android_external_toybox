@@ -5,6 +5,9 @@
  * And http://refspecs.linuxfoundation.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic.html#INSTALL
  *
  * Posix says "cp -Rf dir file" shouldn't delete file, but our -f does.
+ *
+ * TODO: --preserve=links
+ * TODO: what's this _CP_mode system.posix_acl_ business? We chmod()?
 
 // options shared between mv/cp must be in same order (right to left)
 // for FLAG macros to work out right in shared infrastructure.
@@ -25,7 +28,7 @@ config CP
     -f	delete destination files we can't write to
     -F	delete any existing destination file first (--remove-destination)
     -i	interactive, prompt before overwriting existing DEST
-    -p	preserve timestamps, ownership, and permissions
+    -p	preserve timestamps, ownership, and mode
     -R	recurse into subdirectories (DEST must be a directory)
     -H	Follow symlinks listed on command line
     -L	Follow all symlinks
@@ -51,7 +54,7 @@ config CP_PRESERVE
   default y
   depends on CP_MORE
   help
-    usage: cp [--preserve=mota]
+    usage: cp [--preserve=motcxa]
 
     --preserve takes either a comma separated list of attributes, or the first
     letter(s) of:
@@ -59,6 +62,8 @@ config CP_PRESERVE
             mode - permissions (ignore umask for rwx, copy suid and sticky bit)
        ownership - user and group
       timestamps - file creation, modification, and access times.
+         context - security context
+           xattr - extended attributes
              all - all of the above
 
 config MV
@@ -102,6 +107,9 @@ config INSTALL
 
 #define FOR_cp
 #include "toys.h"
+#if CFG_CP_PRESERVE
+#include <sys/xattr.h>
+#endif
 
 GLOBALS(
   union {
@@ -123,6 +131,12 @@ GLOBALS(
   gid_t gid;
   int pflags;
 )
+
+struct cp_preserve {
+  char *name;
+} static const cp_preserve[] = TAGGED_ARRAY(CP,
+  {"mode"}, {"ownership"}, {"timestamps"}, {"context"}, {"xattr"},
+);
 
 // Callback from dirtree_read() for each file/directory under a source dir.
 
@@ -276,6 +290,31 @@ int cp_node(struct dirtree *try)
           xsendfile(fdin, fdout);
           err = 0;
         }
+
+        // We only copy xattrs for files because there's no flistxattrat()
+        if (TT.pflags&(_CP_xattr|_CP_context)) {
+          ssize_t listlen = flistxattr(fdin, 0, 0), len;
+          char *name, *value, *list;
+
+          if (listlen>0) {
+            list = xmalloc(listlen);
+            flistxattr(fdin, list, listlen);
+            list[listlen-1] = 0; // I do not trust this API.
+            for (name = list; name-list < listlen; name += strlen(name)+1) {
+              if (!(TT.pflags&_CP_xattr) && strncmp(name, "security.", 9))
+                continue;
+              if ((len = fgetxattr(fdin, name, 0, 0))>0) {
+                value = xmalloc(len);
+                if (len == fgetxattr(fdin, name, value, len))
+                  if (fsetxattr(fdout, name, value, len, 0))
+                    perror_msg("%s setxattr(%s=%s)", catch, name, value);
+                free(value);
+              }
+            }
+            free(list);
+          }
+        }
+
         close(fdin);
       }
     } while (err && (flags & (FLAG_f|FLAG_n)) && !unlinkat(cfd, catch, 0));
@@ -288,7 +327,7 @@ int cp_node(struct dirtree *try)
     // Inability to set --preserve isn't fatal, some require root access.
 
     // ownership
-    if (TT.pflags & 2) {
+    if (TT.pflags & _CP_ownership) {
 
       // permission bits already correct for mknod and don't apply to symlink
       // If we can't get a filehandle to the actual object, use racy functions
@@ -305,7 +344,7 @@ int cp_node(struct dirtree *try)
     }
 
     // timestamp
-    if (TT.pflags & 4) {
+    if (TT.pflags & _CP_timestamps) {
       struct timespec times[] = {try->st.st_atim, try->st.st_mtim};
 
       if (fdout == AT_FDCWD) utimensat(cfd, catch, times, AT_SYMLINK_NOFOLLOW);
@@ -314,7 +353,7 @@ int cp_node(struct dirtree *try)
 
     // mode comes last because other syscalls can strip suid bit
     if (fdout != AT_FDCWD) {
-      if (TT.pflags & 1) fchmod(fdout, try->st.st_mode);
+      if (TT.pflags & _CP_mode) fchmod(fdout, try->st.st_mode);
       xclose(fdout);
     }
 
@@ -329,29 +368,29 @@ int cp_node(struct dirtree *try)
 
 void cp_main(void)
 {
-  char *destname = toys.optargs[--toys.optc],
-       *preserve[] = {"mode", "ownership", "timestamps"};
+  char *destname = toys.optargs[--toys.optc];
   int i, destdir = !stat(destname, &TT.top) && S_ISDIR(TT.top.st_mode);
 
   if (toys.optc>1 && !destdir) error_exit("'%s' not directory", destname);
 
   if (toys.optflags & (FLAG_a|FLAG_p)) {
-    TT.pflags = 7; // preserve=mot
+    TT.pflags = CP_mode|CP_ownership|CP_timestamps;
     umask(0);
   }
+  // Not using comma_args() (yet?) because interpeting as letters.
   if (CFG_CP_PRESERVE && (toys.optflags & FLAG_preserve)) {
     char *pre = xstrdup(TT.c.preserve), *s;
 
     if (comma_scan(pre, "all", 1)) TT.pflags = ~0;
-    for (i=0; i<ARRAY_LEN(preserve); i++)
-      if (comma_scan(pre, preserve[i], 1)) TT.pflags |= 1<<i;
+    for (i=0; i<ARRAY_LEN(cp_preserve); i++)
+      if (comma_scan(pre, cp_preserve[i].name, 1)) TT.pflags |= 1<<i;
     if (*pre) {
 
       // Try to interpret as letters, commas won't set anything this doesn't.
       for (s = TT.c.preserve; *s; s++) {
-        for (i=0; i<ARRAY_LEN(preserve); i++)
-          if (*s == *preserve[i]) break;
-        if (i == ARRAY_LEN(preserve)) {
+        for (i=0; i<ARRAY_LEN(cp_preserve); i++)
+          if (*s == *cp_preserve[i].name) break;
+        if (i == ARRAY_LEN(cp_preserve)) {
           if (*s == 'a') TT.pflags = ~0;
           else break;
         } else TT.pflags |= 1<<i;
