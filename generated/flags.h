@@ -1775,9 +1775,9 @@
 #undef FLAG_d
 #endif
 
-// patch ulp#i:R xulp#i:R
+// patch xulp#i:R xulp#i:R
 #undef OPTSTR_patch
-#define OPTSTR_patch "ulp#i:R"
+#define OPTSTR_patch "xulp#i:R"
 #ifdef CLEANUP_patch
 #undef CLEANUP_patch
 #undef FOR_patch
@@ -4454,7 +4454,7 @@
 #define FLAG_p (1<<2)
 #define FLAG_l (1<<3)
 #define FLAG_u (1<<4)
-#define FLAG_x (FORCED_FLAG<<5)
+#define FLAG_x (1<<5)
 #endif
 
 #ifdef FOR_pgrep
