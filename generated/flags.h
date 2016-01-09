@@ -2212,9 +2212,9 @@
 #undef FLAG_a
 #endif
 
-// stat c:f c:f
+// stat <1c:f <1c:f
 #undef OPTSTR_stat
-#define OPTSTR_stat "c:f"
+#define OPTSTR_stat "<1c:f"
 #ifdef CLEANUP_stat
 #undef CLEANUP_stat
 #undef FOR_stat

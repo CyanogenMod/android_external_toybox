@@ -1018,7 +1018,7 @@ struct expand_data {
 struct find_data {
   char **filter;
   struct double_list *argdata;
-  int topdir, xdev, depth, envsize;
+  int topdir, xdev, depth;
   time_t now;
 };
 
