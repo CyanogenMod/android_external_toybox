@@ -174,6 +174,8 @@
 #define USE_UUDECODE(...)
 #define CFG_UUENCODE 0
 #define USE_UUENCODE(...)
+#define CFG_VI 0
+#define USE_VI(...)
 #define CFG_WC 1
 #define USE_WC(...) __VA_ARGS__
 #define CFG_WHO 0
@@ -242,6 +244,8 @@
 #define USE_ICONV(...)
 #define CFG_INIT 0
 #define USE_INIT(...)
+#define CFG_IOTOP 0
+#define USE_IOTOP(...)
 #define CFG_IP 0
 #define USE_IP(...)
 #define CFG_IPCRM 0
@@ -540,6 +544,8 @@
 #define USE_TEST_HUMAN_READABLE(...)
 #define CFG_TEST_MANY_OPTIONS 0
 #define USE_TEST_MANY_OPTIONS(...)
+#define CFG_TEST_SCANKEY 0
+#define USE_TEST_SCANKEY(...)
 #define CFG_GETENFORCE 1
 #define USE_GETENFORCE(...) __VA_ARGS__
 #define CFG_GETPROP 1

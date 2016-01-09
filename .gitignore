@@ -8,6 +8,7 @@ change/
 /generated/Config.probed
 /generated/flags.raw
 /generated/mkflags
+/generated/mktags
 /generated/obj
 /generated/optlibs.dat
 /kconfig

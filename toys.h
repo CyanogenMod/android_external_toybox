@@ -80,6 +80,7 @@
 #include "generated/newtoys.h"
 #include "generated/flags.h"
 #include "generated/globals.h"
+#include "generated/tags.h"
 
 // These live in main.c
 
@@ -144,5 +145,5 @@ extern char toybuf[4096], libbuf[4096];
 extern char **environ;
 
 #define GLOBALS(...)
-
 #define ARRAY_LEN(array) (sizeof(array)/sizeof(*array))
+#define TAGGED_ARRAY(X, ...) {__VA_ARGS__}

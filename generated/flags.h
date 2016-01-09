@@ -1116,6 +1116,24 @@
 #undef FOR_iorenice
 #endif
 
+// iotop   Aabkoqp*u*d#n#
+#undef OPTSTR_iotop
+#define OPTSTR_iotop  0 
+#ifdef CLEANUP_iotop
+#undef CLEANUP_iotop
+#undef FOR_iotop
+#undef FLAG_n
+#undef FLAG_d
+#undef FLAG_u
+#undef FLAG_p
+#undef FLAG_q
+#undef FLAG_o
+#undef FLAG_k
+#undef FLAG_b
+#undef FLAG_a
+#undef FLAG_A
+#endif
+
 // ip    
 #undef OPTSTR_ip
 #define OPTSTR_ip  0 
@@ -1484,9 +1502,9 @@
 #undef FOR_mkswap
 #endif
 
-// mktemp >1qd(directory)p(tmpdir): >1qd(directory)p(tmpdir):
+// mktemp >1uqd(directory)p(tmpdir): >1uqd(directory)p(tmpdir):
 #undef OPTSTR_mktemp
-#define OPTSTR_mktemp ">1qd(directory)p(tmpdir):"
+#define OPTSTR_mktemp ">1uqd(directory)p(tmpdir):"
 #ifdef CLEANUP_mktemp
 #undef CLEANUP_mktemp
 #undef FOR_mktemp
@@ -1495,6 +1513,7 @@
 #undef FLAG_directory
 #undef FLAG_d
 #undef FLAG_q
+#undef FLAG_u
 #endif
 
 // modinfo <1b:k:F:0 <1b:k:F:0
@@ -2525,6 +2544,14 @@
 #undef FLAG_Z
 #endif
 
+// test_scankey    
+#undef OPTSTR_test_scankey
+#define OPTSTR_test_scankey  0 
+#ifdef CLEANUP_test_scankey
+#undef CLEANUP_test_scankey
+#undef FOR_test_scankey
+#endif
+
 // tftp   <1b#<8>65464r:l:g|p|[!gp]
 #undef OPTSTR_tftp
 #define OPTSTR_tftp  0 
@@ -2828,6 +2855,14 @@
 #ifdef CLEANUP_vconfig
 #undef CLEANUP_vconfig
 #undef FOR_vconfig
+#endif
+
+// vi   <1>1
+#undef OPTSTR_vi
+#define OPTSTR_vi  0 
+#ifdef CLEANUP_vi
+#undef CLEANUP_vi
+#undef FOR_vi
 #endif
 
 // vmstat >2n >2n
@@ -3869,6 +3904,22 @@
 #endif
 #endif
 
+#ifdef FOR_iotop
+#ifndef TT
+#define TT this.iotop
+#endif
+#define FLAG_n (FORCED_FLAG<<0)
+#define FLAG_d (FORCED_FLAG<<1)
+#define FLAG_u (FORCED_FLAG<<2)
+#define FLAG_p (FORCED_FLAG<<3)
+#define FLAG_q (FORCED_FLAG<<4)
+#define FLAG_o (FORCED_FLAG<<5)
+#define FLAG_k (FORCED_FLAG<<6)
+#define FLAG_b (FORCED_FLAG<<7)
+#define FLAG_a (FORCED_FLAG<<8)
+#define FLAG_A (FORCED_FLAG<<9)
+#endif
+
 #ifdef FOR_ip
 #ifndef TT
 #define TT this.ip
@@ -4184,6 +4235,7 @@
 #define FLAG_directory (1<<1)
 #define FLAG_d (1<<1)
 #define FLAG_q (1<<2)
+#define FLAG_u (1<<3)
 #endif
 
 #ifdef FOR_modinfo
@@ -5054,6 +5106,12 @@
 #define FLAG_Z (FORCED_FLAGLL<<51)
 #endif
 
+#ifdef FOR_test_scankey
+#ifndef TT
+#define TT this.test_scankey
+#endif
+#endif
+
 #ifdef FOR_tftp
 #ifndef TT
 #define TT this.tftp
@@ -5304,6 +5362,12 @@
 #ifdef FOR_vconfig
 #ifndef TT
 #define TT this.vconfig
+#endif
+#endif
+
+#ifdef FOR_vi
+#ifndef TT
+#define TT this.vi
 #endif
 #endif
 

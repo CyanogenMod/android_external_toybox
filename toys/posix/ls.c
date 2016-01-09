@@ -299,6 +299,7 @@ static void listfiles(int dirfd, struct dirtree *indir)
   }
 
   memset(totals, 0, sizeof(totals));
+  if (CFG_TOYBOX_DEBUG) memset(len, 0, sizeof(len));
 
   // Top level directory was already populated by main()
   if (!indir->parent) {
@@ -527,7 +528,7 @@ void ls_main(void)
 
   // Do we have an implied -1
   if (!isatty(1)) {
-    toys.optflags |= FLAG_1;
+    if (!(toys.optflags & FLAG_m)) toys.optflags |= FLAG_1;
     if (TT.color) toys.optflags ^= FLAG_color;
   } else if (toys.optflags&(FLAG_l|FLAG_o|FLAG_n|FLAG_g))
     toys.optflags |= FLAG_1;

@@ -889,6 +889,13 @@ struct useradd_data {
   long gid;
 };
 
+// toys/pending/vi.c
+
+struct vi_data {
+  struct linestack *ls;
+  char *statline;
+};
+
 // toys/pending/watch.c
 
 struct watch_data {
@@ -1145,18 +1152,25 @@ struct ps_data {
       long n;
       long d;
     } ttop;
+    struct {
+      long n;
+      long d;
+      struct arg_list *u;
+      struct arg_list *p;
+    } iotop;
   };
 
 #ifndef __APPLE__
   struct sysinfo si;
 #endif
   struct ptr_len gg, GG, pp, PP, ss, tt, uu, UU;
-  unsigned width;
+  unsigned width, height;
   dev_t tty;
   void *fields, *kfields;
-  long long ticks, bits;
+  long long ticks, bits, ioread, iowrite, aioread, aiowrite;
   size_t header_len;
-  int kcount;
+  int kcount, ksave, forcek;
+  int (*match_process)(long long *slot);
 };
 
 // toys/posix/renice.c
@@ -1216,7 +1230,7 @@ struct tail_data {
   long lines;
   long bytes;
 
-  int file_no;
+  int file_no, ffd, *files;
 };
 
 // toys/posix/tee.c
@@ -1359,6 +1373,7 @@ extern union global_union {
 	struct tr_data tr;
 	struct traceroute_data traceroute;
 	struct useradd_data useradd;
+	struct vi_data vi;
 	struct watch_data watch;
 	struct chgrp_data chgrp;
 	struct chmod_data chmod;
