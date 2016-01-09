@@ -192,7 +192,7 @@ static int filter(struct dirtree *new)
       // fchmodat(), mknodat(), readlinkat() so we could do this without
       // even O_PATH? But no, this is 1990's tech.)
       int fd = openat(dirtree_parentfd(new), new->name,
-        O_PATH|(O_NOFOLLOW*!!(toys.optflags&FLAG_L)));
+        O_PATH|(O_NOFOLLOW*!(toys.optflags&FLAG_L)));
 
       if (fd != -1) {
         if (-1 == lsm_fget_context(fd, (char **)&new->extra) && errno == EBADF)
@@ -293,7 +293,7 @@ static void listfiles(int dirfd, struct dirtree *indir)
 
   if (-1 == dirfd) {
     strwidth(indir->name);
-    perror_msg("%s", indir->name);
+    perror_msg_raw(indir->name);
 
     return;
   }
