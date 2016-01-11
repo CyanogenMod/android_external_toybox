@@ -446,7 +446,7 @@
 
 #define help_pwd "usage: pwd [-L|-P]\n\nPrint working (current) directory.\n\n-L  Use shell's path from $PWD (when applicable)\n-P  Print cannonical absolute path\n\n"
 
-#define help_iotop "usage: iotop [-Aabkoq] [-n NUMBER] [-d SECONDS] [-p PID,] [-u USER,]\n\nRank processes by I/O.\n\n-A	All I/O, not just disk\n-a	Accumulated I/O (not percentage)\n-b	Batch mode (no tty)\n-d	Delay SECONDS between each cycle (default 3)\n-k	Kilobytes\n-n	Exit after NUMBER iterations\n-o	Only show processes doing I/O\n-p	Show these PIDs\n-q	Quiet (no header lines)\n-u	Show these USERs\n\n"
+#define help_iotop "usage: iotop [-Aabkoq] [-n NUMBER] [-d SECONDS] [-p PID,] [-u USER,]\n\nRank processes by I/O. Cursor left/right to change sort, Q to exit.\n\n-A	All I/O, not just disk\n-a	Accumulated I/O (not percentage)\n-b	Batch mode (no tty)\n-d	Delay SECONDS between each cycle (default 3)\n-k	Kilobytes\n-n	Exit after NUMBER iterations\n-o	Only show processes doing I/O\n-p	Show these PIDs\n-q	Quiet (no header lines)\n-u	Show these USERs\n\n"
 
 #define help_ttop "usage: ttop [-mb] [ -d seconds ] [ -n iterations ]\n\ntodo: implement top\n\nProvide a view of process activity in real time.\nKeys\n   N/M/P/T show CPU usage, sort by pid/mem/cpu/time\n   S       show memory\n   R       reverse sort\n   H       toggle threads\n   C,1     toggle SMP\n   Q,^C    exit\n\nOptions\n   -n Iterations before exiting\n   -d Delay between updates\n   -m Same as 's' key\n   -b Batch mode\n\n"
 

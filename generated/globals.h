@@ -1167,7 +1167,7 @@ struct ps_data {
   void *fields, *kfields;
   long long ticks, bits, ioread, iowrite, aioread, aiowrite;
   size_t header_len;
-  int kcount, ksave, forcek;
+  int kcount, ksave, forcek, sortpos;
   int (*match_process)(long long *slot);
 };
 
