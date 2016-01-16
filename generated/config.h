@@ -306,6 +306,8 @@
 #define USE_DEALLOCVT(...)
 #define CFG_PGREP 1
 #define USE_PGREP(...) __VA_ARGS__
+#define CFG_PKILL 1
+#define USE_PKILL(...) __VA_ARGS__
 #define CFG_PING 0
 #define USE_PING(...)
 #define CFG_RESET 0

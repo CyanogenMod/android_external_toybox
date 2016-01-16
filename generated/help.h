@@ -296,8 +296,6 @@
 
 #define help_ping "usage: ping [OPTIONS] HOST\n\nCheck network connectivity by sending packets to a host and reporting\nits response.\n\nSend ICMP ECHO_REQUEST packets to ipv4 or ipv6 addresses and prints each\necho it receives back, with round trip time.\n\nOptions:\n-4, -6      Force IPv4 or IPv6\n-c CNT      Send CNT many packets\n-I IFACE/IP Source interface or address\n-q          Quiet, only displays output at start and when finished\n-s SIZE     Packet SIZE in bytes (default 56)\n-t TTL      Set Time (number of hops) To Live\n-W SEC      Seconds to wait for response after all packets sent (default 10)\n-w SEC      Exit after this many seconds\n\n"
 
-#define help_pgrep "usage: pgrep [-flnovx] [-s SID|-P PPID|PATTERN]\n       pkill [-l|-SIGNAL] [-fnovx] [-s SID|-P PPID|PATTERN]\n\n-l  Show command name too / List all signals\n-f  Match against entire command line\n-n  Show/Signal the newest process only\n-o  Show/Signal the oldest process only\n-v  Negate the match\n-x  Match whole name (not substring)\n-s  Match session ID (0 for current)\n-P  Match parent process ID\n\n"
-
 #define help_deallocvt "usage: deallocvt [N]\n\nDeallocate unused virtual terminal /dev/ttyN, or all unused consoles.\n\n"
 
 #define help_openvt "usage: openvt [-c N] [-sw] [command [command_options]]\n\nstart a program on a new virtual terminal (VT)\n\n-c N  Use VT N\n-s    Switch to new VT\n-w    Wait for command to exit\n\nif -sw used together, switch back to originating VT when command completes\n\n"
@@ -445,6 +443,12 @@
 #define help_renice "usage: renice [-gpu] -n increment ID ...\n\n"
 
 #define help_pwd "usage: pwd [-L|-P]\n\nPrint working (current) directory.\n\n-L  Use shell's path from $PWD (when applicable)\n-P  Print cannonical absolute path\n\n"
+
+#define help_pkill "usage: pkill [-l SIGNAL] [PATTERN]\n\n-l	SIGNAL to send\n\n"
+
+#define help_pgkill_common "usage: pgrep [-fnovx] [-G GID,] [-g PGRP,] [-P PPID,] [-s SID,] [-t TERM,] [-U UID,] [-u EUID,]\n\n-f	Check full command line for PATTERN\n-G	Match real Group ID(s)\n-g	Match Process Group(s) (0 is current user)\n-n	Newest match only\n-o	Oldest match only\n-P	Match Parent Process ID(s)\n-s	Match Session ID(s) (0 for current)\n-t	Match Terminal(s)\n-U	Match real User ID(s)\n-u	Match effective User ID(s)\n-v	Negate the match\n-x	Match whole command (not substring)\n\n"
+
+#define help_pgrep "usage: pgrep [-cL] [-d DELIM] [-L SIGNAL] [PATTERN]\n\nSearch for process(es). PATTERN is an extended regular expression checked\nagainst command names.\n\n-c	Show only count of matches\n-d	Use DELIM instead of newline\n-L	Send SIGNAL instead of printing name\n-l	Show command name\n\n"
 
 #define help_iotop "usage: iotop [-Aabkoq] [-n NUMBER] [-d SECONDS] [-p PID,] [-u USER,]\n\nRank processes by I/O. Cursor left/right to change sort, Q to exit.\n\n-A	All I/O, not just disk\n-a	Accumulated I/O (not percentage)\n-b	Batch mode (no tty)\n-d	Delay SECONDS between each cycle (default 3)\n-k	Kilobytes\n-n	Exit after NUMBER iterations\n-o	Only show processes doing I/O\n-p	Show these PIDs\n-q	Quiet (no header lines)\n-u	Show these USERs\n\n"
 

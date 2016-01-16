@@ -1789,20 +1789,28 @@
 #undef FLAG_x
 #endif
 
-// pgrep ?P# s# xvonlf[!sP] ?P# s# xvonlf[!sP]
+// pgrep ?cld:u*U*t*s*P*g*G*fnovxL: ?cld:u*U*t*s*P*g*G*fnovxL:
 #undef OPTSTR_pgrep
-#define OPTSTR_pgrep "?P# s# xvonlf[!sP]"
+#define OPTSTR_pgrep "?cld:u*U*t*s*P*g*G*fnovxL:"
 #ifdef CLEANUP_pgrep
 #undef CLEANUP_pgrep
 #undef FOR_pgrep
-#undef FLAG_f
-#undef FLAG_l
-#undef FLAG_n
-#undef FLAG_o
-#undef FLAG_v
+#undef FLAG_L
 #undef FLAG_x
-#undef FLAG_s
+#undef FLAG_v
+#undef FLAG_o
+#undef FLAG_n
+#undef FLAG_f
+#undef FLAG_G
+#undef FLAG_g
 #undef FLAG_P
+#undef FLAG_s
+#undef FLAG_t
+#undef FLAG_U
+#undef FLAG_u
+#undef FLAG_d
+#undef FLAG_l
+#undef FLAG_c
 #endif
 
 // pidof <1so: <1so:
@@ -1838,6 +1846,27 @@
 #ifdef CLEANUP_pivot_root
 #undef CLEANUP_pivot_root
 #undef FOR_pivot_root
+#endif
+
+// pkill u*U*t*s*P*g*G*fnovxl: u*U*t*s*P*g*G*fnovxl:
+#undef OPTSTR_pkill
+#define OPTSTR_pkill "u*U*t*s*P*g*G*fnovxl:"
+#ifdef CLEANUP_pkill
+#undef CLEANUP_pkill
+#undef FOR_pkill
+#undef FLAG_l
+#undef FLAG_x
+#undef FLAG_v
+#undef FLAG_o
+#undef FLAG_n
+#undef FLAG_f
+#undef FLAG_G
+#undef FLAG_g
+#undef FLAG_P
+#undef FLAG_s
+#undef FLAG_t
+#undef FLAG_U
+#undef FLAG_u
 #endif
 
 // pmap <1xq <1xq
@@ -4461,14 +4490,22 @@
 #ifndef TT
 #define TT this.pgrep
 #endif
-#define FLAG_f (1<<0)
-#define FLAG_l (1<<1)
-#define FLAG_n (1<<2)
+#define FLAG_L (1<<0)
+#define FLAG_x (1<<1)
+#define FLAG_v (1<<2)
 #define FLAG_o (1<<3)
-#define FLAG_v (1<<4)
-#define FLAG_x (1<<5)
-#define FLAG_s (1<<6)
-#define FLAG_P (1<<7)
+#define FLAG_n (1<<4)
+#define FLAG_f (1<<5)
+#define FLAG_G (1<<6)
+#define FLAG_g (1<<7)
+#define FLAG_P (1<<8)
+#define FLAG_s (1<<9)
+#define FLAG_t (1<<10)
+#define FLAG_U (1<<11)
+#define FLAG_u (1<<12)
+#define FLAG_d (1<<13)
+#define FLAG_l (1<<14)
+#define FLAG_c (1<<15)
 #endif
 
 #ifdef FOR_pidof
@@ -4498,6 +4535,25 @@
 #ifndef TT
 #define TT this.pivot_root
 #endif
+#endif
+
+#ifdef FOR_pkill
+#ifndef TT
+#define TT this.pkill
+#endif
+#define FLAG_l (1<<0)
+#define FLAG_x (1<<1)
+#define FLAG_v (1<<2)
+#define FLAG_o (1<<3)
+#define FLAG_n (1<<4)
+#define FLAG_f (1<<5)
+#define FLAG_G (1<<6)
+#define FLAG_g (1<<7)
+#define FLAG_P (1<<8)
+#define FLAG_s (1<<9)
+#define FLAG_t (1<<10)
+#define FLAG_U (1<<11)
+#define FLAG_u (1<<12)
 #endif
 
 #ifdef FOR_pmap

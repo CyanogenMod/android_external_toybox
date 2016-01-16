@@ -691,15 +691,6 @@ struct openvt_data {
   unsigned long vt_num;
 };
 
-// toys/pending/pgrep.c
-
-struct pgrep_data {
-  long sid;       //-s
-  long ppid;      //-P
-
-  char *signame;
-};
-
 // toys/pending/ping.c
 
 struct ping_data {
@@ -1158,6 +1149,20 @@ struct ps_data {
       struct arg_list *u;
       struct arg_list *p;
     } iotop;
+    struct{
+      char *L;
+      struct arg_list *G;
+      struct arg_list *g;
+      struct arg_list *P;
+      struct arg_list *s;
+      struct arg_list *t;
+      struct arg_list *U;
+      struct arg_list *u;
+      char *d;
+
+      void *regexes;
+      int signal;
+    } pgrep;
   };
 
   struct sysinfo si;
@@ -1167,8 +1172,9 @@ struct ps_data {
   void *fields, *kfields;
   long long ticks, bits, ioread, iowrite, aioread, aiowrite;
   size_t header_len;
-  int kcount, ksave, forcek, sortpos;
+  int kcount, forcek, sortpos;
   int (*match_process)(long long *slot);
+  void (*show_process)(void *tb);
 };
 
 // toys/posix/renice.c
@@ -1355,7 +1361,6 @@ extern union global_union {
 	struct more_data more;
 	struct netstat_data netstat;
 	struct openvt_data openvt;
-	struct pgrep_data pgrep;
 	struct ping_data ping;
 	struct route_data route;
 	struct sh_data sh;
