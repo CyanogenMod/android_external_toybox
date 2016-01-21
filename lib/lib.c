@@ -447,22 +447,38 @@ off_t fdlength(int fd)
 // note: for existing buffers use len = size-1, will set buf[len] = 0
 char *readfileat(int dirfd, char *name, char *ibuf, off_t *plen)
 {
-  off_t len = *plen-!!ibuf;
+  off_t len, rlen;
   int fd;
-  char *buf;
+  char *buf, *rbuf;
+
+  // Unsafe to probe for size with a supplied buffer, don't ever do that.
+  if (CFG_TOYBOX_DEBUG && (ibuf ? !*plen : *plen)) error_exit("bad readfileat");
 
   if (-1 == (fd = openat(dirfd, name, O_RDONLY))) return 0;
-  if (!len) {
-    len = fdlength(fd);
-    // proc files don't report a length, so try 1 page minimum.
-    if (len<4096) len = 4096;
-  }
+
+  // If we dunno the length, probe it. If we can't probe, start with 1 page.
+  if (!*plen) {
+    if ((len = fdlength(fd))>0) *plen = len;
+    else len = 4096;
+  } else len = *plen-1;
+
   if (!ibuf) buf = xmalloc(len+1);
   else buf = ibuf;
 
-  *plen = len = readall(fd, buf, len);
+  for (rbuf = buf;;) {
+    rlen = readall(fd, rbuf, len);
+    if (*plen || rlen<len) break;
+
+    // If reading unknown size, expand buffer by 1.5 each time we fill it up.
+    rlen += rbuf-buf;
+    buf = xrealloc(buf, len = (rlen*3)/2);
+    rbuf = buf+rlen;
+    len -= rlen;
+  }
+  *plen = len = rlen+(buf-ibuf);
   close(fd);
-  if (len<0) {
+
+  if (rlen<0) {
     if (ibuf != buf) free(buf);
     buf =  0;
   } else buf[len] = 0;
@@ -964,14 +980,38 @@ int qstrcmp(const void *a, const void *b)
   return strcmp(*(char **)a, *(char **)b);
 }
 
-int xpoll(struct pollfd *fds, int nfds, int timeout)
+// According to http://www.opengroup.org/onlinepubs/9629399/apdxa.htm
+// we should generate a uuid structure by reading a clock with 100 nanosecond
+// precision, normalizing it to the start of the gregorian calendar in 1582,
+// and looking up our eth0 mac address.
+//
+// On the other hand, we have 128 bits to come up with a unique identifier, of
+// which 6 have a defined value.  /dev/urandom it is.
+
+void create_uuid(char *uuid)
 {
+  // Read 128 random bits
+  int fd = xopen("/dev/urandom", O_RDONLY);
+  xreadall(fd, uuid, 16);
+  close(fd);
+
+  // Claim to be a DCE format UUID.
+  uuid[6] = (uuid[6] & 0x0F) | 0x40;
+  uuid[8] = (uuid[8] & 0x3F) | 0x80;
+
+  // rfc2518 section 6.4.1 suggests if we're not using a macaddr, we should
+  // set bit 1 of the node ID, which is the mac multicast bit.  This means we
+  // should never collide with anybody actually using a macaddr.
+  uuid[11] |= 128;
+}
+
+char *show_uuid(char *uuid)
+{
+  char *out = libbuf;
   int i;
 
-  for (;;) {
-    if (0>(i = poll(fds, nfds, timeout))) {
-      if (errno != EINTR && errno != ENOMEM) perror_exit("xpoll");
-      else if (timeout>0) timeout--;
-    } else return i;
-  }
+  for (i=0; i<16; i++) out+=sprintf(out, "-%02x"+!(0x550&(1<<i)), uuid[i]);
+  *out = 0;
+
+  return libbuf;
 }

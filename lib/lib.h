@@ -194,7 +194,8 @@ void crc_init(unsigned int *crc_table, int little_endian);
 void base64_init(char *p);
 int yesno(int def);
 int qstrcmp(const void *a, const void *b);
-int xpoll(struct pollfd *fds, int nfds, int timeout);
+void create_uuid(char *uuid);
+char *show_uuid(char *uuid);
 
 #define HR_SPACE 1 // Space between number and units
 #define HR_B     2 // Use "B" for single byte units
@@ -214,9 +215,11 @@ void linestack_insert(struct linestack **lls, long pos, char *line, long len);
 void linestack_append(struct linestack **lls, char *line);
 struct linestack *linestack_load(char *name);
 int crunch_str(char **str, int width, FILE *out,
-  int (*escout)(FILE *out, wchar_t wc));
-int draw_str(char *start, int width, int (*escout)(FILE *out, wchar_t wc));
-int draw_rstr(char *start, int width, int (*escout)(FILE *out, wchar_t wc));
+  int (*escout)(FILE *out, int cols, char **buf));
+int draw_str(char *start, int width);
+int utf8len(char *str);
+int utf8skip(char *str, int width);
+int draw_trim(char *str, int padto, int width);
 
 // interestingtimes.c
 int xgettty(void);
@@ -236,6 +239,7 @@ int xsocket(int domain, int type, int protocol);
 void xsetsockopt(int fd, int level, int opt, void *val, socklen_t len);
 int xconnect(char *host, char *port, int family, int socktype, int protocol,
   int flags);
+int xpoll(struct pollfd *fds, int nfds, int timeout);
 
 // password.c
 int get_salt(char *salt, char * algo);
