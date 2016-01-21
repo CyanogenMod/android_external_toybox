@@ -1,3 +1,5 @@
+#undef FORCED_FLAG
+#undef FORCED_FLAGLL
 #ifdef FORCE_FLAGS
 #define FORCED_FLAG 1
 #define FORCED_FLAGLL 1LL
@@ -1116,20 +1118,20 @@
 #undef FOR_iorenice
 #endif
 
-// iotop   Aabkoqp*u*d#n#
+// iotop   >0Aakop*u*d#=3<1n#<1bq
 #undef OPTSTR_iotop
 #define OPTSTR_iotop  0 
 #ifdef CLEANUP_iotop
 #undef CLEANUP_iotop
 #undef FOR_iotop
+#undef FLAG_q
+#undef FLAG_b
 #undef FLAG_n
 #undef FLAG_d
 #undef FLAG_u
 #undef FLAG_p
-#undef FLAG_q
 #undef FLAG_o
 #undef FLAG_k
-#undef FLAG_b
 #undef FLAG_a
 #undef FLAG_A
 #endif
@@ -1494,12 +1496,13 @@
 #undef FLAG_S
 #endif
 
-// mkswap <1>1 <1>1
+// mkswap <1>1L: <1>1L:
 #undef OPTSTR_mkswap
-#define OPTSTR_mkswap "<1>1"
+#define OPTSTR_mkswap "<1>1L:"
 #ifdef CLEANUP_mkswap
 #undef CLEANUP_mkswap
 #undef FOR_mkswap
+#undef FLAG_L
 #endif
 
 // mktemp >1uqd(directory)p(tmpdir): >1uqd(directory)p(tmpdir):
@@ -1848,9 +1851,9 @@
 #undef FOR_pivot_root
 #endif
 
-// pkill u*U*t*s*P*g*G*fnovxl: u*U*t*s*P*g*G*fnovxl:
+// pkill Vu*U*t*s*P*g*G*fnovxl: Vu*U*t*s*P*g*G*fnovxl:
 #undef OPTSTR_pkill
-#define OPTSTR_pkill "u*U*t*s*P*g*G*fnovxl:"
+#define OPTSTR_pkill "Vu*U*t*s*P*g*G*fnovxl:"
 #ifdef CLEANUP_pkill
 #undef CLEANUP_pkill
 #undef FOR_pkill
@@ -1867,6 +1870,7 @@
 #undef FLAG_t
 #undef FLAG_U
 #undef FLAG_u
+#undef FLAG_V
 #endif
 
 // pmap <1xq <1xq
@@ -2293,12 +2297,13 @@
 #undef FOR_swapoff
 #endif
 
-// swapon <1>1p#<0>32767 <1>1p#<0>32767
+// swapon <1>1p#<0>32767d <1>1p#<0>32767d
 #undef OPTSTR_swapon
-#define OPTSTR_swapon "<1>1p#<0>32767"
+#define OPTSTR_swapon "<1>1p#<0>32767d"
 #ifdef CLEANUP_swapon
 #undef CLEANUP_swapon
 #undef FOR_swapon
+#undef FLAG_d
 #undef FLAG_p
 #endif
 
@@ -2614,16 +2619,19 @@
 #undef FLAG_v
 #endif
 
-// top >0d#=3n#<1mb >0d#=3n#<1mb
+// top >0mp*u*d#=3<1n#<1bq >0mp*u*d#=3<1n#<1bq
 #undef OPTSTR_top
-#define OPTSTR_top ">0d#=3n#<1mb"
+#define OPTSTR_top ">0mp*u*d#=3<1n#<1bq"
 #ifdef CLEANUP_top
 #undef CLEANUP_top
 #undef FOR_top
+#undef FLAG_q
 #undef FLAG_b
-#undef FLAG_m
 #undef FLAG_n
 #undef FLAG_d
+#undef FLAG_u
+#undef FLAG_p
+#undef FLAG_m
 #endif
 
 // touch acd:mr:t:h[!dtr] acd:mr:t:h[!dtr]
@@ -2705,18 +2713,6 @@
 #undef FOR_truncate
 #undef FLAG_c
 #undef FLAG_s
-#endif
-
-// ttop   >0d#=3n#<1mb
-#undef OPTSTR_ttop
-#define OPTSTR_ttop  0 
-#ifdef CLEANUP_ttop
-#undef CLEANUP_ttop
-#undef FOR_ttop
-#undef FLAG_b
-#undef FLAG_m
-#undef FLAG_n
-#undef FLAG_d
 #endif
 
 // tty s s
@@ -3925,14 +3921,14 @@
 #ifndef TT
 #define TT this.iotop
 #endif
-#define FLAG_n (FORCED_FLAG<<0)
-#define FLAG_d (FORCED_FLAG<<1)
-#define FLAG_u (FORCED_FLAG<<2)
-#define FLAG_p (FORCED_FLAG<<3)
-#define FLAG_q (FORCED_FLAG<<4)
-#define FLAG_o (FORCED_FLAG<<5)
-#define FLAG_k (FORCED_FLAG<<6)
-#define FLAG_b (FORCED_FLAG<<7)
+#define FLAG_q (FORCED_FLAG<<0)
+#define FLAG_b (FORCED_FLAG<<1)
+#define FLAG_n (FORCED_FLAG<<2)
+#define FLAG_d (FORCED_FLAG<<3)
+#define FLAG_u (FORCED_FLAG<<4)
+#define FLAG_p (FORCED_FLAG<<5)
+#define FLAG_o (FORCED_FLAG<<6)
+#define FLAG_k (FORCED_FLAG<<7)
 #define FLAG_a (FORCED_FLAG<<8)
 #define FLAG_A (FORCED_FLAG<<9)
 #endif
@@ -4241,6 +4237,7 @@
 #ifndef TT
 #define TT this.mkswap
 #endif
+#define FLAG_L (1<<0)
 #endif
 
 #ifdef FOR_mktemp
@@ -4554,6 +4551,7 @@
 #define FLAG_t (1<<10)
 #define FLAG_U (1<<11)
 #define FLAG_u (1<<12)
+#define FLAG_V (1<<13)
 #endif
 
 #ifdef FOR_pmap
@@ -4908,7 +4906,8 @@
 #ifndef TT
 #define TT this.swapon
 #endif
-#define FLAG_p (1<<0)
+#define FLAG_d (1<<0)
+#define FLAG_p (1<<1)
 #endif
 
 #ifdef FOR_switch_root
@@ -5187,10 +5186,13 @@
 #ifndef TT
 #define TT this.top
 #endif
-#define FLAG_b (1<<0)
-#define FLAG_m (1<<1)
+#define FLAG_q (1<<0)
+#define FLAG_b (1<<1)
 #define FLAG_n (1<<2)
 #define FLAG_d (1<<3)
+#define FLAG_u (1<<4)
+#define FLAG_p (1<<5)
+#define FLAG_m (1<<6)
 #endif
 
 #ifdef FOR_touch
@@ -5260,16 +5262,6 @@
 #endif
 #define FLAG_c (1<<0)
 #define FLAG_s (1<<1)
-#endif
-
-#ifdef FOR_ttop
-#ifndef TT
-#define TT this.ttop
-#endif
-#define FLAG_b (FORCED_FLAG<<0)
-#define FLAG_m (FORCED_FLAG<<1)
-#define FLAG_n (FORCED_FLAG<<2)
-#define FLAG_d (FORCED_FLAG<<3)
 #endif
 
 #ifdef FOR_tty

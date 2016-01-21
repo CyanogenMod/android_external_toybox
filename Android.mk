@@ -26,6 +26,7 @@ LOCAL_PATH := $(call my-dir)
 #  mm -j32
 #  # (Make any necessary Android.mk changes and test the new toybox.)
 #  repo upload .
+#  git push aosp HEAD:refs/for/master  # Push to gerrit for review.
 #  git push aosp HEAD:master  # Push directly, avoiding gerrit.
 #
 #  # Now commit any necessary Android.mk changes like normal:
@@ -53,6 +54,7 @@ LOCAL_SRC_FILES := \
     lib/help.c \
     lib/interestingtimes.c \
     lib/lib.c \
+    lib/linestack.c \
     lib/llist.c \
     lib/net.c \
     lib/portability.c \
@@ -140,7 +142,6 @@ LOCAL_SRC_FILES := \
     toys/pending/netstat.c \
     toys/pending/route.c \
     toys/pending/tar.c \
-    toys/pending/top.c \
     toys/pending/tr.c \
     toys/pending/traceroute.c \
     toys/posix/basename.c \
