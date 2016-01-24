@@ -243,6 +243,12 @@ struct mkpasswd_data {
   char *salt;
 };
 
+// toys/other/mkswap.c
+
+struct mkswap_data {
+  char *L;
+};
+
 // toys/other/modinfo.c
 
 struct modinfo_data {
@@ -691,15 +697,6 @@ struct openvt_data {
   unsigned long vt_num;
 };
 
-// toys/pending/pgrep.c
-
-struct pgrep_data {
-  long sid;       //-s
-  long ppid;      //-P
-
-  char *signame;
-};
-
 // toys/pending/ping.c
 
 struct ping_data {
@@ -828,23 +825,6 @@ struct tftpd_data {
 
   long sfd;
   struct passwd *pw;
-};
-
-// toys/pending/top.c
-
-struct top_data {
-  long iterations;
-  long delay;
-
-  long cmp_field;
-  long reverse;
-  long rows;
-  long smp;
-  long threads;
-  long m_flag;
-  long num_new_procs;
-  long scroll_offset;
-  struct termios inf;
 };
 
 // toys/pending/tr.c
@@ -1018,7 +998,7 @@ struct expand_data {
 struct find_data {
   char **filter;
   struct double_list *argdata;
-  int topdir, xdev, depth, envsize;
+  int topdir, xdev, depth;
   time_t now;
 };
 
@@ -1151,13 +1131,24 @@ struct ps_data {
     struct {
       long n;
       long d;
-    } ttop;
-    struct {
-      long n;
-      long d;
       struct arg_list *u;
       struct arg_list *p;
-    } iotop;
+    } top;
+    struct{
+      char *L;
+      struct arg_list *G;
+      struct arg_list *g;
+      struct arg_list *P;
+      struct arg_list *s;
+      struct arg_list *t;
+      struct arg_list *U;
+      struct arg_list *u;
+      char *d;
+
+      void *regexes;
+      int signal;
+      pid_t self;
+    } pgrep;
   };
 
 #ifndef __APPLE__
@@ -1169,8 +1160,9 @@ struct ps_data {
   void *fields, *kfields;
   long long ticks, bits, ioread, iowrite, aioread, aiowrite;
   size_t header_len;
-  int kcount, ksave, forcek;
+  int kcount, forcek, sortpos;
   int (*match_process)(long long *slot);
+  void (*show_process)(void *tb);
 };
 
 // toys/posix/renice.c
@@ -1312,6 +1304,7 @@ extern union global_union {
 	struct makedevs_data makedevs;
 	struct mix_data mix;
 	struct mkpasswd_data mkpasswd;
+	struct mkswap_data mkswap;
 	struct modinfo_data modinfo;
 	struct netcat_data netcat;
 	struct nsenter_data nsenter;
@@ -1357,7 +1350,6 @@ extern union global_union {
 	struct more_data more;
 	struct netstat_data netstat;
 	struct openvt_data openvt;
-	struct pgrep_data pgrep;
 	struct ping_data ping;
 	struct route_data route;
 	struct sh_data sh;
@@ -1369,7 +1361,6 @@ extern union global_union {
 	struct telnetd_data telnetd;
 	struct tftp_data tftp;
 	struct tftpd_data tftpd;
-	struct top_data top;
 	struct tr_data tr;
 	struct traceroute_data traceroute;
 	struct useradd_data useradd;

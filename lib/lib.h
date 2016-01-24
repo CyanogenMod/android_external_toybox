@@ -152,8 +152,12 @@ void verror_msg(char *msg, int err, va_list va);
 void error_msg(char *msg, ...) printf_format;
 void perror_msg(char *msg, ...) printf_format;
 void error_exit(char *msg, ...) printf_format noreturn;
-void help_exit(char *msg, ...) printf_format noreturn;
 void perror_exit(char *msg, ...) printf_format noreturn;
+void help_exit(char *msg, ...) printf_format noreturn;
+void error_msg_raw(char *msg);
+void perror_msg_raw(char *msg);
+void error_exit_raw(char *msg);
+void perror_exit_raw(char *msg);
 ssize_t readall(int fd, void *buf, size_t len);
 ssize_t writeall(int fd, void *buf, size_t len);
 off_t lskip(int fd, off_t offset);
@@ -190,7 +194,8 @@ void crc_init(unsigned int *crc_table, int little_endian);
 void base64_init(char *p);
 int yesno(int def);
 int qstrcmp(const void *a, const void *b);
-int xpoll(struct pollfd *fds, int nfds, int timeout);
+void create_uuid(char *uuid);
+char *show_uuid(char *uuid);
 
 #define HR_SPACE 1 // Space between number and units
 #define HR_B     2 // Use "B" for single byte units
@@ -210,16 +215,20 @@ void linestack_insert(struct linestack **lls, long pos, char *line, long len);
 void linestack_append(struct linestack **lls, char *line);
 struct linestack *linestack_load(char *name);
 int crunch_str(char **str, int width, FILE *out,
-  int (*escout)(FILE *out, wchar_t wc));
-int draw_str(char *start, int width, int (*escout)(FILE *out, wchar_t wc));
-int draw_rstr(char *start, int width, int (*escout)(FILE *out, wchar_t wc));
+  int (*escout)(FILE *out, int cols, char **buf));
+int draw_str(char *start, int width);
+int utf8len(char *str);
+int utf8skip(char *str, int width);
+int draw_trim(char *str, int padto, int width);
 
 // interestingtimes.c
 int xgettty(void);
 int terminal_size(unsigned *xx, unsigned *yy);
-int scan_key_getsize(char *scratch, int block, unsigned *xx, unsigned *yy);
+int terminal_probesize(unsigned *xx, unsigned *yy);
+int scan_key_getsize(char *scratch, int miliwait, unsigned *xx, unsigned *yy);
 int set_terminal(int fd, int raw, struct termios *old);
-int scan_key(char *scratch, int block);
+void xset_terminal(int fd, int raw, struct termios *old);
+int scan_key(char *scratch, int miliwait);
 void tty_esc(char *s);
 void tty_jump(int x, int y);
 void tty_reset(void);
@@ -230,6 +239,7 @@ int xsocket(int domain, int type, int protocol);
 void xsetsockopt(int fd, int level, int opt, void *val, socklen_t len);
 int xconnect(char *host, char *port, int family, int socktype, int protocol,
   int flags);
+int xpoll(struct pollfd *fds, int nfds, int timeout);
 
 // password.c
 int get_salt(char *salt, char * algo);
