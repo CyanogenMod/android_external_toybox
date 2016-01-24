@@ -2256,9 +2256,9 @@
 #undef FLAG_a
 #endif
 
-// stat <1c:f <1c:f
+// stat <1c:tf <1c:tf
 #undef OPTSTR_stat
-#define OPTSTR_stat "<1c:f"
+#define OPTSTR_stat "<1c:tf"
 #ifdef CLEANUP_stat
 #undef CLEANUP_stat
 #undef FOR_stat
