@@ -1118,7 +1118,7 @@
 #undef FOR_iorenice
 #endif
 
-// iotop   >0Aakop*u*d#=3<1n#<1bq
+// iotop   >0AaKOh:k*o*p*u*s#<1=7d#=3<1n#<1bq
 #undef OPTSTR_iotop
 #define OPTSTR_iotop  0 
 #ifdef CLEANUP_iotop
@@ -1128,10 +1128,14 @@
 #undef FLAG_b
 #undef FLAG_n
 #undef FLAG_d
+#undef FLAG_s
 #undef FLAG_u
 #undef FLAG_p
 #undef FLAG_o
 #undef FLAG_k
+#undef FLAG_h
+#undef FLAG_O
+#undef FLAG_K
 #undef FLAG_a
 #undef FLAG_A
 #endif
@@ -2619,9 +2623,9 @@
 #undef FLAG_v
 #endif
 
-// top >0mp*u*d#=3<1n#<1bq >0mp*u*d#=3<1n#<1bq
+// top >0mh:k*o*p*u*s#<1=9d#=3<1n#<1bq >0mh:k*o*p*u*s#<1=9d#=3<1n#<1bq
 #undef OPTSTR_top
-#define OPTSTR_top ">0mp*u*d#=3<1n#<1bq"
+#define OPTSTR_top ">0mh:k*o*p*u*s#<1=9d#=3<1n#<1bq"
 #ifdef CLEANUP_top
 #undef CLEANUP_top
 #undef FOR_top
@@ -2629,8 +2633,12 @@
 #undef FLAG_b
 #undef FLAG_n
 #undef FLAG_d
+#undef FLAG_s
 #undef FLAG_u
 #undef FLAG_p
+#undef FLAG_o
+#undef FLAG_k
+#undef FLAG_h
 #undef FLAG_m
 #endif
 
@@ -3925,12 +3933,16 @@
 #define FLAG_b (FORCED_FLAG<<1)
 #define FLAG_n (FORCED_FLAG<<2)
 #define FLAG_d (FORCED_FLAG<<3)
-#define FLAG_u (FORCED_FLAG<<4)
-#define FLAG_p (FORCED_FLAG<<5)
-#define FLAG_o (FORCED_FLAG<<6)
-#define FLAG_k (FORCED_FLAG<<7)
-#define FLAG_a (FORCED_FLAG<<8)
-#define FLAG_A (FORCED_FLAG<<9)
+#define FLAG_s (FORCED_FLAG<<4)
+#define FLAG_u (FORCED_FLAG<<5)
+#define FLAG_p (FORCED_FLAG<<6)
+#define FLAG_o (FORCED_FLAG<<7)
+#define FLAG_k (FORCED_FLAG<<8)
+#define FLAG_h (FORCED_FLAG<<9)
+#define FLAG_O (FORCED_FLAG<<10)
+#define FLAG_K (FORCED_FLAG<<11)
+#define FLAG_a (FORCED_FLAG<<12)
+#define FLAG_A (FORCED_FLAG<<13)
 #endif
 
 #ifdef FOR_ip
@@ -5190,9 +5202,13 @@
 #define FLAG_b (1<<1)
 #define FLAG_n (1<<2)
 #define FLAG_d (1<<3)
-#define FLAG_u (1<<4)
-#define FLAG_p (1<<5)
-#define FLAG_m (1<<6)
+#define FLAG_s (1<<4)
+#define FLAG_u (1<<5)
+#define FLAG_p (1<<6)
+#define FLAG_o (1<<7)
+#define FLAG_k (1<<8)
+#define FLAG_h (1<<9)
+#define FLAG_m (1<<10)
 #endif
 
 #ifdef FOR_touch

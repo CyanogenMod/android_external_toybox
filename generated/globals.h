@@ -1131,8 +1131,12 @@ struct ps_data {
     struct {
       long n;
       long d;
+      long s;
       struct arg_list *u;
       struct arg_list *p;
+      struct arg_list *o;
+      struct arg_list *k;
+      char *h;
     } top;
     struct{
       char *L;
@@ -1156,7 +1160,7 @@ struct ps_data {
   unsigned width, height;
   dev_t tty;
   void *fields, *kfields;
-  long long ticks, bits, ioread, iowrite, aioread, aiowrite;
+  long long ticks, bits;
   size_t header_len;
   int kcount, forcek, sortpos;
   int (*match_process)(long long *slot);
