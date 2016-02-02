@@ -6,7 +6,7 @@
  *
  * TODO: -ABC
 
-USE_GREP(NEWTOY(grep, "ZzEFHabhinorsvwclqe*f*m#x[!wx][!EFw]", TOYFLAG_BIN))
+USE_GREP(NEWTOY(grep, "C#B#A#ZzEFHabhinorsvwclqe*f*m#x[!wx][!EFw]", TOYFLAG_BIN))
 USE_EGREP(OLDTOY(egrep, grep, TOYFLAG_BIN))
 USE_FGREP(OLDTOY(fgrep, grep, TOYFLAG_BIN))
 
@@ -14,7 +14,7 @@ config GREP
   bool "grep"
   default y
   help
-    usage: grep [-EFivwcloqsHbhn] [-m MAX] [-e REGEX]... [-f REGFILE] [FILE]...
+    usage: grep [-EFivwcloqsHbhn] [-A NUM] [-m MAX] [-e REGEX]... [-f REGFILE] [FILE]...
 
     Show lines matching regular expressions. If no -e, first argument is
     regular expression to match. With no files (or "-" filename) read stdin.
@@ -24,11 +24,12 @@ config GREP
     -f  File containing regular expressions to match.
 
     match type:
-    -E  extended regex syntax    -F  fixed (match literal string)
-    -i  case insensitive         -m  stop after this many lines matched
-    -r  recursive (on dir)       -v  invert match
-    -w  whole word (implies -E)  -x  whole line
-    -z  input NUL terminated
+    -A  Show NUM lines after     -B  Show NUM lines before match
+    -C  NUM lines context (A+B)  -E  extended regex syntax
+    -F  fixed (literal match)    -i  case insensitive
+    -m  match MAX many lines     -r  recursive (on dir)
+    -v  invert match             -w  whole word (implies -E)
+    -x  whole line               -z  input NUL terminated
 
     display modes: (default: matched line)
     -c  count of matching lines  -l  show matching filenames
@@ -58,15 +59,19 @@ GLOBALS(
   long m;
   struct arg_list *f;
   struct arg_list *e;
+  long a;
+  long b;
+  long c;
 )
 
 // Show matches in one file
 static void do_grep(int fd, char *name)
 {
+  struct double_list *dlb = 0;
   FILE *file = fdopen(fd, "r");
-  long offset = 0;
+  long offset = 0, after = 0, before = 0;
   int lcount = 0, mcount = 0;
-  char indelim = '\n' * !(toys.optflags&FLAG_z),
+  char *bars = 0, indelim = '\n' * !(toys.optflags&FLAG_z),
        outdelim = '\n' * !(toys.optflags&FLAG_Z);
 
   if (!fd) name = "(standard input)";
@@ -164,6 +169,11 @@ static void do_grep(int fd, char *name)
         matches.rm_so = 0;
       } else if (rc) break;
 
+      // At least one line we didn't print since match while -ABC active
+      if (bars) {
+        xputs(bars);
+        bars = 0;
+      }
       mmatch++;
       toys.exitval = 0;
       if (toys.optflags & FLAG_q) xexit();
@@ -183,10 +193,22 @@ static void do_grep(int fd, char *name)
         if (toys.optflags & FLAG_b)
           printf("%ld:", offset + (start-line) +
               ((toys.optflags & FLAG_o) ? matches.rm_so : 0));
-        if (!(toys.optflags & FLAG_o)) xprintf("%s%c", line, outdelim);
-        else {
-          xprintf("%.*s%c", matches.rm_eo - matches.rm_so,
-                  start + matches.rm_so, outdelim);
+        if (!(toys.optflags & FLAG_o)) {
+          while (dlb) {
+            struct double_list *dl = dlist_pop(&dlb);
+
+            xprintf("%s%c", dl->data, outdelim);
+            free(dl->data);
+            free(dl);
+            before--;
+          }
+
+          while (before) xprintf("%s%c", line, outdelim);
+          xprintf("%s%c", line, outdelim);
+          if (TT.a) after = TT.a+1;
+        } else {
+          xprintf("%.*s%c", (int)(matches.rm_eo-matches.rm_so),
+                  start+matches.rm_so, outdelim);
         }
       }
 
@@ -195,9 +217,30 @@ static void do_grep(int fd, char *name)
     } while (*start);
     offset += len;
 
+    if (mmatch) mcount++;
+    else {
+      int discard = (after || TT.b);
+
+      if (after && --after) {
+        xprintf("%s%c", line, outdelim);
+        discard = 0;
+      }
+      if (discard && TT.b) {
+        dlist_add(&dlb, line);
+        line = 0;
+        if (++before>TT.b) {
+          struct double_list *dl;
+
+          dl = dlist_pop(&dlb);
+          free(dl->data);
+          free(dl);
+          before--;
+        } else discard = 0;
+      }
+      if (discard && mcount) bars = "--";
+    }
     free(line);
 
-    if (mmatch) mcount++;
     if ((toys.optflags & FLAG_m) && mcount >= TT.m) break;
   }
 
@@ -291,6 +334,9 @@ static int do_grep_r(struct dirtree *new)
 void grep_main(void)
 {
   char **ss = toys.optargs;
+
+  if (!TT.a) TT.a = TT.c;
+  if (!TT.b) TT.b = TT.c;
 
   // Handle egrep and fgrep
   if (*toys.which->name == 'e') toys.optflags |= FLAG_E;
