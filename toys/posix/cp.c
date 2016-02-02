@@ -338,8 +338,8 @@ int cp_node(struct dirtree *try)
       if (rc) {
         char *pp;
 
-        perror_msg("chown '%s'", pp = dirtree_path(try, 0));
         free(pp);
+        err = 0;
       }
     }
 
