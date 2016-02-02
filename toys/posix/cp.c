@@ -338,7 +338,10 @@ int cp_node(struct dirtree *try)
       if (rc) {
         char *pp;
 
-        perror_msg("chown '%s'", pp = dirtree_path(try, 0));
+        if (!(toys.optflags & FLAG_a)) {
+          perror_msg("chown '%s'", pp = dirtree_path(try, 0));
+          err = 0;
+        }
         free(pp);
       }
     }
