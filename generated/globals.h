@@ -1011,6 +1011,8 @@ struct grep_data {
   long a;
   long b;
   long c;
+
+  char indelim, outdelim;
 };
 
 // toys/posix/head.c
