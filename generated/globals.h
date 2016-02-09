@@ -1008,6 +1008,11 @@ struct grep_data {
   long m;
   struct arg_list *f;
   struct arg_list *e;
+  long a;
+  long b;
+  long c;
+
+  char indelim, outdelim;
 };
 
 // toys/posix/head.c
@@ -1124,6 +1129,7 @@ struct ps_data {
       struct arg_list *t;
       struct arg_list *s;
       struct arg_list *p;
+      struct arg_list *O;
       struct arg_list *o;
       struct arg_list *P;
       struct arg_list *k;
@@ -1131,8 +1137,11 @@ struct ps_data {
     struct {
       long n;
       long d;
+      long s;
       struct arg_list *u;
       struct arg_list *p;
+      struct arg_list *o;
+      struct arg_list *k;
     } top;
     struct{
       char *L;
@@ -1145,9 +1154,9 @@ struct ps_data {
       struct arg_list *u;
       char *d;
 
-      void *regexes;
+      void *regexes, *snapshot;
       int signal;
-      pid_t self;
+      pid_t self, match;
     } pgrep;
   };
 
@@ -1158,8 +1167,7 @@ struct ps_data {
   unsigned width, height;
   dev_t tty;
   void *fields, *kfields;
-  long long ticks, bits, ioread, iowrite, aioread, aiowrite;
-  size_t header_len;
+  long long ticks, bits, time;
   int kcount, forcek, sortpos;
   int (*match_process)(long long *slot);
   void (*show_process)(void *tb);
