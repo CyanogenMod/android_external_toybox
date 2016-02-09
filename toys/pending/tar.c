@@ -190,7 +190,6 @@ static void add_file(struct archive_handler *tar, char **nam, struct stat *st)
   }
 
   memset(&hdr, 0, sizeof(hdr));
-  xstrncpy(hdr.name, hname, sizeof(hdr.name));
   itoo(hdr.mode, sizeof(hdr.mode), st->st_mode &07777);
   itoo(hdr.uid, sizeof(hdr.uid), st->st_uid);
   itoo(hdr.gid, sizeof(hdr.gid), st->st_gid);
@@ -234,8 +233,10 @@ static void add_file(struct archive_handler *tar, char **nam, struct stat *st)
     error_msg("unknown file type '%o'", st->st_mode & S_IFMT);
     return;
   }
-  if (strlen(hname) > sizeof(hdr.name))
-          write_longname(tar, hname, 'L'); //write longname NAME
+  if (strlen(hname) >= sizeof(hdr.name))
+    write_longname(tar, hname, 'L'); //write longname NAME
+  else
+    xstrncpy(hdr.name, hname, sizeof(hdr.name));
   strcpy(hdr.magic, "ustar  ");
   if ((pw = getpwuid(st->st_uid)))
     snprintf(hdr.uname, sizeof(hdr.uname), "%s", pw->pw_name);
