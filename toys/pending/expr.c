@@ -257,7 +257,7 @@ static void parse_op(struct value *lhs, struct value *tok, struct op *op)
 
 void expr_main(void)
 {
-  struct value tok, ret = {0};
+  struct value tok, ret = {0,0};
 
   toys.exitval = 2; // if exiting early, indicate invalid expression
 

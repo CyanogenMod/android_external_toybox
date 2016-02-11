@@ -1447,7 +1447,7 @@ static void read_and_print_parts()
   while (fgets(buffer, ONE_K, fp)) {
     reset_entries();
     num_parts = 4;
-    memset(name, 0, sizeof(name));
+    memset(toybuf, 0, sizeof(toybuf));
     if (sscanf(buffer, " %u %u %u %[^\n ]", &ma, &mi, &sz, name) != 4)
       continue;
       

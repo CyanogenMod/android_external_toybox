@@ -47,14 +47,14 @@ static const struct rrt {
 } rrt[] = {
   [1] = { "A", "has address", PL_IP, AF_INET },
   [28] = { "AAAA", "has address", PL_IP, AF_INET6 },
-  [2] = { "NS", "name server", PL_NAME },
-  [5] = { "CNAME", "is a nickname for", PL_NAME },
-  [16] = { "TXT", "descriptive text", PL_TEXT },
-  [6] = { "SOA", "start of authority", PL_SOA },
-  [12] = { "PTR", "domain name pointer", PL_NAME },
-  [15] = { "MX", "mail is handled", PL_MX },
-  [33] = { "SRV", "mail is handled", PL_SRV },
-  [255] = { "*", 0, 0 },
+  [2] = { "NS", "name server", PL_NAME, 0 },
+  [5] = { "CNAME", "is a nickname for", PL_NAME, 0 },
+  [16] = { "TXT", "descriptive text", PL_TEXT, 0 },
+  [6] = { "SOA", "start of authority", PL_SOA, 0 },
+  [12] = { "PTR", "domain name pointer", PL_NAME, 0 },
+  [15] = { "MX", "mail is handled", PL_MX, 0 },
+  [33] = { "SRV", "mail is handled", PL_SRV, 0 },
+  [255] = { "*", NULL, 0, 0 },
 };
 
 static const char rct[16][32] = {
