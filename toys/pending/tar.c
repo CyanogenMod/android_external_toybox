@@ -92,14 +92,38 @@ static void copy_in_out(int src, int dst, off_t size)
 }
 
 //convert to octal
-static void itoo(char *str, int len, off_t val)
+static void itoo(char *str, int len, int64_t val)
 {
-  char *t, tmp[sizeof(off_t)*3+1];
+  char *t, tmp[sizeof(int64_t)*3+1];
   int cnt  = sprintf(tmp, "%0*llo", len, (unsigned long long)val);
 
   t = tmp + cnt - len;
   if (*t == '0') t++;
   memcpy(str, t, len);
+}
+
+//convert to octal if possible, otherwise use binary extended format
+static void itooex(char *str, int len, int64_t val)
+{
+  if (val < 0 || val >= ((int64_t)1 << ((len - 1) * 3))) {
+    unsigned char *p;
+    unsigned int i;
+
+    memset(str, 0, len);
+    p = (unsigned char *)str + len;
+    for (i = 0; i < sizeof(val); ++i) {
+      *(--p) = val & 0xff;
+      val >>= 8;
+    }
+    if (val < 0) {
+      for (; i < len; ++i) {
+        *(--p) = 0xff;
+      }
+    }
+    *(unsigned char *)str |= 0x80;
+    return;
+  }
+  itoo(str, len, val);
 }
 
 static struct inode_list *seen_inode(void **list, struct stat *st, char *name)
@@ -195,7 +219,7 @@ static void add_file(struct archive_handler *tar, char **nam, struct stat *st)
   itoo(hdr.uid, sizeof(hdr.uid), st->st_uid);
   itoo(hdr.gid, sizeof(hdr.gid), st->st_gid);
   itoo(hdr.size, sizeof(hdr.size), 0); //set size later
-  itoo(hdr.mtime, sizeof(hdr.mtime), st->st_mtime);
+  itooex(hdr.mtime, sizeof(hdr.mtime), st->st_mtime);
   for (i=0; i<sizeof(hdr.chksum); i++) hdr.chksum[i] = ' ';
 
   if ((node = seen_inode(&TT.inodes, st, hname))) {
@@ -206,13 +230,7 @@ static void add_file(struct archive_handler *tar, char **nam, struct stat *st)
     xstrncpy(hdr.link, node->arg, sizeof(hdr.link));
   } else if (S_ISREG(st->st_mode)) {
     hdr.type = '0';
-    if (st->st_size <= (off_t)0777777777777LL)
-      itoo(hdr.size, sizeof(hdr.size), st->st_size);
-    else {
-      error_msg("can't store file '%s' of size '%lld'\n",
-                hname, (unsigned long long)st->st_size);
-      return;
-    }
+    itooex(hdr.size, sizeof(hdr.size), st->st_size);
   } else if (S_ISLNK(st->st_mode)) {
     hdr.type = '2'; //'K' long link
     if (!(lnk = xreadlink(name))) {
@@ -484,8 +502,8 @@ static struct archive_handler *init_handler()
   return tar_hdl;
 }
 
-//convert octal to int
-static int otoi(char *str, int len)
+//convert octal to int64
+static int64_t otoi(char *str, int len)
 {
   long val;
   char *endp, inp[len+1]; //1 for NUL termination
@@ -494,7 +512,27 @@ static int otoi(char *str, int len)
   inp[len] = '\0'; //nul-termination made sure
   val = strtol(inp, &endp, 8);
   if (*endp && *endp != ' ') error_exit("invalid param");
-  return (int)val;
+  return val;
+}
+
+//convert octal or binary extended to int64
+static int64_t otoiex(char *str, int len)
+{
+  if (*(unsigned char *)str & 0x80) {
+    int64_t val = 0;
+    unsigned char *p = (unsigned char *)str + len - sizeof(val);
+    unsigned int i;
+    char tmp = *str;
+
+    *str &= 0x7f;
+    for (i = 0; i < sizeof(val); ++i) {
+      val <<= 8;
+      val |= *(p++);
+    }
+    *str = tmp;
+    return val;
+  }
+  return otoi(str, len);
 }
 
 static void extract_stream(struct archive_handler *tar_hdl)
@@ -617,8 +655,8 @@ CHECK_MAGIC:
     file_hdr->mode = otoi(tar.mode, sizeof(tar.mode));
     file_hdr->uid = otoi(tar.uid, sizeof(tar.uid));
     file_hdr->gid = otoi(tar.gid, sizeof(tar.gid));
-    file_hdr->size = otoi(tar.size, sizeof(tar.size));
-    file_hdr->mtime = otoi(tar.mtime, sizeof(tar.mtime));
+    file_hdr->size = otoiex(tar.size, sizeof(tar.size));
+    file_hdr->mtime = otoiex(tar.mtime, sizeof(tar.mtime));
     file_hdr->uname = xstrdup(tar.uname);
     file_hdr->gname = xstrdup(tar.gname);
     maj = otoi(tar.major, sizeof(tar.major));
