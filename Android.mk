@@ -212,7 +212,10 @@ LOCAL_CFLAGS += \
     -ffunction-sections -fdata-sections \
     -fno-asynchronous-unwind-tables \
 
-toybox_version := $(shell git -C $(LOCAL_PATH) rev-parse --short=12 HEAD 2>/dev/null)-android
+toybox_upstream_version := $(shell awk 'match($$0, /TOYBOX_VERSION.*"(.*)"/, ary) {print ary[1]}' $(LOCAL_PATH)/main.c)
+toybox_sha := $(shell git -C $(LOCAL_PATH) rev-parse --short=12 HEAD 2>/dev/null)
+
+toybox_version := $(toybox_upstream_version)-$(toybox_sha)-android
 LOCAL_CFLAGS += -DTOYBOX_VERSION='"$(toybox_version)"'
 
 LOCAL_CLANG := true
