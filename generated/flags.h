@@ -2737,9 +2737,9 @@
 #undef FLAG_s
 #endif
 
-// ulimit   >1P#<1SHavutsrRqpnmlifedc[-SH][!apvutsrRqnmlifedc]
+// ulimit >1P#<1SHavutsrRqpnmlifedc[-SH][!apvutsrRqnmlifedc] >1P#<1SHavutsrRqpnmlifedc[-SH][!apvutsrRqnmlifedc]
 #undef OPTSTR_ulimit
-#define OPTSTR_ulimit  0 
+#define OPTSTR_ulimit ">1P#<1SHavutsrRqpnmlifedc[-SH][!apvutsrRqnmlifedc]"
 #ifdef CLEANUP_ulimit
 #undef CLEANUP_ulimit
 #undef FOR_ulimit
@@ -5338,26 +5338,26 @@
 #ifndef TT
 #define TT this.ulimit
 #endif
-#define FLAG_c (FORCED_FLAG<<0)
-#define FLAG_d (FORCED_FLAG<<1)
-#define FLAG_e (FORCED_FLAG<<2)
-#define FLAG_f (FORCED_FLAG<<3)
-#define FLAG_i (FORCED_FLAG<<4)
-#define FLAG_l (FORCED_FLAG<<5)
-#define FLAG_m (FORCED_FLAG<<6)
-#define FLAG_n (FORCED_FLAG<<7)
-#define FLAG_p (FORCED_FLAG<<8)
-#define FLAG_q (FORCED_FLAG<<9)
-#define FLAG_R (FORCED_FLAG<<10)
-#define FLAG_r (FORCED_FLAG<<11)
-#define FLAG_s (FORCED_FLAG<<12)
-#define FLAG_t (FORCED_FLAG<<13)
-#define FLAG_u (FORCED_FLAG<<14)
-#define FLAG_v (FORCED_FLAG<<15)
-#define FLAG_a (FORCED_FLAG<<16)
-#define FLAG_H (FORCED_FLAG<<17)
-#define FLAG_S (FORCED_FLAG<<18)
-#define FLAG_P (FORCED_FLAG<<19)
+#define FLAG_c (1<<0)
+#define FLAG_d (1<<1)
+#define FLAG_e (1<<2)
+#define FLAG_f (1<<3)
+#define FLAG_i (1<<4)
+#define FLAG_l (1<<5)
+#define FLAG_m (1<<6)
+#define FLAG_n (1<<7)
+#define FLAG_p (1<<8)
+#define FLAG_q (1<<9)
+#define FLAG_R (1<<10)
+#define FLAG_r (1<<11)
+#define FLAG_s (1<<12)
+#define FLAG_t (1<<13)
+#define FLAG_u (1<<14)
+#define FLAG_v (1<<15)
+#define FLAG_a (1<<16)
+#define FLAG_H (1<<17)
+#define FLAG_S (1<<18)
+#define FLAG_P (1<<19)
 #endif
 
 #ifdef FOR_umount
