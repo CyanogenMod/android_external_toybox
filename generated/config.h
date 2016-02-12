@@ -178,6 +178,8 @@
 #define USE_TRUE(...) __VA_ARGS__
 #define CFG_TTY 1
 #define USE_TTY(...) __VA_ARGS__
+#define CFG_ULIMIT 0
+#define USE_ULIMIT(...)
 #define CFG_UNAME 1
 #define USE_UNAME(...) __VA_ARGS__
 #define CFG_UNIQ 1
