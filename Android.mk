@@ -195,6 +195,7 @@ LOCAL_SRC_FILES := \
     toys/posix/touch.c \
     toys/posix/true.c \
     toys/posix/tty.c \
+    toys/posix/ulimit.c \
     toys/posix/uname.c \
     toys/posix/uniq.c \
     toys/posix/wc.c \
@@ -351,6 +352,7 @@ ALL_TOOLS := \
     true \
     truncate \
     tty \
+    ulimit \
     umount \
     uname \
     uniq \
