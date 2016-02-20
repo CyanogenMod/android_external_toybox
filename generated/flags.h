@@ -695,6 +695,14 @@
 #undef FLAG_C
 #endif
 
+// file   <1
+#undef OPTSTR_file
+#define OPTSTR_file  0 
+#ifdef CLEANUP_file
+#undef CLEANUP_file
+#undef FOR_file
+#endif
+
 // find ?^HL[-HL] ?^HL[-HL]
 #undef OPTSTR_find
 #define OPTSTR_find "?^HL[-HL]"
@@ -816,12 +824,13 @@
 #undef FOR_getenforce
 #endif
 
-// getprop >2 >2
+// getprop >2Z >2Z
 #undef OPTSTR_getprop
-#define OPTSTR_getprop ">2"
+#define OPTSTR_getprop ">2Z"
 #ifdef CLEANUP_getprop
 #undef CLEANUP_getprop
 #undef FOR_getprop
+#undef FLAG_Z
 #endif
 
 // getty   <2t#<0H:I:l:f:iwnmLh
@@ -3004,12 +3013,14 @@
 #undef FLAG_I
 #endif
 
-// xxd >1c#<1>4096=16l#g#<1=2 >1c#<1>4096=16l#g#<1=2
+// xxd >1c#<1>4096=16l#g#<1=2pr >1c#<1>4096=16l#g#<1=2pr
 #undef OPTSTR_xxd
-#define OPTSTR_xxd ">1c#<1>4096=16l#g#<1=2"
+#define OPTSTR_xxd ">1c#<1>4096=16l#g#<1=2pr"
 #ifdef CLEANUP_xxd
 #undef CLEANUP_xxd
 #undef FOR_xxd
+#undef FLAG_r
+#undef FLAG_p
 #undef FLAG_g
 #undef FLAG_l
 #undef FLAG_c
@@ -3616,6 +3627,12 @@
 #define FLAG_C (FORCED_FLAG<<5)
 #endif
 
+#ifdef FOR_file
+#ifndef TT
+#define TT this.file
+#endif
+#endif
+
 #ifdef FOR_find
 #ifndef TT
 #define TT this.find
@@ -3719,6 +3736,7 @@
 #ifndef TT
 #define TT this.getprop
 #endif
+#define FLAG_Z (1<<0)
 #endif
 
 #ifdef FOR_getty
@@ -5561,9 +5579,11 @@
 #ifndef TT
 #define TT this.xxd
 #endif
-#define FLAG_g (1<<0)
-#define FLAG_l (1<<1)
-#define FLAG_c (1<<2)
+#define FLAG_r (1<<0)
+#define FLAG_p (1<<1)
+#define FLAG_g (1<<2)
+#define FLAG_l (1<<3)
+#define FLAG_c (1<<4)
 #endif
 
 #ifdef FOR_xzcat

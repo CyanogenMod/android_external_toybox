@@ -88,7 +88,7 @@
 
 #define HELP_yes "usage: yes [args...]\n\nRepeatedly output line until killed. If no args, output 'y'.\n\n\n"
 
-#define HELP_xxd "usage: xxd [-c n] [-g n] [-l n] [file]\n\nHexdump a file to stdout.  If no file is listed, copy from stdin.\nFilename \"-\" is a synonym for stdin.\n\n-c n	Show n bytes per line (default 16).\n-g n	Group bytes by adding a ' ' every n bytes (default 2).\n-l n	Limit of n bytes before stopping (default is no limit).\n\n"
+#define HELP_xxd "usage: xxd [-c n] [-g n] [-l n] [-p] [-r] [file]\n\nHexdump a file to stdout.  If no file is listed, copy from stdin.\nFilename \"-\" is a synonym for stdin.\n\n-c n	Show n bytes per line (default 16).\n-g n	Group bytes by adding a ' ' every n bytes (default 2).\n-l n	Limit of n bytes before stopping (default is no limit).\n-p	Plain hexdump (30 bytes/line, no grouping).\n-r	Reverse operation: turn a hexdump into a binary file.\n\n"
 
 #define HELP_which "usage: which [-a] filename ...\n\nSearch $PATH for executable files matching filename(s).\n\n-a	Show all matches\n\n"
 
@@ -206,7 +206,7 @@
 
 #define HELP_hostid "usage: hostid\n\nPrint the numeric identifier for the current host.\n\n"
 
-#define HELP_hexedit "usage: hexedit FILENAME\n\nHexadecimal file editor.\n\n-r	Read only (display but don't edit)\n\n"
+#define HELP_hexedit "usage: hexedit FILENAME\n\nHexadecimal file editor. All changes are written to disk immediately.\n\n-r	Read only (display but don't edit)\n\nKeys:\nArrows        Move left/right/up/down by one line/column\nPg Up/Pg Dn   Move up/down by one page\n0-9, a-f      Change current half-byte to hexadecimal value\nu             Undo\nq/^c/^d/<esc> Quit\n\n"
 
 #define HELP_help "usage: help [-ah] [command]\n\nShow usage information for toybox commands.\nRun \"toybox\" with no arguments for a list of available commands.\n\n-h	HTML output\n-a	All commands\n"
 
@@ -351,6 +351,8 @@
 #define HELP_fsck "usage: fsck [-ANPRTV] [-C FD] [-t FSTYPE] [FS_OPTS] [BLOCKDEV]...\n\nCheck and repair filesystems\n\n-A      Walk /etc/fstab and check all filesystems\n-N      Don't execute, just show what would be done\n-P      With -A, check filesystems in parallel\n-R      With -A, skip the root filesystem\n-T      Don't show title on startup\n-V      Verbose\n-C n    Write status information to specified filedescriptor\n-t TYPE List of filesystem types to check\n\n\n"
 
 #define HELP_fold "usage: fold [-bsu] [-w WIDTH] [FILE...]\n\nFolds (wraps) or unfolds ascii text by adding or removing newlines.\nDefault line width is 80 columns for folding and infinite for unfolding.\n\n-b	Fold based on bytes instead of columns\n-s	Fold/unfold at whitespace boundaries if possible\n-u	Unfold text (and refold if -w is given)\n-w	Set lines to WIDTH columns or bytes\n\n"
+
+#define HELP_file "usage: file [file...]\n\nExamine the given files and describe their content types.\n\n"
 
 #define HELP_fdisk "usage: fdisk [-lu] [-C CYLINDERS] [-H HEADS] [-S SECTORS] [-b SECTSZ] DISK\n\nChange partition table\n\n-u            Start and End are in sectors (instead of cylinders)\n-l            Show partition table for each DISK, then exit\n-b size       sector size (512, 1024, 2048 or 4096)\n-C CYLINDERS  Set number of cylinders/heads/sectors\n-H HEADS\n-S SECTORS\n\n"
 

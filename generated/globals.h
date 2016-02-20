@@ -3,6 +3,7 @@
 struct getprop_data {
   size_t size;
   char **nv; // name/value pairs: even=name, odd=value
+  struct selabel_handle *handle;
 };
 
 // toys/example/hello.c
@@ -503,6 +504,12 @@ struct fdisk_data {
   long sectors;
   long heads;
   long cylinders;
+};
+
+// toys/pending/file.c
+
+struct file_data {
+  int max_name_len;
 };
 
 // toys/pending/fold.c
@@ -1349,6 +1356,7 @@ extern union global_union {
 	struct dumpleases_data dumpleases;
 	struct expr_data expr;
 	struct fdisk_data fdisk;
+	struct file_data file;
 	struct fold_data fold;
 	struct fsck_data fsck;
 	struct ftpget_data ftpget;
