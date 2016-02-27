@@ -3,6 +3,7 @@
 struct getprop_data {
   size_t size;
   char **nv; // name/value pairs: even=name, odd=value
+  struct selabel_handle *handle;
 };
 
 // toys/example/hello.c
@@ -505,6 +506,12 @@ struct fdisk_data {
   long cylinders;
 };
 
+// toys/pending/file.c
+
+struct file_data {
+  int max_name_len;
+};
+
 // toys/pending/fold.c
 
 struct fold_data {
@@ -985,6 +992,12 @@ struct du_data {
   void *inodes;
 };
 
+// toys/posix/env.c
+
+struct env_data {
+  struct arg_list *u;
+};;
+
 // toys/posix/expand.c
 
 struct expand_data {
@@ -1245,6 +1258,12 @@ struct touch_data {
   char *date;
 };
 
+// toys/posix/ulimit.c
+
+struct ulimit_data {
+  long pid;
+};
+
 // toys/posix/uniq.c
 
 struct uniq_data {
@@ -1337,6 +1356,7 @@ extern union global_union {
 	struct dumpleases_data dumpleases;
 	struct expr_data expr;
 	struct fdisk_data fdisk;
+	struct file_data file;
 	struct fold_data fold;
 	struct fsck_data fsck;
 	struct ftpget_data ftpget;
@@ -1382,6 +1402,7 @@ extern union global_union {
 	struct date_data date;
 	struct df_data df;
 	struct du_data du;
+	struct env_data env;
 	struct expand_data expand;
 	struct find_data find;
 	struct grep_data grep;
@@ -1405,6 +1426,7 @@ extern union global_union {
 	struct tail_data tail;
 	struct tee_data tee;
 	struct touch_data touch;
+	struct ulimit_data ulimit;
 	struct uniq_data uniq;
 	struct uudecode_data uudecode;
 	struct wc_data wc;

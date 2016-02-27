@@ -41,6 +41,10 @@
 #define AT_REMOVEDIR 0x200
 #endif
 
+#ifndef RLIMIT_RTTIME
+#define RLIMIT_RTTIME 15
+#endif
+
 // We don't define GNU_dammit because we're not part of the gnu project, and
 // don't want to get any FSF on us. Unfortunately glibc (gnu libc)
 // won't give us Linux syscall wrappers without claiming to be part of the
@@ -245,6 +249,16 @@ static inline void endutxent(void) {;}
 
 #ifndef O_PATH
 #define O_PATH   010000000
+#endif
+
+// Glibc won't give you linux-kernel constants unless you say "no, a BUD lite"
+// even though linux has nothing to do with the FSF and never has.
+#ifndef F_SETPIPE_SZ
+#define F_SETPIPE_SZ 1031
+#endif
+
+#ifndef F_GETPIPE_SZ
+#define F_GETPIPE_SZ 1032
 #endif
 
 #if defined(__SIZEOF_DOUBLE__) && defined(__SIZEOF_LONG__) \
