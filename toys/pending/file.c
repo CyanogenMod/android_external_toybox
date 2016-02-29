@@ -31,15 +31,20 @@ static void do_elf_file(int fd)
   int endian = toybuf[5], bits = toybuf[4], i, j;
   int64_t (*elf_int)(void *ptr, unsigned size) = peek_le;
   // Values from include/linux/elf-em.h (plus arch/*/include/asm/elf.h)
-  // Names are linux/arch/ directory name
-  struct {int val; char *name;} type[] = {{0x9026, "alpha"},
-    {40, "arm"}, {183, "arm"}, {0x18ad, "avr32"}, {106, "blackfin"},
-    {76, "cris"}, {0x5441, "frv"}, {46, "h8300"}, {50, "ia64"},//ia intel ftaghn
-    {88, "m32r"}, {4, "m68k"}, {0xbaab, "microblaze"}, {8, "mips"},
-    {10, "mips"}, {89, "mn10300"}, {15, "parisc"}, {22, "s390"},
-    {135, "score"}, {42, "sh"}, {2, "sparc"}, {18, "sparc"}, {43, "sparc"},
-    {187, "tile"}, {188, "tile"}, {191, "tile"}, {3, "x86"}, {6, "x86"},
-    {62, "x86"}, {94, "xtensa"}, {0xabc7, "xtensa"}};
+  // Names are linux/arch/ directory (sometimes before 32/64 bit merges)
+  struct {int val; char *name;} type[] = {{0x9026, "alpha"}, {93, "arc"},
+    {195, "arcv2"}, {40, "arm"}, {183, "arm64"}, {0x18ad, "avr32"},
+    {106, "blackfin"}, {140, "c6x"}, {23, "cell"}, {76, "cris"},
+    {0x5441, "frv"}, {46, "h8300"}, {164, "hexagon"}, {50, "ia64"},
+    {88, "m32r"}, {0x9041, "m32r"}, {4, "m68k"}, {174, "metag"},
+    {0xbaab, "microblaze"}, {8, "mips"}, {10, "mips-old"}, {89, "mn10300"},
+    {0xbeef, "mn10300-old"}, {113, "nios2"}, {92, "openrisc"},
+    {0x8472, "openrisc-old"}, {15, "parisc"}, {20, "ppc"}, {21, "ppc64"},
+    {22, "s390"}, {0xa390, "s390-old"}, {135, "score"}, {42, "sh"},
+    {2, "sparc"}, {18, "sparc8+"}, {43, "sparc9"}, {188, "tile"},
+    {191, "tilegx"}, {3, "386"}, {6, "486"}, {62, "x86-64"}, {94, "xtensa"},
+    {0xabc7, "xtensa-old"}
+  };
 
   xprintf("ELF ");
 
@@ -126,6 +131,7 @@ static void do_regular_file(int fd, char *name)
 {
   char *s;
   int len = read(fd, s = toybuf, sizeof(toybuf)-256);
+  int magic;
 
   if (len<0) perror_msg("%s", name);
 
@@ -166,9 +172,32 @@ static void do_regular_file(int fd, char *name)
     xprintf("Java class file, version %d.%d\n",
       (int)peek_be(s+6, 2), (int)peek_be(s, 2));
 
-    // TODO: cpio archive.
-    // TODO: tar archive.
-    // TODO: zip/jar/apk archive.
+  // https://people.freebsd.org/~kientzle/libarchive/man/cpio.5.txt
+  // the lengths for cpio are size of header + 9 bytes, since any valid
+  // cpio archive ends with a record for "TARGET!!!"
+  else if (len>85 && strstart(&s, "07070")) {
+    char *cpioformat = "unknown type";
+    if (toybuf[5] == '7') cpioformat = "pre-SVR4 or odc";
+    else if (toybuf[5] == '1') cpioformat = "SVR4 with no CRC";
+    else if (toybuf[5] == '2') cpioformat = "SVR4 with CRC";
+    xprintf("ASCII cpio archive (%s)\n", cpioformat);
+  }
+  else if (len>33 && (magic=peek(&s,2), magic==0143561 || magic==070707)) {
+    if (magic == 0143561) printf("byte-swapped ");
+    xprintf("cpio archive\n");
+  }
+  // tar archive (ustar/pax or gnu)
+  else if (len>500 && !strncmp(s+257, "ustar", 5)) {
+    xprintf("POSIX tar archive%s\n", strncmp(s+262,"  ",2)?"":" (GNU)");
+  }
+  // zip/jar/apk archive, ODF/OOXML document, or such
+  else if (len>5 && strstart(&s, "PK\03\04")) {
+    int ver = (int)(char)(toybuf[4]);
+    xprintf("Zip archive data");
+    if (ver)
+      xprintf(", requires at least v%d.%d to extract", ver/10, ver%10);
+    xputc('\n');
+  }
   else {
     char *what = 0;
     int i, bytes;
@@ -195,38 +224,41 @@ static void do_regular_file(int fd, char *name)
   }
 }
 
-static void do_file(int fd, char *name)
-{
-  struct stat sb;
-  char *what = "unknown";
-
-  xprintf("%s: %*s", name, (int)(TT.max_name_len - strlen(name)), "");
-
-  if (!fstat(fd, &sb)) what = "cannot open";
-  if (S_ISREG(sb.st_mode)) {
-    if (sb.st_size == 0) what = "empty";
-    else {
-      do_regular_file(fd, name);
-      return;
-    }
-  } else if (S_ISBLK(sb.st_mode)) what = "block special";
-  else if (S_ISCHR(sb.st_mode)) what = "character special";
-  else if (S_ISDIR(sb.st_mode)) what = "directory";
-  else if (S_ISFIFO(sb.st_mode)) what = "fifo";
-  else if (S_ISSOCK(sb.st_mode)) what = "socket";
-  else if (S_ISLNK(sb.st_mode)) what = "symbolic link";
-  xputs(what);
-}
-
 void file_main(void)
 {
-  char **name;
+  char **arg;
 
-  for (name = toys.optargs; *name; ++name) {
-    int name_len = strlen(*name);
+  for (arg = toys.optargs; *arg; ++arg) {
+    int name_len = strlen(*arg);
 
     if (name_len > TT.max_name_len) TT.max_name_len = name_len;
   }
 
-  loopfiles(toys.optargs, do_file);
+  // Can't use loopfiles here because it doesn't call function when can't open
+  for (arg = toys.optargs; *arg; arg++) {
+    struct stat sb;
+    char *name = *arg, *what = "cannot open";
+
+    xprintf("%s: %*s", name, (int)(TT.max_name_len - strlen(name)), "");
+
+    if (!lstat(name, &sb)) {
+      if (S_ISFIFO(sb.st_mode)) what = "fifo";
+      else if (S_ISREG(sb.st_mode)) {
+        int fd = !strcmp(name, "-") ? 0 : open(name, O_RDONLY);
+
+        if (fd!=-1) {
+          if (sb.st_size == 0) what = "empty";
+          else do_regular_file(fd, name);
+        }
+        if (fd>0) close(fd);
+      } else if (S_ISBLK(sb.st_mode)) what = "block special";
+      else if (S_ISCHR(sb.st_mode)) what = "character special";
+      else if (S_ISDIR(sb.st_mode)) what = "directory";
+      else if (S_ISSOCK(sb.st_mode)) what = "socket";
+      else if (S_ISLNK(sb.st_mode)) what = "symbolic link";
+      else what = "unknown";
+    }
+
+    xputs(what);
+  }
 }
