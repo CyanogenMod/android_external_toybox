@@ -1381,9 +1381,9 @@
 #undef FOR_lsmod
 #endif
 
-// lsof lp:t lp:t
+// lsof lp*t lp*t
 #undef OPTSTR_lsof
-#define OPTSTR_lsof "lp:t"
+#define OPTSTR_lsof "lp*t"
 #ifdef CLEANUP_lsof
 #undef CLEANUP_lsof
 #undef FOR_lsof
@@ -2975,6 +2975,15 @@
 #undef FLAG_w
 #undef FLAG_c
 #undef FLAG_m
+#endif
+
+// wget   f:
+#undef OPTSTR_wget
+#define OPTSTR_wget  0 
+#ifdef CLEANUP_wget
+#undef CLEANUP_wget
+#undef FOR_wget
+#undef FLAG_f
 #endif
 
 // which <1a <1a
@@ -5543,6 +5552,13 @@
 #define FLAG_w (1<<1)
 #define FLAG_c (1<<2)
 #define FLAG_m (1<<3)
+#endif
+
+#ifdef FOR_wget
+#ifndef TT
+#define TT this.wget
+#endif
+#define FLAG_f (FORCED_FLAG<<0)
 #endif
 
 #ifdef FOR_which

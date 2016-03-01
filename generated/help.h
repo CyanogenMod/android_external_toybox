@@ -68,7 +68,7 @@
 
 #define HELP_passwd "usage: passwd [-a ALGO] [-dlu] <account name>\n\nupdate user's authentication tokens. Default : current user\n\n-a ALGO	Encryption method (des, md5, sha256, sha512) default: des\n-d		Set password to ''\n-l		Lock (disable) account\n-u		Unlock (enable) account\n\n"
 
-#define HELP_mount "usage: mount [-afFrsvw] [-t TYPE] [-o OPTIONS...] [[DEVICE] DIR]\n\nMount new filesystem(s) on directories. With no arguments, display existing\nmounts.\n\n-a	mount all entries in /etc/fstab (with -t, only entries of that TYPE)\n-O	only mount -a entries that have this option\n-f	fake it (don't actually mount)\n-r	read only (same as -o ro)\n-w	read/write (default, same as -o rw)\n-t	specify filesystem type\n-v	verbose\n\nOPTIONS is a comma separated list of options, which can also be supplied\nas --longopts.\n\nThis mount autodetects loopback mounts (a file on a directory) and\nbind mounts (file on file, directory on directory), so you don't need\nto say --bind or --loop. You can also \"mount -a /path\" to mount everything\nin /etc/fstab under /path, even if it's noauto.\n\n\n"
+#define HELP_mount "usage: mount [-afFrsvw] [-t TYPE] [-o OPTION,] [[DEVICE] DIR]\n\nMount new filesystem(s) on directories. With no arguments, display existing\nmounts.\n\n-a	mount all entries in /etc/fstab (with -t, only entries of that TYPE)\n-O	only mount -a entries that have this option\n-f	fake it (don't actually mount)\n-r	read only (same as -o ro)\n-w	read/write (default, same as -o rw)\n-t	specify filesystem type\n-v	verbose\n\nOPTIONS is a comma separated list of options, which can also be supplied\nas --longopts.\n\nThis mount autodetects loopback mounts (a file on a directory) and\nbind mounts (file on file, directory on directory), so you don't need\nto say --bind or --loop. You can also \"mount -a /path\" to mount everything\nin /etc/fstab under /path, even if it's noauto.\n\n\n"
 
 #define HELP_mktemp "usage: mktemp [-dqu] [-p DIR] [TEMPLATE]\n\nSafely create a new file \"DIR/TEMPLATE\" and print its name.\n\n-d	Create directory instead of file (--directory)\n-p	Put new file in DIR (--tmpdir)\n-q	Quiet, no error messages\n-u	Don't create anything, just print what would be created\n\nEach X in TEMPLATE is replaced with a random printable character. The\ndefault TEMPLATE is tmp.XXXXXX, and the default DIR is $TMPDIR if set,\nelse \"/tmp\".\n\n"
 
@@ -255,6 +255,8 @@
 #define HELP_acpi "usage: acpi [-abctV]\n\nShow status of power sources and thermal devices.\n\n-a	show power adapters\n-b	show batteries\n-c	show cooling device state\n-t	show temperatures\n-V	show everything\n\n"
 
 #define HELP_xzcat "usage: xzcat [filename...]\n\nDecompress listed files to stdout. Use stdin if no files listed.\n\n\n\n"
+
+#define HELP_wget "usage: wget -f filename URL\n-f filename: specify the filename to be saved\nURL: HTTP uniform resource location and only HTTP, not HTTPS\n\nexamples:\n  wget -f index.html http://www.example.com\n  wget -f sample.jpg http://www.example.com:8080/sample.jpg\n\n"
 
 #define HELP_watch "usage: watch [-n SEC] [-t] PROG ARGS\n\nRun PROG periodically\n\n-n  Loop period in seconds (default 2)\n-t  Don't print header\n-e  Freeze updates on command error, and exit after enter.\n\n"
 
