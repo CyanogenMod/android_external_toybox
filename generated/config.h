@@ -354,6 +354,8 @@
 #define USE_USERDEL(...)
 #define CFG_WATCH 0
 #define USE_WATCH(...)
+#define CFG_WGET 0
+#define USE_WGET(...)
 #define CFG_XZCAT 0
 #define USE_XZCAT(...)
 #define CFG_ACPI 1

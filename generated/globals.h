@@ -635,7 +635,7 @@ struct logger_data {
 // toys/pending/lsof.c
 
 struct lsof_data {
-  char *pids;
+  struct arg_list *p;
 
   struct stat *sought_files;
 
@@ -887,6 +887,12 @@ struct vi_data {
 
 struct watch_data {
   int interval;
+};
+
+// toys/pending/wget.c
+
+struct wget_data {
+  char *filename;
 };
 
 // toys/posix/chgrp.c
@@ -1392,6 +1398,7 @@ extern union global_union {
 	struct useradd_data useradd;
 	struct vi_data vi;
 	struct watch_data watch;
+	struct wget_data wget;
 	struct chgrp_data chgrp;
 	struct chmod_data chmod;
 	struct cksum_data cksum;
