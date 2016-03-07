@@ -304,7 +304,7 @@
 
 #define HELP_netstat "usage: netstat [-pWrxwutneal]\n\nDisplay networking information.\n\n-r  Display routing table.\n-a  Display all sockets (Default: Connected).\n-l  Display listening server sockets.\n-t  Display TCP sockets.\n-u  Display UDP sockets.\n-w  Display Raw sockets.\n-x  Display Unix sockets.\n-e  Display other/more information.\n-n  Don't resolve names.\n-W  Wide Display.\n-p  Display PID/Program name for sockets.\n\n"
 
-#define HELP_more "usage: more [FILE]...\n\nView FILE (or stdin) one screenful at a time.\n\n"
+#define HELP_more "usage: more [FILE...]\n\nView FILE(s) (or stdin) one screenful at a time.\n\n"
 
 #define HELP_modprobe "usage: modprobe [-alrqvsDb] MODULE [symbol=value][...]\n\nmodprobe utility - inserts modules and dependencies.\n\n-a  Load multiple MODULEs\n-l  List (MODULE is a pattern)\n-r  Remove MODULE (stacks) or do autoclean\n-q  Quiet\n-v  Verbose\n-s  Log to syslog\n-D  Show dependencies\n-b  Apply blacklist to module names too\n\n"
 

@@ -132,6 +132,8 @@ struct acpi_data {
 
 struct base64_data {
   long columns;
+
+  unsigned total;
 };
 
 // toys/other/blockdev.c
