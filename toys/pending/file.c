@@ -170,7 +170,7 @@ static void do_regular_file(int fd, char *name)
   // https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html
   else if (len>8 && strstart(&s, "\xca\xfe\xba\xbe"))
     xprintf("Java class file, version %d.%d\n",
-      (int)peek_be(s+6, 2), (int)peek_be(s, 2));
+      (int)peek_be(s+2, 2), (int)peek_be(s, 2));
 
   // https://people.freebsd.org/~kientzle/libarchive/man/cpio.5.txt
   // the lengths for cpio are size of header + 9 bytes, since any valid
@@ -204,6 +204,9 @@ static void do_regular_file(int fd, char *name)
 
     // If shell script, report which interpreter
     if (len>3 && strstart(&s, "#!")) {
+      // Whitespace is allowed between the #! and the interpreter
+      while (isspace(*s)) s++;
+      if (strstart(&s, "/usr/bin/env")) while (isspace(*s)) s++;
       for (what = s; (s-toybuf)<len && !isspace(*s); s++);
       strcpy(s, " script");
 
@@ -248,7 +251,10 @@ void file_main(void)
 
         if (fd!=-1) {
           if (sb.st_size == 0) what = "empty";
-          else do_regular_file(fd, name);
+          else {
+            do_regular_file(fd, name);
+            continue;
+          }
         }
         if (fd>0) close(fd);
       } else if (S_ISBLK(sb.st_mode)) what = "block special";
