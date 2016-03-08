@@ -122,7 +122,6 @@ LOCAL_SRC_FILES := \
     toys/other/stat.c \
     toys/other/swapoff.c \
     toys/other/swapon.c \
-    toys/other/switch_root.c \
     toys/other/sysctl.c \
     toys/other/tac.c \
     toys/other/taskset.c \
@@ -231,7 +230,7 @@ LOCAL_MODULE := toybox
 
 # dupes: dd
 # useless?: freeramdisk fsfreeze install makedevs mkfifo nbd-client
-#           partprobe pivot_root pwdx rev rfkill switch_root vconfig
+#           partprobe pivot_root pwdx rev rfkill vconfig
 # prefer BSD netcat instead?: nc netcat
 # prefer efs2progs instead?: blkid chattr lsattr
 
