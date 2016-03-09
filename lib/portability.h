@@ -168,7 +168,6 @@ int utimensat(int fd, const char *path, const struct timespec times[2], int flag
 // with toybox's basename_r so we can't include <libgen.h> even though that
 // would give us a POSIX basename(3).
 #if defined(__BIONIC__)
-char *basename(char *path);
 char *dirname(char *path);
 #endif
 
