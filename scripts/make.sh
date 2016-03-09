@@ -66,6 +66,11 @@ CFLAGS="$CFLAGS $(cat generated/cflags)"
 BUILD="$(echo ${CROSS_COMPILE}${CC} $CFLAGS -I . $OPTIMIZE $GITHASH)"
 FILES="$(echo lib/*.c main.c $TOYFILES)"
 
+if [ "${TOYFILES/pending//}" != "$TOYFILES" ]
+then
+  echo -e "\n\033[1;31mwarning: using unfinished code from toys/pending\033[0m"
+fi
+
 genbuildsh()
 {
   # Write a canned build line for use on crippled build machines.
@@ -249,6 +254,7 @@ fi
 PENDING=
 LFILES=
 DONE=0
+COUNT=0
 for i in $FILES
 do
   # build each generated/obj/*.o file in parallel
@@ -259,17 +265,19 @@ do
   LFILES="$LFILES $OUT"
   [ "$OUT" -nt "$i" ] && continue
   do_loudly $BUILD -c $i -o $OUT &
+  PENDING="$PENDING $!"
+  COUNT=$(($COUNT+1))
 
   # ratelimit to $CPUS many parallel jobs, detecting errors
 
-  while true
+  for j in $PENDING
   do
-    PENDING="$(echo $PENDING $(jobs -rp) | tr ' ' '\n' | sort -u)"
-    [ $(echo -n "$PENDING" | wc -l) -lt "$CPUS" ] && break;
+    [ "$COUNT" -lt "$CPUS" ] && break;
 
-    wait $(echo "$PENDING" | head -n 1)
+    wait $j
     DONE=$(($DONE+$?))
-    PENDING="$(echo "$PENDING" | tail -n +2)"
+    COUNT=$(($COUNT-1))
+    PENDING="${PENDING## $j}"
   done
   [ $DONE -ne 0 ] && break
 done

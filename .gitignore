@@ -1,5 +1,6 @@
 syntax: glob
 /.config.old
+.single*
 change/
 /generated/build.sh
 /generated/cflags

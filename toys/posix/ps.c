@@ -673,7 +673,7 @@ static int get_ps(struct dirtree *new)
     len = sizeof(toybuf)-(buf-toybuf)-260-256*(ARRAY_LEN(fetch)-j);
     sprintf(buf, "%lld/%s", *slot, fetch[j].name);
 
-    // For cmdline we readlink instead of read contents
+    // For exe we readlink instead of read contents
     if (j==3) {
       if ((len = readlinkat(fd, buf, buf, len))>0) buf[len] = 0;
       else *buf = 0;
@@ -701,7 +701,7 @@ static int get_ps(struct dirtree *new)
         // Couldn't find it, try all the tty drivers.
         if (i == 3) {
           FILE *fp = fopen("/proc/tty/drivers", "r");
-          int tty_major = 0, maj = major(rdev), min = minor(rdev);
+          int tty_major = 0, maj = dev_major(rdev), min = dev_minor(rdev);
 
           if (fp) {
             while (fscanf(fp, "%*s %256s %d %*s %*s", buf, &tty_major) == 2) {
@@ -735,7 +735,8 @@ static int get_ps(struct dirtree *new)
         if (buf[len-1]=='\n') buf[--len] = 0;
 
         // Turn NUL to space, other low ascii to ? (in non-tty mode)
-        for (i=0; i<len; i++) {
+        // cmdline has a trailing NUL that we don't want to turn to space.
+        for (i=0; i<len-1; i++) {
           char c = buf[i];
 
           if (!c) {

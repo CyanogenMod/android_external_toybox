@@ -12,9 +12,16 @@ config HEXEDIT
   help
     usage: hexedit FILENAME
 
-    Hexadecimal file editor.
+    Hexadecimal file editor. All changes are written to disk immediately.
 
     -r	Read only (display but don't edit)
+
+    Keys:
+    Arrows        Move left/right/up/down by one line/column
+    Pg Up/Pg Dn   Move up/down by one page
+    0-9, a-f      Change current half-byte to hexadecimal value
+    u             Undo
+    q/^c/^d/<esc> Quit
 */
 
 #define FOR_hexedit
@@ -43,9 +50,9 @@ static int draw_char(FILE *fp, wchar_t broiled)
         if (broiled==127) broiled = 32;
         else broiled += 64;
       }
-      printf("%c", broiled);
+      printf("%c", (int)broiled);
       tty_esc("0m");
-    } else printf("%c", broiled);
+    } else printf("%c", (int)broiled);
   }
 
   return 1;

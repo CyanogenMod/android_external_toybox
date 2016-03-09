@@ -16,8 +16,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-
-common_cflags := \
+common_cflags += \
     -std=c99 \
     -Os \
     -Wno-char-subscripts \
@@ -29,8 +28,11 @@ common_cflags := \
     -ffunction-sections -fdata-sections \
     -fno-asynchronous-unwind-tables \
 
-toybox_version := $(shell git -C $(LOCAL_PATH) rev-parse --short=12 HEAD 2>/dev/null)-android
-common_cflags  += -DTOYBOX_VERSION='"$(toybox_version)"'
+toybox_upstream_version := $(shell awk 'match($$0, /TOYBOX_VERSION.*"(.*)"/, ary) {print ary[1]}' $(LOCAL_PATH)/main.c)
+toybox_sha := $(shell git -C $(LOCAL_PATH) rev-parse --short=12 HEAD 2>/dev/null)
+
+toybox_version := $(toybox_upstream_version)-$(toybox_sha)-android
+common_cflags += -DTOYBOX_VERSION='"$(toybox_version)"'
 
 #
 # To update:
@@ -224,6 +226,7 @@ LOCAL_SRC_FILES := \
     toys/posix/touch.c \
     toys/posix/true.c \
     toys/posix/tty.c \
+    toys/posix/ulimit.c \
     toys/posix/uname.c \
     toys/posix/uniq.c \
     toys/posix/wc.c \

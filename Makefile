@@ -19,9 +19,11 @@ toybox toybox_unstripped: toybox_stuff
 	scripts/make.sh
 
 .PHONY: clean distclean baseline bloatcheck install install_flat \
-	uinstall uninstall_flat test tests help toybox_stuff change
+	uinstall uninstall_flat test tests help toybox_stuff change \
+	list list_working list_pending
 
 include kconfig/Makefile
+-include .singlemake
 
 $(KCONFIG_CONFIG): $(KCONFIG_TOP)
 $(KCONFIG_TOP): generated/Config.in
@@ -41,7 +43,7 @@ install_flat:
 install:
 	scripts/install.sh --long --symlink --force
 
-uninstall_flat: generated/instlist
+uninstall_flat:
 	scripts/install.sh --uninstall
 
 uninstall:
@@ -54,7 +56,7 @@ clean::
 	rm -rf toybox toybox_unstripped generated change .singleconfig*
 
 distclean: clean
-	rm -f toybox_old .config*
+	rm -f toybox_old .config* .singlemake
 
 test: tests
 
@@ -63,10 +65,15 @@ tests:
 
 help::
 	@echo  '  toybox          - Build toybox.'
+	@echo  '  COMMANDNAME     - Build individual toybox command as a standalone binary.'
+	@echo  '  list            - List COMMANDNAMEs (also list_working and list_pending).'
 	@echo  '  change          - Build each command standalone under change/.'
 	@echo  '  baseline        - Create toybox_old for use by bloatcheck.'
 	@echo  '  bloatcheck      - Report size differences between old and current versions'
-	@echo  '  test            - Run test suite against compiled commands.'
+	@echo  '  test_COMMAND    - Run tests for COMMAND (test_ps, test_cat, etc.)'
+	@echo  '  test            - Run test suite against all compiled commands.'
+	@echo  '                    export TEST_HOST=1 to test host command, VERBOSE=1'
+	@echo  '                    to show diff, VERBOSE=fail to stop after first failure.'
 	@echo  '  clean           - Delete temporary files.'
 	@echo  "  distclean       - Delete everything that isn't shipped."
 	@echo  '  install_flat    - Install toybox into $$PREFIX directory.'

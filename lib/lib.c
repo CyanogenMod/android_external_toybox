@@ -475,12 +475,12 @@ char *readfileat(int dirfd, char *name, char *ibuf, off_t *plen)
     rbuf = buf+rlen;
     len -= rlen;
   }
-  *plen = len = rlen+(buf-ibuf);
+  *plen = len = rlen+(rbuf-buf);
   close(fd);
 
   if (rlen<0) {
     if (ibuf != buf) free(buf);
-    buf =  0;
+    buf = 0;
   } else buf[len] = 0;
 
   return buf;
@@ -508,8 +508,7 @@ int64_t peek_le(void *ptr, unsigned size)
   char *c = ptr;
   int i;
 
-  for (i=0; i<size; i++) ret |= ((int64_t)c[i])<<i;
-
+  for (i=0; i<size; i++) ret |= ((int64_t)c[i])<<(i*8);
   return ret;
 }
 
@@ -517,9 +516,9 @@ int64_t peek_be(void *ptr, unsigned size)
 {
   int64_t ret = 0;
   char *c = ptr;
+  int i;
 
-  while (size--) ret = (ret<<8)|c[size];
-
+  for (i=0; i<size; i++) ret = (ret<<8)|(c[i]&0xff);
   return ret;
 }
 
@@ -1024,4 +1023,30 @@ char *next_printf(char *s, char **start)
   }
 
   return 0;
+}
+
+// Posix inexplicably hasn't got this, so find str in line.
+char *strnstr(char *line, char *str)
+{
+  long len = strlen(str);
+  char *s;
+
+  for (s = line; *s; s++) if (!strncasecmp(s, str, len)) break;
+
+  return *s ? s : 0;
+}
+
+int dev_minor(int dev)
+{
+  return ((dev&0xfff00000)>>12)|(dev&0xff);
+}
+
+int dev_major(int dev)
+{
+  return (dev&0xfff00)>>8;
+}
+
+int dev_makedev(int major, int minor)
+{
+  return (minor&0xff)|((major&0xfff)<<8)|((minor&0xfff00)<<12);
 }

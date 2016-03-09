@@ -5,6 +5,7 @@
  * See http://refspecs.linuxfoundation.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic/mount.html
  * Note: -hV is bad spec, haven't implemented -FsLU yet
  * no mtab (/proc/mounts does it) so -n is NOP.
+ * TODO mount -o loop,autoclear (linux git 96c5865559ce)
 
 USE_MOUNT(NEWTOY(mount, "?O:afnrvwt:o*[-rw]", TOYFLAG_BIN|TOYFLAG_STAYROOT))
 //USE_NFSMOUNT(NEWTOY(nfsmount, "?<2>2", TOYFLAG_USR|TOYFLAG_BIN|TOYFLAG_STAYROOT))
@@ -13,7 +14,7 @@ config MOUNT
   bool "mount"
   default y
   help
-    usage: mount [-afFrsvw] [-t TYPE] [-o OPTIONS...] [[DEVICE] DIR]
+    usage: mount [-afFrsvw] [-t TYPE] [-o OPTION,] [[DEVICE] DIR]
 
     Mount new filesystem(s) on directories. With no arguments, display existing
     mounts.
@@ -91,6 +92,7 @@ static long flag_opts(char *new, long flags, char **more)
     {"noexec", MS_NOEXEC}, {"exec", ~MS_NOEXEC},
     {"sync", MS_SYNCHRONOUS}, {"async", ~MS_SYNCHRONOUS},
     {"noatime", MS_NOATIME}, {"atime", ~MS_NOATIME},
+    {"norelatime", ~MS_RELATIME}, {"relatime", MS_RELATIME},
     {"nodiratime", MS_NODIRATIME}, {"diratime", ~MS_NODIRATIME},
     {"loud", ~MS_SILENT},
     {"shared", MS_SHARED}, {"rshared", MS_SHARED|MS_REC},
@@ -196,16 +198,21 @@ static void mount_filesystem(char *dev, char *dir, char *type,
     for (;;) {
       errno = 0;
       rc = mount(dev, dir, type, flags, opts);
-      if ((errno != EACCES && errno != EROFS) || (flags & MS_RDONLY)) break;
-      if ((errno == EACCES || errno == EROFS) && fd == -1) {
+      // Did we succeed, fail unrecoverably, or already try read-only?
+      if (!rc || (errno != EACCES && errno != EROFS) || (flags&MS_RDONLY))
+        break;
+      // If we haven't already tried it, use the BLKROSET ioctl to ensure
+      // that the underlying device isn't read-only.
+      if (fd == -1) {
+        if (toys.optflags & FLAG_v)
+          printf("trying BLKROSET ioctl on '%s'\n", dev);
         if (-1 != (fd = open(dev, O_RDONLY))) {
-          ioctl(fd, BLKROSET, &ro);
+          rc = ioctl(fd, BLKROSET, &ro);
           close(fd);
-
-          continue;
+          if (!rc) continue;
         }
       }
-      fprintf(stderr, "'%s' is read-only", dev);
+      fprintf(stderr, "'%s' is read-only\n", dev);
       flags |= MS_RDONLY;
     }
 
@@ -376,7 +383,8 @@ void mount_main(void)
   } else {
     char *more = 0;
 
-    mount_filesystem(dev, dir, TT.type, flag_opts(opts, flags, &more), more);
+    flags = flag_opts(opts, flags, &more);
+    mount_filesystem(dev, dir, TT.type, flags, more);
     if (CFG_TOYBOX_FREE) free(more);
   }
 }
