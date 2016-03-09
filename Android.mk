@@ -112,7 +112,6 @@ LOCAL_SRC_FILES := \
     toys/other/freeramdisk.c \
     toys/other/fsfreeze.c \
     toys/other/help.c \
-    toys/other/hostid.c \
     toys/other/hwclock.c \
     toys/other/ifconfig.c \
     toys/other/inotifyd.c \
