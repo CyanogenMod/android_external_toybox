@@ -16,7 +16,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-common_cflags += \
+common_cflags := \
     -std=c99 \
     -Os \
     -Wno-char-subscripts \
