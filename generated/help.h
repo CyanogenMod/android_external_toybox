@@ -72,9 +72,7 @@
 
 #define HELP_mktemp "usage: mktemp [-dqu] [-p DIR] [TEMPLATE]\n\nSafely create a new file \"DIR/TEMPLATE\" and print its name.\n\n-d	Create directory instead of file (--directory)\n-p	Put new file in DIR (--tmpdir)\n-q	Quiet, no error messages\n-u	Don't create anything, just print what would be created\n\nEach X in TEMPLATE is replaced with a random printable character. The\ndefault TEMPLATE is tmp.XXXXXX, and the default DIR is $TMPDIR if set,\nelse \"/tmp\".\n\n"
 
-#define HELP_mknod_z "usage: mknod [-Z CONTEXT] ...\n\n-Z	Set security context to created file\n\n"
-
-#define HELP_mknod "usage: mknod [-m MODE] NAME TYPE [MAJOR MINOR]\n\nCreate a special file NAME with a given type. TYPE is b for block device,\nc or u for character device, p for named pipe (which ignores MAJOR/MINOR).\n\n-m	Mode (file permissions) of new device, in octal or u+x format\n\n"
+#define HELP_mknod "usage: mknod [-Z CONTEXT] ... [-m MODE] NAME TYPE [MAJOR MINOR]\n\nCreate a special file NAME with a given type. TYPE is b for block device,\nc or u for character device, p for named pipe (which ignores MAJOR/MINOR).\n-Z	Set security context to created file\n-m	Mode (file permissions) of new device, in octal or u+x format\n"
 
 #define HELP_sha1sum "usage: sha1sum [FILE]...\n\ncalculate sha1 hash for each input file, reading from stdin if none.\nOutput one hash (20 hex digits) for each input file, followed by\nfilename.\n\n-b	brief (hash only, no filename)\n\n"
 
@@ -120,7 +118,7 @@
 
 #define HELP_swapoff "usage: swapoff swapregion\n\nDisable swapping on a given swapregion.\n\n"
 
-#define HELP_stat "usage: stat [-f] [-c FORMAT] FILE...\n\nDisplay status of files or filesystems.\n\n-f display filesystem status instead of file status\n-c Output specified FORMAT string instead of default\n\nThe valid format escape sequences for files:\n%a  Access bits (octal) |%A  Access bits (flags)|%b  Blocks allocated\n%B  Bytes per block     |%d  Device ID (dec)    |%D  Device ID (hex)\n%f  All mode bits (hex) |%F  File type          |%g  Group ID\n%G  Group name          |%h  Hard links         |%i  Inode\n%n  Filename            |%N  Long filename      |%o  I/O block size\n%s  Size (bytes)        |%u  User ID            |%U  User name\n%x  Access time         |%X  Access unix time   |%y  File write time\n%Y  File write unix time|%z  Dir change time    |%Z  Dir change unix time\n\nThe valid format escape sequences for filesystems:\n%a  Available blocks    |%b  Total blocks       |%c  Total inodes\n%d  Free inodes         |%f  Free blocks        |%i  File system ID\n%l  Max filename length |%n  File name          |%s  Fragment size\n%S  Best transfer size  |%t  Filesystem type    |%T  Filesystem type name\n\n"
+#define HELP_stat "usage: stat [-f] [-t] [-c FORMAT] FILE...\n\nDisplay status of files or filesystems.\n\n-f display filesystem status instead of file status\n-c Output specified FORMAT string instead of default\n-t Display info in terse form\n\nThe valid format escape sequences for files:\n%a  Access bits (octal) |%A  Access bits (flags)|%b  Blocks allocated\n%B  Bytes per block     |%d  Device ID (dec)    |%D  Device ID (hex)\n%f  All mode bits (hex) |%F  File type          |%g  Group ID\n%G  Group name          |%h  Hard links         |%i  Inode\n%n  Filename            |%N  Long filename      |%o  I/O block size\n%s  Size (bytes)        |%u  User ID            |%U  User name\n%x  Access time         |%X  Access unix time   |%y  File write time\n%Y  File write unix time|%z  Dir change time    |%Z  Dir change unix time\n\nThe valid format escape sequences for filesystems:\n%a  Available blocks    |%b  Total blocks       |%c  Total inodes\n%d  Free inodes         |%f  Free blocks        |%i  File system ID\n%l  Max filename length |%n  File name          |%s  Fragment size\n%S  Best transfer size  |%t  Filesystem type    |%T  Filesystem type name\n\n"
 
 #define HELP_shred "usage: shred [-fuz] [-n COUNT] [-s SIZE] FILE...\n\nSecurely delete a file by overwriting its contents with random data.\n\n-f        Force (chmod if necessary)\n-n COUNT  Random overwrite iterations (default 1)\n-o OFFSET Start at OFFSET\n-s SIZE   Use SIZE instead of detecting file size\n-u        unlink (actually delete file when done)\n-x        Use exact size (default without -s rounds up to next 4k)\n-z        zero at end\n\nNote: data journaling filesystems render this command useless, you must\noverwrite all free space (fill up disk) to erase old data on those.\n\n"
 
@@ -158,9 +156,7 @@
 
 #define HELP_unshare "usage: unshare [-imnpuUr] COMMAND...\n\nCreate new container namespace(s) for this process and its children, so\nsome attribute is not shared with the parent process.\n\n-f  Fork command in the background (--fork)\n-i	SysV IPC (message queues, semaphores, shared memory) (--ipc)\n-m	Mount/unmount tree (--mount)\n-n	Network address, sockets, routing, iptables (--net)\n-p	Process IDs and init (--pid)\n-r	Become root (map current euid/egid to 0/0, implies -U) (--map-root-user)\n-u	Host and domain names (--uts)\n-U	UIDs, GIDs, capabilities (--user)\n\nA namespace allows a set of processes to have a different view of the\nsystem than other sets of processes.\n\n"
 
-#define HELP_netcat_listen_tty "usage: netcat [-t]\n\n-t	allocate tty (must come before -l or -L)\n\n"
-
-#define HELP_netcat "usage: netcat [-lL COMMAND...] [-u] [-wpq #] [-s addr] {IPADDR PORTNUM|-f FILENAME}\n\n-L	listen for multiple incoming connections (server mode).\n-f	use FILENAME (ala /dev/ttyS0) instead of network\n-l	listen for one incoming connection.\n-p	local port number\n-q	SECONDS quit this many seconds after EOF on stdin.\n-s	local ipv4 address\n-w	SECONDS timeout for connection\n\nUse \"stty 115200 -F /dev/ttyS0 && stty raw -echo -ctlecho\" with\nnetcat -f to connect to a serial port.\n\nThe command line after -l or -L is executed to handle each incoming\nconnection. If none, the connection is forwarded to stdin/stdout.\n\nFor a quick-and-dirty server, try something like:\nnetcat -s 127.0.0.1 -p 1234 -tL /bin/bash -l\n"
+#define HELP_netcat "usage: netcat [-tu] [-lL COMMAND...] [-wpq #] [-s addr] {IPADDR PORTNUM|-f FILENAME}\n\n-L	listen for multiple incoming connections (server mode).\n-f	use FILENAME (ala /dev/ttyS0) instead of network\n-l	listen for one incoming connection.\n-p	local port number\n-q	SECONDS quit this many seconds after EOF on stdin.\n-s	local ipv4 address\n-t	allocate tty (must come before -l or -L)\n-w	SECONDS timeout for connection\n\nUse \"stty 115200 -F /dev/ttyS0 && stty raw -echo -ctlecho\" with\nnetcat -f to connect to a serial port.\n\nThe command line after -l or -L is executed to handle each incoming\nconnection. If none, the connection is forwarded to stdin/stdout.\n\nFor a quick-and-dirty server, try something like:\nnetcat -s 127.0.0.1 -p 1234 -tL /bin/bash -l\n"
 
 #define HELP_nbd_client "usage: nbd-client [-ns] HOST PORT DEVICE\n\n-n	Do not fork into background\n-s	nbd swap support (lock server into memory)\n\n"
 
@@ -178,9 +174,7 @@
 
 #define HELP_lsusb "usage: lsusb\n\nList USB hosts/devices.\n\n"
 
-#define HELP_lspci_text "usage: lspci [-n] [-i FILE ]\n\n-n	Numeric output (repeat for readable and numeric)\n-i	PCI ID database (default /usr/share/misc/pci.ids)\n\n\n"
-
-#define HELP_lspci "usage: lspci [-ekm]\n\nList PCI devices.\n\n-e	Print all 6 digits in class\n-k	Print kernel driver\n-m	Machine parseable format\n\n"
+#define HELP_lspci "usage: lspci [-ekmn] [-i FILE ] \n\nList PCI devices.\n-e	Print all 6 digits in class\n-i	PCI ID database (default /usr/share/misc/pci.ids)\n-k	Print kernel driver\n-m	Machine parseable format\n-n	Numeric output (repeat for readable and numeric)\n"
 
 #define HELP_lsmod "usage: lsmod\n\nDisplay the currently loaded modules, their sizes and their dependencies.\n\n"
 
@@ -292,13 +286,11 @@
 
 #define HELP_exit "usage: exit [status]\n\nExit shell.  If no return value supplied on command line, use value\nof most recent command, or 0 if none.\n\n"
 
-#define HELP_resize "usage: resize\n\nreset terminal to maximum width and height\n\n\n"
-
-#define HELP_ping "usage: ping [OPTIONS] HOST\n\nCheck network connectivity by sending packets to a host and reporting\nits response.\n\nSend ICMP ECHO_REQUEST packets to ipv4 or ipv6 addresses and prints each\necho it receives back, with round trip time.\n\nOptions:\n-4, -6      Force IPv4 or IPv6\n-c CNT      Send CNT many packets\n-I IFACE/IP Source interface or address\n-q          Quiet, only displays output at start and when finished\n-s SIZE     Packet SIZE in bytes (default 56)\n-t TTL      Set Time (number of hops) To Live\n-W SEC      Seconds to wait for response after all packets sent (default 10)\n-w SEC      Exit after this many seconds\n\n"
-
 #define HELP_sh "usage: sh [-c command] [script]\n\nCommand shell.  Runs a shell script, or reads input interactively\nand responds to it.\n\n-c	command line to execute\n-i	interactive mode (default when STDIN is a tty)\n\n"
 
 #define HELP_route "usage: route [-ne] [-A inet[6]] / [add|del]\n\nDisplay/Edit kernel routing tables.\n\n-n	no name lookups\n-e	display other/more information\n-A	inet{6} Select Address Family\n\nreject mod dyn reinstate metric netmask gw mss window irtt dev\n\n"
+
+#define HELP_resize "usage: resize\n\nreset terminal to maximum width and height\n\n\n"
 
 #define HELP_ping "usage: ping [OPTIONS] HOST\n\nCheck network connectivity by sending packets to a host and reporting\nits response.\n\nSend ICMP ECHO_REQUEST packets to ipv4 or ipv6 addresses and prints each\necho it receives back, with round trip time.\n\nOptions:\n-4, -6      Force IPv4 or IPv6\n-c CNT      Send CNT many packets\n-I IFACE/IP Source interface or address\n-q          Quiet, only displays output at start and when finished\n-s SIZE     Packet SIZE in bytes (default 56)\n-t TTL      Set Time (number of hops) To Live\n-W SEC      Seconds to wait for response after all packets sent (default 10)\n-w SEC      Exit after this many seconds\n\n"
 
@@ -456,9 +448,7 @@
 
 #define HELP_pkill "usage: pkill [-l SIGNAL] [PATTERN]\n\n-l	SIGNAL to send\n-V	verbose\n\n"
 
-#define HELP_pgkill_common "usage: pgrep [-fnovx] [-G GID,] [-g PGRP,] [-P PPID,] [-s SID,] [-t TERM,] [-U UID,] [-u EUID,]\n\n-f	Check full command line for PATTERN\n-G	Match real Group ID(s)\n-g	Match Process Group(s) (0 is current user)\n-n	Newest match only\n-o	Oldest match only\n-P	Match Parent Process ID(s)\n-s	Match Session ID(s) (0 for current)\n-t	Match Terminal(s)\n-U	Match real User ID(s)\n-u	Match effective User ID(s)\n-v	Negate the match\n-x	Match whole command (not substring)\n\n"
-
-#define HELP_pgrep "usage: pgrep [-cL] [-d DELIM] [-L SIGNAL] [PATTERN]\n\nSearch for process(es). PATTERN is an extended regular expression checked\nagainst command names.\n\n-c	Show only count of matches\n-d	Use DELIM instead of newline\n-L	Send SIGNAL instead of printing name\n-l	Show command name\n\n"
+#define HELP_pgrep "usage: pgrep [-Lcfnovx] [-G GID,] [-g PGRP,] [-P PPID,] [-s SID,] [-t TERM,] [-U UID,] [-u EUID,] [-d DELIM] [-L SIGNAL] [PATTERN]\n\nSearch for process(es). PATTERN is an extended regular expression checked\nagainst command names.\n-G	Match real Group ID(s)\n-L	Send SIGNAL instead of printing name\n-P	Match Parent Process ID(s)\n-U	Match real User ID(s)\n-c	Show only count of matches\n-d	Use DELIM instead of newline\n-f	Check full command line for PATTERN\n-g	Match Process Group(s) (0 is current user)\n-l	Show command name\n-n	Newest match only\n-o	Oldest match only\n-s	Match Session ID(s) (0 for current)\n-t	Match Terminal(s)\n-u	Match effective User ID(s)\n-v	Negate the match\n-x	Match whole command (not substring)\n"
 
 #define HELP_top_common "usage: COMMON [-bq] [-n NUMBER] [-d SECONDS] [-p PID,] [-u USER,] [-s SORT]\n\n-b	Batch mode (no tty)\n-d	Delay SECONDS between each cycle (default 3)\n-n	Exit after NUMBER iterations\n-p	Show these PIDs\n-u	Show these USERs\n-q	Quiet (no header lines)\n\nCursor LEFT/RIGHT to change sort, UP/DOWN move list, space to force\nupdate, R to reverse sort, Q to exit.\n\n"
 

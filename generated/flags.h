@@ -695,9 +695,9 @@
 #undef FLAG_C
 #endif
 
-// file   <1
+// file <1 <1
 #undef OPTSTR_file
-#define OPTSTR_file  0 
+#define OPTSTR_file "<1"
 #ifdef CLEANUP_file
 #undef CLEANUP_file
 #undef FOR_file
@@ -1131,9 +1131,9 @@
 #undef FOR_iorenice
 #endif
 
-// iotop   >0AaKOk*o*p*u*s#<1=7d#=3<1n#<1bq
+// iotop >0AaKOk*o*p*u*s#<1=7d#=3<1n#<1bq >0AaKOk*o*p*u*s#<1=7d#=3<1n#<1bq
 #undef OPTSTR_iotop
-#define OPTSTR_iotop  0 
+#define OPTSTR_iotop ">0AaKOk*o*p*u*s#<1=7d#=3<1n#<1bq"
 #ifdef CLEANUP_iotop
 #undef CLEANUP_iotop
 #undef FOR_iotop
@@ -1392,9 +1392,9 @@
 #undef FLAG_l
 #endif
 
-// lspci   emkn@i:
+// lspci emkn@i: emkn@i:
 #undef OPTSTR_lspci
-#define OPTSTR_lspci  0 
+#define OPTSTR_lspci "emkn@i:"
 #ifdef CLEANUP_lspci
 #undef CLEANUP_lspci
 #undef FOR_lspci
@@ -4014,19 +4014,19 @@
 #ifndef TT
 #define TT this.iotop
 #endif
-#define FLAG_q (FORCED_FLAG<<0)
-#define FLAG_b (FORCED_FLAG<<1)
-#define FLAG_n (FORCED_FLAG<<2)
-#define FLAG_d (FORCED_FLAG<<3)
-#define FLAG_s (FORCED_FLAG<<4)
-#define FLAG_u (FORCED_FLAG<<5)
-#define FLAG_p (FORCED_FLAG<<6)
-#define FLAG_o (FORCED_FLAG<<7)
-#define FLAG_k (FORCED_FLAG<<8)
-#define FLAG_O (FORCED_FLAG<<9)
-#define FLAG_K (FORCED_FLAG<<10)
-#define FLAG_a (FORCED_FLAG<<11)
-#define FLAG_A (FORCED_FLAG<<12)
+#define FLAG_q (1<<0)
+#define FLAG_b (1<<1)
+#define FLAG_n (1<<2)
+#define FLAG_d (1<<3)
+#define FLAG_s (1<<4)
+#define FLAG_u (1<<5)
+#define FLAG_p (1<<6)
+#define FLAG_o (1<<7)
+#define FLAG_k (1<<8)
+#define FLAG_O (1<<9)
+#define FLAG_K (1<<10)
+#define FLAG_a (1<<11)
+#define FLAG_A (1<<12)
 #endif
 
 #ifdef FOR_ip
@@ -4235,11 +4235,11 @@
 #ifndef TT
 #define TT this.lspci
 #endif
-#define FLAG_i (FORCED_FLAG<<0)
-#define FLAG_n (FORCED_FLAG<<1)
-#define FLAG_k (FORCED_FLAG<<2)
-#define FLAG_m (FORCED_FLAG<<3)
-#define FLAG_e (FORCED_FLAG<<4)
+#define FLAG_i (1<<0)
+#define FLAG_n (1<<1)
+#define FLAG_k (1<<2)
+#define FLAG_m (1<<3)
+#define FLAG_e (1<<4)
 #endif
 
 #ifdef FOR_lsusb

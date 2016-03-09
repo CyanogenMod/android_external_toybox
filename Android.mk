@@ -112,6 +112,7 @@ LOCAL_SRC_FILES := \
     toys/other/freeramdisk.c \
     toys/other/fsfreeze.c \
     toys/other/help.c \
+    toys/other/hostid.c \
     toys/other/hwclock.c \
     toys/other/ifconfig.c \
     toys/other/inotifyd.c \
@@ -120,6 +121,7 @@ LOCAL_SRC_FILES := \
     toys/other/losetup.c \
     toys/other/lsattr.c \
     toys/other/lsmod.c \
+    toys/other/lspci.c \
     toys/other/lsusb.c \
     toys/other/makedevs.c \
     toys/other/mkswap.c \
@@ -161,6 +163,7 @@ LOCAL_SRC_FILES := \
     toys/pending/diff.c \
     toys/pending/expr.c \
     toys/pending/fdisk.c \
+    toys/pending/file.c \
     toys/pending/ftpget.c \
     toys/pending/host.c \
     toys/pending/lsof.c \
