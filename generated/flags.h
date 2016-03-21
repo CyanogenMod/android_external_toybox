@@ -2326,9 +2326,9 @@
 #undef FLAG_p
 #endif
 
-// switch_root <2c:h <2c:h
+// switch_root   <2c:h
 #undef OPTSTR_switch_root
-#define OPTSTR_switch_root "<2c:h"
+#define OPTSTR_switch_root  0 
 #ifdef CLEANUP_switch_root
 #undef CLEANUP_switch_root
 #undef FOR_switch_root
@@ -5001,8 +5001,8 @@
 #ifndef TT
 #define TT this.switch_root
 #endif
-#define FLAG_h (1<<0)
-#define FLAG_c (1<<1)
+#define FLAG_h (FORCED_FLAG<<0)
+#define FLAG_c (FORCED_FLAG<<1)
 #endif
 
 #ifdef FOR_sync
