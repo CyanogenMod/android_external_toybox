@@ -144,7 +144,6 @@ LOCAL_SRC_FILES := \
     toys/other/stat.c \
     toys/other/swapoff.c \
     toys/other/swapon.c \
-    toys/other/switch_root.c \
     toys/other/sysctl.c \
     toys/other/tac.c \
     toys/other/taskset.c \

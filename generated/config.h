@@ -486,8 +486,8 @@
 #define USE_SWAPOFF(...) __VA_ARGS__
 #define CFG_SWAPON 1
 #define USE_SWAPON(...) __VA_ARGS__
-#define CFG_SWITCH_ROOT 1
-#define USE_SWITCH_ROOT(...) __VA_ARGS__
+#define CFG_SWITCH_ROOT 0
+#define USE_SWITCH_ROOT(...)
 #define CFG_SYSCTL 1
 #define USE_SYSCTL(...) __VA_ARGS__
 #define CFG_TAC 1
