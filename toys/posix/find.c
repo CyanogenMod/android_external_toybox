@@ -315,21 +315,22 @@ static int do_find(struct dirtree *new)
         || !strcmp(s, "path") || !strcmp(s, "ipath"))
       {
         int i = (*s == 'i');
+        char *arg = ss[1], *path = 0, *name = new ? new->name : arg;
 
-        if (i && !new) {
-            char *p;
-            for (p = ss[1]; *p; ++p) {
-                *p = tolower(*p);
-            }
+        // Handle path expansion and case flattening
+        if (new && s[i] == 'p') name = path = dirtree_path(new, 0);
+        if (i) {
+          if (check || !new) {
+            if (name) name = strlower(name);
+            if (!new) {
+              dlist_add(&TT.argdata, name);
+              free(path);
+            } else arg = ((struct double_list *)llist_pop(&argdata))->data;
+          }
         }
+
         if (check) {
-          char *path = 0, *name = new->name;
-
-          // Handle path expansion and case flattening
-          if (s[i] == 'p') name = path = dirtree_path(new, 0);
-          if (i) name = strlower(name);
-
-          test = !fnmatch(ss[1], name, FNM_PATHNAME*(s[i] == 'p'));
+          test = !fnmatch(arg, name, FNM_PATHNAME*(s[i] == 'p'));
           free(path);
           if (i) free(name);
         }
