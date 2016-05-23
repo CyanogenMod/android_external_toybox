@@ -375,6 +375,9 @@ static long ss_inode(char *link)
 {
   long inode = -1;
   //"link = socket:[12345]", get "12345" as inode.
+  if (link == NULL)
+    return -1;
+
   if (!strncmp(link, "socket:[", sizeof("socket:[")-1)) {
     inode = get_strtou(link + sizeof("socket:[")-1, (char**)&link, 0);
     if (*link != ']') inode = -1;
