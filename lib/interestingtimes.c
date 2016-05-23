@@ -227,7 +227,7 @@ void tty_jump(int x, int y)
 
 void tty_reset(void)
 {
-  set_terminal(1, 0, 0);
+  set_terminal(0, 0, 0);
   tty_esc("?25h");
   tty_esc("0m");
   tty_jump(0, 999);
@@ -239,5 +239,5 @@ void tty_reset(void)
 void tty_sigreset(int i)
 {
   tty_reset();
-  _exit(128+i);
+  _exit(i ? 128+i : 0);
 }

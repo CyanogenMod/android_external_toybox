@@ -84,7 +84,7 @@ char *dirtree_path(struct dirtree *node, int *plen);
 int dirtree_notdotdot(struct dirtree *catch);
 int dirtree_parentfd(struct dirtree *node);
 int dirtree_recurse(struct dirtree *node, int (*callback)(struct dirtree *node),
-  int symfollow);
+  int dirfd, int symfollow);
 struct dirtree *dirtree_flagread(char *path, int flags,
   int (*callback)(struct dirtree *node));
 struct dirtree *dirtree_read(char *path, int (*callback)(struct dirtree *node));
@@ -286,14 +286,8 @@ char *num_to_sig(int sig);
 
 mode_t string_to_mode(char *mode_str, mode_t base);
 void mode_to_string(mode_t mode, char *buf);
-static inline char *basename_r(char *name)
-{
-  char *s = strrchr(name, '/');
 
-  if (s) return s+1;
-  return name;
-}
-
+char *getbasename(char *name);
 void names_to_pid(char **names, int (*callback)(pid_t pid, char *name));
 
 pid_t xvforkwrap(pid_t pid);

@@ -137,8 +137,11 @@ void toy_exec(char *argv[])
   if (!(which = toy_find(*argv))) return;
 
   // Return if stack depth getting noticeable (proxy for leaked heap, etc).
-  if (toys.stacktop && labs((char *)toys.stacktop-(char *)&which)>6000)
-    return;
+
+  // Compiler writers have decided subtracting char * is undefined behavior,
+  // so convert to integers. (LP64 says sizeof(long)==sizeof(pointer).)
+  if (!CFG_TOYBOX_NORECURSE)
+    if (toys.stacktop && labs((long)toys.stacktop-(long)&which)>6000) return;
 
   // Return if we need to re-exec to acquire root via suid bit.
   if (toys.which && (which->flags&TOYFLAG_ROOTONLY) && toys.wasroot) return;
@@ -202,7 +205,7 @@ int main(int argc, char *argv[])
 
     toys.stacktop = &stack;
   }
-  *argv = basename_r(*argv);
+  *argv = getbasename(*argv);
 
   // If nommu can't fork, special reentry path.
   // Use !stacktop to signal "vfork happened", both before and after xexec()

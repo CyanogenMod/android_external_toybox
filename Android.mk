@@ -315,6 +315,6 @@ LOCAL_MODULE_CLASS := UTILITY_EXECUTABLES
 LOCAL_MODULE_PATH := $(PRODUCT_OUT)/utilities
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_STEM := toybox
-LOCAL_STATIC_LIBRARIES := libc libtoybox libcutils libselinux libmincrypt
+LOCAL_STATIC_LIBRARIES := libc libtoybox libcutils libselinux libmincrypt liblog
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 include $(BUILD_EXECUTABLE)

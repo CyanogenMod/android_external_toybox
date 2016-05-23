@@ -43,9 +43,9 @@
  * TODO: top: thread support and SMP
  * TODO: pgrep -f only searches the amount of cmdline that fits in toybuf.
 
-USE_PS(NEWTOY(ps, "k(sort)*P(ppid)*aAdeflMno*O*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae]", TOYFLAG_USR|TOYFLAG_BIN|TOYFLAG_LOCALE))
+USE_PS(NEWTOY(ps, "k(sort)*P(ppid)*aAdeflMno*O*p(pid)*s*t*Tu*U*g*G*wZ[!ol][+Ae]", TOYFLAG_USR|TOYFLAG_BIN|TOYFLAG_LOCALE))
 // stayroot because iotop needs root to read other process' proc/$$/io
-USE_TOP(NEWTOY(top, ">0m" "k*o*p*u*s#<1=9d#=3<1n#<1bq", TOYFLAG_USR|TOYFLAG_BIN|TOYFLAG_LOCALE))
+USE_TOP(NEWTOY(top, ">0m" "Hk*o*p*u*s#<1=9d#=3<1n#<1bq", TOYFLAG_USR|TOYFLAG_BIN|TOYFLAG_LOCALE))
 USE_IOTOP(NEWTOY(iotop, ">0AaKO" "k*o*p*u*s#<1=7d#=3<1n#<1bq", TOYFLAG_USR|TOYFLAG_BIN|TOYFLAG_STAYROOT|TOYFLAG_LOCALE))
 USE_PGREP(NEWTOY(pgrep, "?cld:u*U*t*s*P*g*G*fnovxL:[-no]", TOYFLAG_USR|TOYFLAG_BIN))
 USE_PKILL(NEWTOY(pkill,     "Vu*U*t*s*P*g*G*fnovxl:[-no]", TOYFLAG_USR|TOYFLAG_BIN))
@@ -54,7 +54,7 @@ config PS
   bool "ps"
   default y
   help
-    usage: ps [-AadeflnwZ] [-gG GROUP,] [-k FIELD,] [-o FIELD,] [-p PID,] [-t TTY,] [-uU USER,]
+    usage: ps [-AadefLlnwZ] [-gG GROUP,] [-k FIELD,] [-o FIELD,] [-p PID,] [-t TTY,] [-uU USER,]
 
     List processes.
 
@@ -70,6 +70,7 @@ config PS
     -P	Parent PIDs (--ppid)
     -s	In session IDs
     -t	Attached to selected TTYs
+    -T	Show threads
     -u	Owned by USERs
     -U	Owned by real USERs (before suid)
 
@@ -85,20 +86,22 @@ config PS
     -f	Full listing (-o USER:8=UID,PID,PPID,C,STIME,TTY,TIME,CMD)
     -l	Long listing (-o F,S,UID,PID,PPID,C,PRI,NI,ADDR,SZ,WCHAN,TTY,TIME,CMD)
     -o	Output FIELDs instead of defaults, each with optional :size and =title
-    -O  Add FIELDS to defaults
+    -O	Add FIELDS to defaults
     -Z	Include LABEL
 
     Available -o FIELDs:
 
       ADDR  Instruction pointer               ARGS    Command line (argv[] -path)
-      CMD   COMM without -f, ARGS with -f     CMDLINE Command line (argv[])
+      BIT   Is this process 32 or 64 bits
+      CMD   COMM, or ARGS with -f             CMDLINE Command line (argv[])
       COMM  Original command name             COMMAND Original command path
       CPU   Which processor running on        ETIME   Elapsed time since PID start
       F     Flags (1=FORKNOEXEC 4=SUPERPRIV)  GID     Group id
       GROUP Group name                        LABEL   Security label
       MAJFL Major page faults                 MINFL   Minor page faults
       NAME  Command name (argv[0])            NI      Niceness (lower is faster)
-      PCPU  Percentage of CPU time used       PGID    Process Group ID
+      PCPU  Percentage of CPU time used       PCY     Android scheduling policy
+      PGID  Process Group ID
       PID   Process ID                        PPID    Parent Process ID
       PRI   Priority (higher is faster)       PSR     Processor last executed on
       RGID  Real (before sgid) group ID       RGROUP  Real (before sgid) group name
@@ -113,6 +116,7 @@ config PS
             s session leader         + foreground   l multithreaded
       STIME Start time of process in hh:mm (size :19 shows yyyy-mm-dd hh:mm:ss)
       SZ    Memory Size (4k pages needed to completely swap out process)
+      TCNT  Thread count                      TID     Thread ID
       TIME  CPU time consumed                 TTY     Controlling terminal
       UID   User id                           USER    User name
       VSZ   Virtual memory size (1k units)    %VSZ    VSZ as % of physical memory
@@ -122,10 +126,11 @@ config TOP
   bool "top"
   default y
   help
-    usage: top [-m] [ -d seconds ] [ -n iterations ]
+    usage: top [-H] [-k FIELD,] [-o FIELD,] [-s SORT]
 
     Show process activity in real time.
 
+    -H	Show threads
     -k	Fallback sort FIELDS (default -S,-%CPU,-ETIME,-PID)
     -o	Show FIELDS (def PID,USER,PR,NI,VIRT,RES,SHR,S,%CPU,%MEM,TIME+,CMDLINE)
     -s	Sort by field number (1-X, default 9)
@@ -151,7 +156,7 @@ config TOP_COMMON
   bool
   default y
   help
-    usage: COMMON [-bq] [-n NUMBER] [-d SECONDS] [-p PID,] [-u USER,] [-s SORT]
+    usage: COMMON [-bq] [-n NUMBER] [-d SECONDS] [-p PID,] [-u USER,]
 
     -b	Batch mode (no tty)
     -d	Delay SECONDS between each cycle (default 3)
@@ -300,15 +305,19 @@ enum {
  SLOT_rss2,     /*Resident Set Size*/     SLOT_shr,       // Shared memory
  SLOT_rchar,    /*All bytes read*/        SLOT_wchar,     // All bytes written
  SLOT_rbytes,   /*Disk bytes read*/       SLOT_wbytes,    // Disk bytes written
- SLOT_swap,     /*Swap pages used*/
+ SLOT_swap,     /*Swap pages used*/       SLOT_bits,      // 32 or 64
+ SLOT_tid,      /*Thread ID*/             SLOT_tcount,    // Thread count
+ SLOT_pcy,      /*Android sched policy*/
+
+ SLOT_count
 };
 
 // Data layout in toybuf
 struct carveup {
-  long long slot[55];       // data from /proc
-  unsigned short offset[5]; // offset of fields in str[] (skip name, always 0)
+  long long slot[SLOT_count]; // data (see enum above)
+  unsigned short offset[5];   // offset of fields in str[] (skip name, always 0)
   char state;
-  char str[];               // name, tty, command, wchan, attr, cmdline
+  char str[];                 // name, tty, command, wchan, attr, cmdline
 };
 
 // TODO: Android uses -30 for LABEL, but ideally it would auto-size.
@@ -324,6 +333,7 @@ struct typography {
   {"VSZ", 6, SLOT_vsize}, {"MAJFL", 6, SLOT_majflt}, {"MINFL", 6, SLOT_minflt},
   {"PR", 2, SLOT_priority}, {"PSR", 3, SLOT_taskcpu},
   {"RTPRIO", 6, SLOT_rtprio}, {"SCH", 3, SLOT_policy}, {"CPU", 3, SLOT_taskcpu},
+  {"TID", 5, SLOT_tid}, {"TCNT", 4, SLOT_tcount}, {"BIT", 3, SLOT_bits},
 
   // String fields
   {"COMM", -15, -1}, {"TTY", -8, -2}, {"WCHAN", -6, -3}, {"LABEL", -30, -4},
@@ -351,7 +361,7 @@ struct typography {
 
   // Misc
   {"STIME", 5, SLOT_starttime}, {"F", 1, 64|SLOT_flags}, {"S", -1, 64},
-  {"STAT", -5, 64},
+  {"STAT", -5, 64}, {"PCY", 3, 64|SLOT_pcy},
 );
 
 // Return 0 to discard, nonzero to keep
@@ -404,7 +414,7 @@ static char *string_field(struct carveup *tb, struct strawberry *field)
   long long *slot = tb->slot, ll = (sl >= 0) ? slot[sl&63] : 0;
 
   // numbers, mostly from /proc/$PID/stat
-  if (which <= PS_CPU) {
+  if (which <= PS_BIT) {
     char *fmt = "%lld";
 
     if (which==PS_PRI) ll = 39-ll;
@@ -413,7 +423,7 @@ static char *string_field(struct carveup *tb, struct strawberry *field)
     else if (which==PS_RSS) ll <<= 2;
     else if (which==PS_VSZ) ll >>= 10;
     else if (which==PS_PR && ll<-9) fmt="RT";
-    else if (which==PS_RTPRIO && ll == 0) fmt="-";
+    else if ((which==PS_RTPRIO || which==PS_BIT) && ll == 0) fmt="-";
     sprintf(out, fmt, ll);
 
   // String fields
@@ -425,7 +435,8 @@ static char *string_field(struct carveup *tb, struct strawberry *field)
     if (--sl) out += tb->offset[--sl];
     if (which==PS_ARGS)
       for (s = out; *s && *s != ' '; s++) if (*s == '/') out = s+1;
-    if (which>=PS_COMMAND && !*out) sprintf(out = buf, "[%s]", tb->str);
+    if (which>=PS_COMMAND && (!*out || *slot != slot[SLOT_tid]))
+      sprintf(out = buf, "[%s]", tb->str);
 
   // user/group
   } else if (which <= PS_RGROUP) {
@@ -512,7 +523,8 @@ static char *string_field(struct carveup *tb, struct strawberry *field)
     out = out+strlen(out)-3-abs(field->len);
     if (out<buf) out = buf;
 
-  } else if (CFG_TOYBOX_DEBUG) error_exit("bad which %d", which);
+  } else if (which==PS_PCY) sprintf(out, "%.2s", get_sched_policy_name(ll));
+  else if (CFG_TOYBOX_DEBUG) error_exit("bad which %d", which);
 
   return out;
 }
@@ -553,6 +565,7 @@ static int get_ps(struct dirtree *new)
     char *name;
     long long bits;
   } fetch[] = {
+    // sources for carveup->offset[] data
     {"fd/", _PS_TTY}, {"wchan", _PS_WCHAN}, {"attr/current", _PS_LABEL},
     {"exe", _PS_COMMAND}, {"cmdline", _PS_CMDLINE|_PS_ARGS|_PS_NAME}
   };
@@ -567,7 +580,7 @@ static int get_ps(struct dirtree *new)
     return DIRTREE_RECURSE|DIRTREE_SHUTUP|(DIRTREE_SAVE*!TT.show_process);
 
   memset(slot, 0, sizeof(tb->slot));
-  if (!(*slot = atol(new->name))) return 0;
+  if (!(tb->slot[SLOT_tid] = *slot = atol(new->name))) return 0;
   fd = dirtree_parentfd(new);
 
   len = 2048;
@@ -655,6 +668,20 @@ static int get_ps(struct dirtree *new)
       if (!sscanf(s, " %lld%n", slot+SLOT_vsz+i, &j)) slot[SLOT_vsz+i] = 0;
       else s += j;
   }
+
+  // Do we need to read "exe"?
+  if (TT.bits&_PS_BIT) {
+    off_t temp = 6;
+
+    sprintf(buf, "%lld/exe", *slot);
+    if (readfileat(fd, buf, buf, &temp) && !memcmp(buf, "\177ELF", 4)) {
+      if (buf[4] == 1) slot[SLOT_bits] = 32;
+      else if (buf[4] == 2) slot[SLOT_bits] = 64;
+    }
+  }
+
+  // Do we need Android scheduling policy?
+  if (TT.bits&_PS_PCY) get_sched_policy(*slot, (void *)&slot[SLOT_pcy]);
 
   // Fetch string data while parentfd still available, appending to buf.
   // (There's well over 3k of toybuf left. We could dynamically malloc, but
@@ -767,6 +794,47 @@ static int get_ps(struct dirtree *new)
   memcpy(s, toybuf, buf-toybuf);
 
   return DIRTREE_SAVE;
+}
+
+static int get_threads(struct dirtree *new)
+{
+  struct dirtree *threads, *dt;
+  unsigned pid, kcount;
+  void (*show_process)(void *tb) = TT.show_process;
+
+  if (!new->parent) return get_ps(new);
+
+  if (!(pid = atol(new->name))) return 0;
+
+  // Recurse down into tasks, retaining thread groups.
+  TT.show_process = 0;
+  sprintf(toybuf, "/proc/%u/task", pid);
+  kcount = TT.kcount;
+  threads = dirtree_read(toybuf, get_ps);
+  if (!threads) return 0;
+
+  // Fill out tid and thread count for each entry in group
+  for (dt = threads->child; dt; dt = dt->next) {
+    struct carveup *tb = (void *)dt->extra;
+
+    tb->slot[SLOT_tid] = tb->slot[SLOT_pid];
+    tb->slot[SLOT_pid] = pid;
+    tb->slot[SLOT_tcount] = TT.kcount - kcount;
+  }
+
+  // Save or display
+  if (!(TT.show_process = show_process)) {
+    new->child = threads;
+
+    return DIRTREE_SAVE;
+  } while (threads->child) {
+    dt = threads->child->next;
+    show_process((void *)threads->child->extra);
+    free(threads->child);
+    threads->child = dt;
+  }
+
+  return 0;
 }
 
 static char *parse_ko(void *data, char *type, int length)
@@ -950,25 +1018,25 @@ static int ksort(void *aa, void *bb)
   return ret;
 }
 
-static struct carveup **collate(int count, struct dirtree *dt,
-  int (*sort)(void *a, void *b))
+static struct carveup **collate_leaves(struct carveup **tb, struct dirtree *dt) 
 {
-  struct dirtree *temp;
-  struct carveup **tbsort = xmalloc(count*sizeof(struct carveup *));
-  int i;
+  while (dt) {
+    struct dirtree *next = dt->next;
 
-  // descend into child list
-  *tbsort = (void *)dt;
-  dt = dt->child;
-  free(*tbsort);
-
-  // populate array
-  for (i = 0; i < count; i++) {
-    temp = dt->next;
-    tbsort[i] = (void *)dt->extra;
+    if (dt->child) tb = collate_leaves(tb, dt->child);
+    else *(tb++) = (void *)dt->extra;
     free(dt);
-    dt = temp;
+    dt = next;
   }
+
+  return tb;
+}
+
+static struct carveup **collate(int count, struct dirtree *dt)
+{
+  struct carveup **tbsort = xmalloc(count*sizeof(struct carveup *));
+
+  collate_leaves(tbsort, dt);
 
   return tbsort;
 } 
@@ -1008,7 +1076,7 @@ static void shared_main(void)
 void ps_main(void)
 {
   struct dirtree *dt;
-  char *s;
+  char *not_o;
   int i;
 
   if (toys.optflags&FLAG_w) TT.width = 99999;
@@ -1026,15 +1094,21 @@ void ps_main(void)
   comma_args(TT.ps.k, &TT.kfields, "bad -k", parse_ko);
   dlist_terminate(TT.kfields);
 
-  // Parse manual field selection, or default/-f/-l, plus -Z and -O
-  if (toys.optflags&FLAG_Z) default_ko("LABEL", &TT.fields, 0, 0);
-  if (toys.optflags&FLAG_f) s = "USER:8=UID,PID,PPID,C,STIME,TTY,TIME,CMD";
+  // Figure out which fields to display
+  not_o = "%sTTY,TIME,CMD";
+  if (toys.optflags&FLAG_f)
+    sprintf(not_o = toybuf+128, "USER:8=UID,%%sPPID,%s,STIME,TTY,TIME,CMD",
+      (toys.optflags&FLAG_T) ? "TCNT" : "C");
   else if (toys.optflags&FLAG_l)
-    s = "F,S,UID,PID,PPID,C,PRI,NI,ADDR,SZ,WCHAN,TTY,TIME,CMD";
+    not_o = "F,S,UID,%sPPID,C,PRI,NI,ADDR,SZ,WCHAN,TTY,TIME,CMD";
   else if (CFG_TOYBOX_ON_ANDROID)
-    s = "USER,PID,PPID,VSIZE,RSS,WCHAN:10,ADDR:10=PC,S,NAME";
-  else s = "PID,TTY,TIME,CMD";
-  default_ko(s, &TT.fields, "bad -o", TT.ps.o);
+    not_o = "USER,%sPPID,VSIZE,RSS,WCHAN:10,ADDR:10=PC,S,NAME";
+  sprintf(toybuf, not_o, (toys.optflags & FLAG_T) ? "PID,TID," : "PID,");
+
+  // Init TT.fields. This only uses toybuf if TT.ps.o is NULL
+  if (toys.optflags&FLAG_Z) default_ko("LABEL", &TT.fields, 0, 0);
+  default_ko(toybuf, &TT.fields, "bad -o", TT.ps.o);
+
   if (TT.ps.O) {
     if (TT.fields) TT.fields = ((struct strawberry *)TT.fields)->prev;
     comma_args(TT.ps.O, &TT.fields, "bad -O", parse_ko);
@@ -1060,10 +1134,12 @@ void ps_main(void)
   if (!(toys.optflags&FLAG_M)) printf("%.*s\n", TT.width, toybuf);
   if (!(toys.optflags&(FLAG_k|FLAG_M))) TT.show_process = (void *)show_ps;
   TT.match_process = ps_match_process;
-  dt = dirtree_read("/proc", get_ps);
+  dt = dirtree_read("/proc",
+    ((toys.optflags&FLAG_T) || (TT.bits&(_PS_TID|_PS_TCNT)))
+      ? get_threads : get_ps);
 
   if (toys.optflags&(FLAG_k|FLAG_M)) {
-    struct carveup **tbsort = collate(TT.kcount, dt, ksort);
+    struct carveup **tbsort = collate(TT.kcount, dt);
 
     if (toys.optflags&FLAG_M) {
       for (i = 0; i<TT.kcount; i++) {
@@ -1144,6 +1220,8 @@ static int header_line(int line, int rev)
 {
   if (!line) return 0;
 
+  if (toys.optflags&FLAG_b) rev = 0;
+
   printf("%s%*.*s%s\r\n", rev ? "\033[7m" : "",
     (toys.optflags&FLAG_b) ? 0 : -TT.width, TT.width, toybuf,
     rev ? "\033[0m" : "");
@@ -1151,13 +1229,11 @@ static int header_line(int line, int rev)
   return line-1;
 }
 
-// Get current time in miliseconds
-static long long militime(void)
+static long long millitime(void)
 {
   struct timespec ts;
 
   clock_gettime(CLOCK_MONOTONIC, &ts);
-
   return ts.tv_sec*1000+ts.tv_nsec/1000000;
 }
 
@@ -1187,9 +1263,11 @@ static void top_common(
 
     plold = plist+(tock++&1);
     plnew = plist+(tock&1);
-    plnew->whence = militime();
-    dt= dirtree_read("/proc", get_ps);
-    plnew->tb = collate(plnew->count = TT.kcount, dt, ksort);
+    plnew->whence = millitime();
+    dt = dirtree_read("/proc",
+      ((toys.optflags&FLAG_H) || (TT.bits&(_PS_TID|_PS_TCNT)))
+        ? get_threads : get_ps);
+    plnew->tb = collate(plnew->count = TT.kcount, dt);
     TT.kcount = 0;
 
     if (readfile("/proc/stat", pos = toybuf, sizeof(toybuf))) {
@@ -1339,11 +1417,12 @@ static void top_common(
         *pos = 0;
         lines = header_line(lines, 1);
       }
-      if (!recalc) printf("\033[%dH\033[J", 1+TT.height-lines);
+      if (!recalc && !(toys.optflags&FLAG_b))
+        printf("\033[%dH\033[J", 1+TT.height-lines);
       recalc = 1;
 
       for (i = 0; i<lines && i+topoff<mix.count; i++) {
-        if (i) xputc('\n');
+        if (!(toys.optflags&FLAG_b) && i) xputc('\n');
         show_ps(mix.tb[i+topoff]);
       }
 
@@ -1352,10 +1431,17 @@ static void top_common(
         break;
       }
 
-      // Get current time in miliseconds
-      now = militime();
+      now = millitime();
       if (timeout<=now) timeout = new.whence+TT.top.d;
       if (timeout<=now || timeout>now+TT.top.d) timeout = now+TT.top.d;
+
+      // In batch mode, we ignore the keyboard.
+      if (toys.optflags&FLAG_b) {
+        msleep(timeout-now);
+        // Make an obvious gap between datasets.
+        xputs("\n\n");
+        continue;
+      }
 
       i = scan_key_getsize(scratch, timeout-now, &TT.width, &TT.height);
       if (i==-1 || i==3 || toupper(i)=='Q') {
@@ -1402,11 +1488,11 @@ static void top_setup(char *defo, char *defk)
 {
   int len;
 
-  TT.time = militime();
   TT.top.d *= 1000;
   if (toys.optflags&FLAG_b) TT.width = TT.height = 99999;
   else {
-    xset_terminal(0, 1, 0);
+    TT.time = millitime();
+    set_terminal(0, 1, 0);
     sigatexit(tty_sigreset);
     xsignal(SIGWINCH, generic_signal);
     printf("\033[?25l\033[0m");
@@ -1446,7 +1532,7 @@ void top_main(void)
 static int iotop_filter(long long *oslot, long long *nslot, int milis)
 {
   if (!(toys.optflags&FLAG_a)) merge_deltas(oslot, nslot, milis);
-  else oslot[SLOT_upticks] = ((militime()-TT.time)*TT.ticks)/1000;
+  else oslot[SLOT_upticks] = ((millitime()-TT.time)*TT.ticks)/1000;
 
   return !(toys.optflags&FLAG_o)||oslot[SLOT_iobytes+!(toys.optflags&FLAG_A)];
 }

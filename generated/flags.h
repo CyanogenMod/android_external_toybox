@@ -1004,12 +1004,14 @@
 #undef FOR_hostid
 #endif
 
-// hostname    
+// hostname bF: bF:
 #undef OPTSTR_hostname
-#define OPTSTR_hostname  0 
+#define OPTSTR_hostname "bF:"
 #ifdef CLEANUP_hostname
 #undef CLEANUP_hostname
 #undef FOR_hostname
+#undef FLAG_F
+#undef FLAG_b
 #endif
 
 // hwclock >0(fast)f(rtc):u(utc)l(localtime)t(systz)s(hctosys)r(show)w(systohc)[-ul][!rtsw] >0(fast)f(rtc):u(utc)l(localtime)t(systz)s(hctosys)r(show)w(systohc)[-ul][!rtsw]
@@ -1920,9 +1922,9 @@
 #undef FOR_printf
 #endif
 
-// ps k(sort)*P(ppid)*aAdeflMno*O*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae] k(sort)*P(ppid)*aAdeflMno*O*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae]
+// ps k(sort)*P(ppid)*aAdeflMno*O*p(pid)*s*t*Tu*U*g*G*wZ[!ol][+Ae] k(sort)*P(ppid)*aAdeflMno*O*p(pid)*s*t*Tu*U*g*G*wZ[!ol][+Ae]
 #undef OPTSTR_ps
-#define OPTSTR_ps "k(sort)*P(ppid)*aAdeflMno*O*p(pid)*s*t*u*U*g*G*wZ[!ol][+Ae]"
+#define OPTSTR_ps "k(sort)*P(ppid)*aAdeflMno*O*p(pid)*s*t*Tu*U*g*G*wZ[!ol][+Ae]"
 #ifdef CLEANUP_ps
 #undef CLEANUP_ps
 #undef FOR_ps
@@ -1932,6 +1934,7 @@
 #undef FLAG_g
 #undef FLAG_U
 #undef FLAG_u
+#undef FLAG_T
 #undef FLAG_t
 #undef FLAG_s
 #undef FLAG_pid
@@ -2653,9 +2656,9 @@
 #undef FLAG_v
 #endif
 
-// top >0mk*o*p*u*s#<1=9d#=3<1n#<1bq >0mk*o*p*u*s#<1=9d#=3<1n#<1bq
+// top >0mHk*o*p*u*s#<1=9d#=3<1n#<1bq >0mHk*o*p*u*s#<1=9d#=3<1n#<1bq
 #undef OPTSTR_top
-#define OPTSTR_top ">0mk*o*p*u*s#<1=9d#=3<1n#<1bq"
+#define OPTSTR_top ">0mHk*o*p*u*s#<1=9d#=3<1n#<1bq"
 #ifdef CLEANUP_top
 #undef CLEANUP_top
 #undef FOR_top
@@ -2668,6 +2671,7 @@
 #undef FLAG_p
 #undef FLAG_o
 #undef FLAG_k
+#undef FLAG_H
 #undef FLAG_m
 #endif
 
@@ -3912,6 +3916,8 @@
 #ifndef TT
 #define TT this.hostname
 #endif
+#define FLAG_F (1<<0)
+#define FLAG_b (1<<1)
 #endif
 
 #ifdef FOR_hwclock
@@ -4688,24 +4694,25 @@
 #define FLAG_g (1<<3)
 #define FLAG_U (1<<4)
 #define FLAG_u (1<<5)
-#define FLAG_t (1<<6)
-#define FLAG_s (1<<7)
-#define FLAG_pid (1<<8)
-#define FLAG_p (1<<8)
-#define FLAG_O (1<<9)
-#define FLAG_o (1<<10)
-#define FLAG_n (1<<11)
-#define FLAG_M (1<<12)
-#define FLAG_l (1<<13)
-#define FLAG_f (1<<14)
-#define FLAG_e (1<<15)
-#define FLAG_d (1<<16)
-#define FLAG_A (1<<17)
-#define FLAG_a (1<<18)
-#define FLAG_ppid (1<<19)
-#define FLAG_P (1<<19)
-#define FLAG_sort (1<<20)
-#define FLAG_k (1<<20)
+#define FLAG_T (1<<6)
+#define FLAG_t (1<<7)
+#define FLAG_s (1<<8)
+#define FLAG_pid (1<<9)
+#define FLAG_p (1<<9)
+#define FLAG_O (1<<10)
+#define FLAG_o (1<<11)
+#define FLAG_n (1<<12)
+#define FLAG_M (1<<13)
+#define FLAG_l (1<<14)
+#define FLAG_f (1<<15)
+#define FLAG_e (1<<16)
+#define FLAG_d (1<<17)
+#define FLAG_A (1<<18)
+#define FLAG_a (1<<19)
+#define FLAG_ppid (1<<20)
+#define FLAG_P (1<<20)
+#define FLAG_sort (1<<21)
+#define FLAG_k (1<<21)
 #endif
 
 #ifdef FOR_pwd
@@ -5310,7 +5317,8 @@
 #define FLAG_p (1<<6)
 #define FLAG_o (1<<7)
 #define FLAG_k (1<<8)
-#define FLAG_m (1<<9)
+#define FLAG_H (1<<9)
+#define FLAG_m (1<<10)
 #endif
 
 #ifdef FOR_touch
