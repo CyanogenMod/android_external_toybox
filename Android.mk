@@ -236,6 +236,8 @@ LOCAL_SRC_FILES := \
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CLANG := true
 
+LOCAL_STATIC_LIBRARIES := libselinux
+
 # This doesn't actually prevent us from dragging in libc++ at runtime
 # because libnetd_client.so is C++.
 LOCAL_CXX_STL := none
