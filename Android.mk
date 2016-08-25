@@ -236,6 +236,8 @@ LOCAL_SRC_FILES := \
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CLANG := true
 
+LOCAL_STATIC_LIBRARIES := libselinux
+
 # This doesn't actually prevent us from dragging in libc++ at runtime
 # because libnetd_client.so is C++.
 LOCAL_CXX_STL := none
@@ -293,7 +295,7 @@ toybox_links:
 # This is used by the recovery system
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := main.c
-LOCAL_WHOLE_STATIC_LIBRARIES := libtoybox
+LOCAL_WHOLE_STATIC_LIBRARIES := libselinux libtoybox
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CFLAGS += -Dmain=toybox_driver
 LOCAL_CXX_STL := none
