@@ -295,7 +295,7 @@ static int do_find(struct dirtree *new)
       if (check) not = !not;
       continue;
     // Mostly ignore NOP argument
-    } else if (!strcmp(s, "a") || !strcmp(s, "and")) {
+    } else if (!strcmp(s, "a") || !strcmp(s, "and") || !strcmp(s, "noleaf")) {
       if (not) goto error;
 
     } else if (!strcmp(s, "print") || !strcmp("print0", s)) {
@@ -303,9 +303,9 @@ static int do_find(struct dirtree *new)
       if (check) do_print(new, s[5] ? 0 : '\n');
 
     } else if (!strcmp(s, "nouser")) {
-      if (check) if (getpwuid(new->st.st_uid)) test = 0;
+      if (check) if (bufgetpwuid(new->st.st_uid)) test = 0;
     } else if (!strcmp(s, "nogroup")) {
-      if (check) if (getgrgid(new->st.st_gid)) test = 0;
+      if (check) if (bufgetgrgid(new->st.st_gid)) test = 0;
     } else if (!strcmp(s, "prune")) {
       if (check && S_ISDIR(new->st.st_mode) && !TT.depth) recurse = 0;
 
@@ -398,8 +398,8 @@ static int do_find(struct dirtree *new)
             udl = xmalloc(sizeof(*udl));
             dlist_add_nomalloc(&TT.argdata, (void *)udl);
 
-            if (*s == 'u') udl->u.uid = xgetpwnamid(ss[1])->pw_uid;
-            else if (*s == 'g') udl->u.gid = xgetgrnamid(ss[1])->gr_gid;
+            if (*s == 'u') udl->u.uid = xgetuid(ss[1]);
+            else if (*s == 'g') udl->u.gid = xgetgid(ss[1]);
             else {
               struct stat st;
 
@@ -454,7 +454,7 @@ static int do_find(struct dirtree *new)
           ss += len;
           aa->arglen = len;
           aa->dir = !!strchr(s, 'd');
-          if (TT.topdir == -1) TT.topdir = xopen(".", 0);
+          if (TT.topdir == -1) TT.topdir = xopenro(".");
 
         // collect names and execute commands
         } else {

@@ -251,8 +251,8 @@ int cp_node(struct dirtree *try)
 
         // make symlink, or make block/char/fifo/socket
         if (S_ISLNK(try->st.st_mode)
-            ? (0 < (i = readlinkat(tfd, try->name, toybuf, sizeof(toybuf))) &&
-               sizeof(toybuf) > i && !symlinkat(toybuf, cfd, catch))
+            ? ((i = readlinkat0(tfd, try->name, toybuf, sizeof(toybuf))) &&
+               !symlinkat(toybuf, cfd, catch))
             : !mknodat(cfd, catch, try->st.st_mode, try->st.st_rdev))
         {
           err = 0;
@@ -317,7 +317,13 @@ int cp_node(struct dirtree *try)
       if (fdout == AT_FDCWD)
         fchownat(cfd, catch, try->st.st_uid, try->st.st_gid,
                       AT_SYMLINK_NOFOLLOW);
-      else fchown(fdout, try->st.st_uid, try->st.st_gid);
+      else rc = fchown(fdout, try->st.st_uid, try->st.st_gid);
+      if (rc && !geteuid()) {
+        char *pp;
+
+        perror_msg("chown '%s'", pp = dirtree_path(try, 0));
+        free(pp);
+      }
     }
 
     // timestamp
@@ -339,7 +345,19 @@ int cp_node(struct dirtree *try)
         err = "%s";
   }
 
-  if (err) perror_msg(err, catch);
+  if (err) {
+    char *f = 0;
+
+    if (catch == try->name) {
+      f = dirtree_path(try, 0);
+      while (try->parent) try = try->parent;
+      catch = xmprintf("%s%s", TT.destname, f+strlen(try->name));
+      free(f);
+      f = catch;
+    }
+    perror_msg(err, catch);
+    free(f);
+  }
   return 0;
 }
 
@@ -481,8 +499,8 @@ void install_main(void)
   if (flags & FLAG_v) toys.optflags |= cp_flag_v();
   if (flags & (FLAG_p|FLAG_o|FLAG_g)) toys.optflags |= cp_flag_p();
 
-  if (TT.i.user) TT.uid = xgetpwnamid(TT.i.user)->pw_uid;
-  if (TT.i.group) TT.gid = xgetgrnamid(TT.i.group)->gr_gid;
+  if (TT.i.user) TT.uid = xgetuid(TT.i.user);
+  if (TT.i.group) TT.gid = xgetgid(TT.i.group);
 
   TT.callback = install_node;
   cp_main();

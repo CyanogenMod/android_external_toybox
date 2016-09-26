@@ -219,41 +219,6 @@ static int emit(char *line, long len, int eol)
   return 0;
 }
 
-// Do regex matching handling embedded NUL bytes in string. Note that
-// neither the pattern nor the match can currently include NUL bytes
-// (even with wildcards) and string must be null terminated at string[len].
-// But this can find a match after the first NUL.
-static int regex_null(regex_t *preg, char *string, long len, int nmatch,
-  regmatch_t pmatch[], int eflags)
-{
-  char *s = string;
-
-  for (;;) {
-    long ll = 0;
-    int rc;
-
-    while (len && !*s) {
-      s++;
-      len--;
-    }
-    while (s[ll] && ll<len) ll++;
-
-    rc = regexec(preg, s, nmatch, pmatch, eflags);
-    if (!rc) {
-      for (rc = 0; rc<nmatch && pmatch[rc].rm_so!=-1; rc++) {
-        pmatch[rc].rm_so += s-string;
-        pmatch[rc].rm_eo += s-string;
-      }
-          
-      return 0;
-    }
-    if (ll==len) return rc;
-
-    s += ll;
-    len -= ll;
-  }
-}
-
 // Extend allocation to include new string, with newline between if newlen<0
 
 static char *extend_string(char **old, char *new, int oldlen, int newlen)
@@ -330,7 +295,7 @@ static void process_line(char **pline, long plen)
             void *rm = get_regex(command, command->rmatch[1]);
 
             // regex match end includes matching line, so defer deactivation
-            if (line && !regex_null(rm, line, len, 0, 0, 0)) miss = 1;
+            if (line && !regexec0(rm, line, len, 0, 0, 0)) miss = 1;
           }
         } else if (lm > 0 && lm < TT.count) command->hit = 0;
 
@@ -339,7 +304,7 @@ static void process_line(char **pline, long plen)
         if (!(lm = *command->lmatch)) {
           void *rm = get_regex(command, *command->rmatch);
 
-          if (line && !regex_null(rm, line, len, 0, 0, 0)) command->hit++;
+          if (line && !regexec0(rm, line, len, 0, 0, 0)) command->hit++;
         } else if (lm == TT.count || (lm == -1 && !pline)) command->hit++;
 
         if (!command->lmatch[1] && !command->rmatch[1]) miss = 1;
@@ -501,7 +466,7 @@ static void process_line(char **pline, long plen)
       int mflags = 0, count = 0, zmatch = 1, rlen = len, mlen, off, newlen;
 
       // Find match in remaining line (up to remaining len)
-      while (!regex_null(reg, rline, rlen, 10, match, mflags)) {
+      while (!regexec0(reg, rline, rlen, 10, match, mflags)) {
         mflags = REG_NOTBOL;
 
         // Zero length matches don't count immediately after a previous match
@@ -635,8 +600,6 @@ writenow:
   if (line && !(toys.optflags & FLAG_n)) emit(line, len, eol);
 
 done:
-  free(line);
-
   if (dlist_terminate(append)) while (append) {
     struct append *a = append->next;
 
@@ -655,30 +618,7 @@ done:
     free(append);
     append = a;
   }
-}
-
-// Genericish function, can probably get moved to lib.c
-
-// Iterate over lines in file, calling function. Function can write 0 to
-// the line pointer if they want to keep it, or 1 to terminate processing,
-// otherwise line is freed. Passed file descriptor is closed at the end.
-static void do_lines(int fd, char *name, void (*call)(char **pline, long len))
-{
-  FILE *fp = fd ? xfdopen(fd, "r") : stdin;
-
-  for (;;) {
-    char *line = 0;
-    ssize_t len;
-
-    len = getline(&line, (void *)&len, fp);
-    if (len > 0) {
-      call(&line, len);
-      if (line == (void *)1) break;
-      free(line);
-    } else break;
-  }
-
-  if (fd) fclose(fp);
+  free(line);
 }
 
 // Callback called on each input file
@@ -699,7 +639,7 @@ static void do_sed(int fd, char *name)
     for (command = (void *)TT.pattern; command; command = command->next)
       command->hit = 0;
   }
-  do_lines(fd, name, process_line);
+  do_lines(fd, process_line);
   if (i) {
     process_line(0, 0);
     replace_tempfile(-1, TT.fdout, &tmp);
@@ -717,6 +657,7 @@ static char *unescape_delimited_string(char **pstr, char *delim)
 {
   char *to, *from, mode = 0, d;
 
+  // Grab leading delimiter (if necessary), allocate space for new string
   from = *pstr;
   if (!delim || !*delim) {
     if (!(d = *(from++))) return 0;
@@ -730,13 +671,23 @@ static char *unescape_delimited_string(char **pstr, char *delim)
     if (!*from) return 0;
 
     // delimiter in regex character range doesn't count
-    if (!mode && *from == '[') {
-      mode = '[';
-      if (from[1]=='-' || from[1]==']') *(to++) = *(from++);
-    } else if (mode && *from == ']') mode = 0;
+    if (*from == '[') {
+      if (!mode) {
+        mode = ']';
+        if (from[1]=='-' || from[1]==']') *(to++) = *(from++);
+      } else if (mode == ']' && strchr(".=:", from[1])) {
+        *(to++) = *(from++);
+        mode = *from;
+      }
+    } else if (*from == mode) {
+      if (mode == ']') mode = 0;
+      else {
+        *(to++) = *(from++);
+        mode = ']';
+      }
     // Length 1 range (X-X with same X) is "undefined" and makes regcomp err,
     // but the perl build does it, so we need to filter it out.
-    else if (mode && *from == '-' && from[-1] == from[1]) {
+    } else if (mode && *from == '-' && from[-1] == from[1]) {
       from+=2;
       continue;
     } else if (*from == '\\') {
@@ -1062,9 +1013,7 @@ void sed_main(void)
   // so handle all -e, then all -f. (At least the behavior's consistent.)
 
   for (al = TT.e; al; al = al->next) parse_pattern(&al->arg, strlen(al->arg));
-  for (al = TT.f; al; al = al->next)
-    do_lines(strcmp(al->arg, "-") ? xopen(al->arg, O_RDONLY) : 0,
-             al->arg, parse_pattern);
+  for (al = TT.f; al; al = al->next) do_lines(xopenro(al->arg), parse_pattern);
   parse_pattern(0, 0);
   dlist_terminate(TT.pattern);
   if (TT.nextlen) error_exit("no }");  
@@ -1072,8 +1021,8 @@ void sed_main(void)
   TT.fdout = 1;
   TT.remember = xstrdup("");
 
-  // Inflict pattern upon input files
-  loopfiles_rw(args, O_RDONLY, 0, 0, do_sed);
+  // Inflict pattern upon input files. Long version because !O_CLOEXEC
+  loopfiles_rw(args, O_RDONLY|WARN_ONLY, 0, do_sed);
 
   if (!(toys.optflags & FLAG_i)) process_line(0, 0);
 

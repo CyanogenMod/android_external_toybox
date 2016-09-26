@@ -56,8 +56,7 @@ common_cflags += -DTOYBOX_VERSION='"$(toybox_version)"'
 # To add a toy:
 #
 
-#  make menuconfig
-#  # (Select the toy you want to add.)
+#  Edit .config to enable the toy you want to add.
 #  make clean && make  # Regenerate the generated files.
 #  # Edit LOCAL_SRC_FILES below to add the toy.
 #  # If you just want to use it as "toybox x" rather than "x", you can stop now.
@@ -82,10 +81,13 @@ LOCAL_SRC_FILES := \
     toys/android/getenforce.c \
     toys/android/getprop.c \
     toys/android/load_policy.c \
+    toys/android/log.c \
     toys/android/restorecon.c \
     toys/android/runcon.c \
+    toys/android/sendevent.c \
     toys/android/setenforce.c \
     toys/android/setprop.c \
+    toys/android/start.c \
     toys/lsb/dmesg.c \
     toys/lsb/hostname.c \
     toys/lsb/killall.c \
@@ -97,6 +99,11 @@ LOCAL_SRC_FILES := \
     toys/lsb/seq.c \
     toys/lsb/sync.c \
     toys/lsb/umount.c \
+    toys/net/ifconfig.c \
+    toys/net/netcat.c \
+    toys/net/netstat.c \
+    toys/net/rfkill.c \
+    toys/net/tunctl.c \
     toys/other/acpi.c \
     toys/other/base64.c \
     toys/other/blkid.c \
@@ -113,7 +120,6 @@ LOCAL_SRC_FILES := \
     toys/other/fsfreeze.c \
     toys/other/help.c \
     toys/other/hwclock.c \
-    toys/other/ifconfig.c \
     toys/other/inotifyd.c \
     toys/other/insmod.c \
     toys/other/ionice.c \
@@ -127,7 +133,6 @@ LOCAL_SRC_FILES := \
     toys/other/modinfo.c \
     toys/other/mountpoint.c \
     toys/other/nbd_client.c \
-    toys/other/netcat.c \
     toys/other/partprobe.c \
     toys/other/pivot_root.c \
     toys/other/pmap.c \
@@ -138,8 +143,8 @@ LOCAL_SRC_FILES := \
     toys/other/realpath.c \
     toys/other/reset.c \
     toys/other/rev.c \
-    toys/other/rfkill.c \
     toys/other/rmmod.c \
+    toys/other/setfattr.c \
     toys/other/setsid.c \
     toys/other/stat.c \
     toys/other/swapoff.c \
@@ -157,16 +162,16 @@ LOCAL_SRC_FILES := \
     toys/other/xxd.c \
     toys/other/yes.c \
     toys/pending/arp.c \
+    toys/pending/chrt.c \
     toys/pending/dd.c \
     toys/pending/diff.c \
     toys/pending/expr.c \
     toys/pending/fdisk.c \
-    toys/pending/file.c \
     toys/pending/ftpget.c \
+    toys/pending/getfattr.c \
     toys/pending/host.c \
     toys/pending/lsof.c \
     toys/pending/more.c \
-    toys/pending/netstat.c \
     toys/pending/resize.c \
     toys/pending/route.c \
     toys/pending/tar.c \
@@ -195,6 +200,7 @@ LOCAL_SRC_FILES := \
     toys/posix/env.c \
     toys/posix/expand.c \
     toys/posix/false.c \
+    toys/posix/file.c \
     toys/posix/find.c \
     toys/posix/grep.c \
     toys/posix/head.c \
@@ -236,7 +242,7 @@ LOCAL_SRC_FILES := \
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CLANG := true
 
-LOCAL_STATIC_LIBRARIES := libselinux
+LOCAL_STATIC_LIBRARIES := libselinux libcrypto_static
 
 # This doesn't actually prevent us from dragging in libc++ at runtime
 # because libnetd_client.so is C++.
@@ -262,7 +268,7 @@ include $(BUILD_HOST_EXECUTABLE)
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := main.c
 LOCAL_STATIC_LIBRARIES := libtoybox
-LOCAL_SHARED_LIBRARIES := libcutils libselinux
+LOCAL_SHARED_LIBRARIES := libcutils libselinux libcrypto
 LOCAL_CFLAGS := $(common_cflags)
 LOCAL_CXX_STL := none
 LOCAL_CLANG := true
@@ -316,6 +322,6 @@ LOCAL_MODULE_PATH := $(PRODUCT_OUT)/utilities
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_STEM := toybox
 LOCAL_PACK_MODULE_RELOCATIONS := false
-LOCAL_STATIC_LIBRARIES := libc libtoybox libcutils libselinux libmincrypt liblog
+LOCAL_STATIC_LIBRARIES := libc libtoybox libcutils libselinux libcrypto_static liblog
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 include $(BUILD_EXECUTABLE)

@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 
   for (;;) {
     struct flag *flist, *aflist, *offlist;
-    char *gaps, *mgaps, c;
+    char *mgaps = 0;
     unsigned bit;
 
     *command = *flags = *allflags = 0;
@@ -141,16 +141,13 @@ int main(int argc, char *argv[])
 
     bit = 0;
     printf("// %s %s %s\n", command, flags, allflags);
-    mgaps = mark_gaps(flags, allflags);
-    for (gaps = mgaps; *gaps == 1; gaps++);
-    if (*gaps) c = '"';
-    else {
-      c = ' ';
-      gaps = "0";
-    }
-    printf("#undef OPTSTR_%s\n#define OPTSTR_%s %c%s%c\n",
-            command, command, c, gaps, c);
-    free(mgaps);
+    if (*flags != ' ') mgaps = mark_gaps(flags, allflags);
+    else if (*allflags != ' ') mgaps = allflags;
+    // If command disabled, use allflags for OLDTOY()
+    printf("#undef OPTSTR_%s\n#define OPTSTR_%s ", command, command);
+    if (mgaps) printf("\"%s\"\n", mgaps);
+    else printf("0\n");
+    if (mgaps != allflags) free(mgaps);
 
     flist = digest(flags);
     offlist = aflist = digest(allflags);
@@ -194,7 +191,7 @@ int main(int argc, char *argv[])
         }
       // Output normal flag macro
       } else if (aflist->command) {
-        if (flist && (!flist->command || *aflist->command == *flist->command)) {
+        if (flist && flist->command && *aflist->command == *flist->command) {
           if (aflist->command)
             sprintf(out, "#define FLAG_%c (1%s<<%d)\n", *aflist->command,
               llstr, bit);

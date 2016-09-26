@@ -6,14 +6,14 @@
 #include "toys.h"
 
 #ifndef TOYBOX_VERSION
-#define TOYBOX_VERSION "0.7.0"
+#define TOYBOX_VERSION "0.7.1"
 #endif
 
 // Populate toy_list[].
 
 #undef NEWTOY
 #undef OLDTOY
-#define NEWTOY(name, opts, flags) {#name, name##_main, opts, flags},
+#define NEWTOY(name, opts, flags) {#name, name##_main, OPTSTR_##name, flags},
 #define OLDTOY(name, oldname, flags) \
   {#name, oldname##_main, OPTSTR_##oldname, flags},
 
@@ -75,7 +75,9 @@ static void toy_singleinit(struct toy_list *which, char *argv[])
 
   if (CFG_TOYBOX_I18N) setlocale(LC_ALL, "C"+!!(which->flags & TOYFLAG_LOCALE));
 
-  if (CFG_TOYBOX_HELP_DASHDASH && argv[1] && !strcmp(argv[1], "--help")) {
+  if (CFG_TOYBOX_HELP_DASHDASH && !(which->flags & TOYFLAG_NOHELP)
+    && argv[1] && !strcmp(argv[1], "--help"))
+  {
     if (CFG_TOYBOX && toys.which == toy_list && toys.argv[2])
       if (!(toys.which = toy_find(toys.argv[2]))) return;
     show_help(stdout);

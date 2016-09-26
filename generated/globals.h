@@ -6,6 +6,13 @@ struct getprop_data {
   struct selabel_handle *handle;
 };
 
+// toys/android/log.c
+
+struct log_data {
+  char *tag;
+  char *pri;
+};
+
 // toys/example/hello.c
 
 struct hello_data {
@@ -59,6 +66,11 @@ struct killall_data {
 // toys/lsb/md5sum.c
 
 struct md5sum_data {
+  struct arg_list *c;
+
+  int sawline;
+
+  // Crypto variables blanked after summing
   unsigned state[5];
   unsigned oldstate[5];
   uint64_t count;
@@ -127,6 +139,35 @@ struct umount_data {
   char *types;
 };
 
+// toys/net/ifconfig.c
+
+struct ifconfig_data {
+  int sockfd;
+};
+
+// toys/net/netcat.c
+
+struct netcat_data {
+  char *filename;        // -f read from filename instead of network
+  long quit_delay;       // -q Exit after EOF from stdin after # seconds.
+  char *source_address;  // -s Bind to a specific source address.
+  long port;             // -p Bind to a specific source port.
+  long wait;             // -w Wait # seconds for a connection.
+};
+
+// toys/net/netstat.c
+
+struct netstat_data {
+  struct num_cache *inodes;
+  int wpad;
+};;
+
+// toys/net/tunctl.c
+
+struct tunctl_data {
+  char *user;
+};
+
 // toys/other/acpi.c
 
 struct acpi_data {
@@ -183,12 +224,6 @@ struct hwclock_data {
   char *fname;
 
   int utc;
-};
-
-// toys/other/ifconfig.c
-
-struct ifconfig_data {
-  int sockfd;
 };
 
 // toys/other/ionice.c
@@ -268,16 +303,6 @@ struct modinfo_data {
   long mod;
 };
 
-// toys/other/netcat.c
-
-struct netcat_data {
-  char *filename;        // -f read from filename instead of network
-  long quit_delay;       // -q Exit after EOF from stdin after # seconds.
-  char *source_address;  // -s Bind to a specific source address.
-  long port;             // -p Bind to a specific source port.
-  long wait;             // -w Wait # seconds for a connection.
-};
-
 // toys/other/nsenter.c
 
 struct nsenter_data {
@@ -289,6 +314,12 @@ struct nsenter_data {
 
 struct oneit_data {
   char *console;
+};
+
+// toys/other/setfattr.c
+
+struct setfattr_data {
+  char *x, *v, *n;
 };
 
 // toys/other/shred.c
@@ -310,8 +341,8 @@ struct stat_data {
     struct stat st;
     struct statfs sf;
   } stat;
-  struct passwd *user_name;
-  struct group *group_name;
+  char *file, *pattern;
+  int patlen;
 };
 
 // toys/other/swapon.c
@@ -352,6 +383,7 @@ struct truncate_data {
 // toys/other/xxd.c
 
 struct xxd_data {
+  long s;
   long g;
   long l;
   long c;
@@ -400,6 +432,12 @@ struct brctl_data {
     int sockfd;
 };
 
+// toys/pending/chrt.c
+
+struct chrt_data {
+  long pid;
+};
+
 // toys/pending/compress.c
 
 struct compress_data {
@@ -443,8 +481,18 @@ struct crontab_data {
 // toys/pending/dd.c
 
 struct dd_data {
-  int sig;
-};
+  int show_xfer;
+  int show_records;
+  unsigned long long bytes, c_count, in_full, in_part, out_full, out_part;
+  struct timeval start;
+  struct {
+    char *name;
+    int fd;
+    unsigned char *buff, *bp;
+    long sz, count;
+    unsigned long long offset;
+  } in, out;
+};;
 
 // toys/pending/dhcp.c
 
@@ -516,12 +564,6 @@ struct fdisk_data {
   long cylinders;
 };
 
-// toys/pending/file.c
-
-struct file_data {
-  int max_name_len;
-};
-
 // toys/pending/fold.c
 
 struct fold_data {
@@ -555,6 +597,12 @@ struct ftpget_data {
   int c;
   int isget;
   char buf[sizeof(struct sockaddr_storage)];
+};
+
+// toys/pending/getfattr.c
+
+struct getfattr_data {
+  char *n;
 };
 
 // toys/pending/getty.c
@@ -701,13 +749,6 @@ struct more_data {
   struct termios inf;
   int cin_fd;
 };
-
-// toys/pending/netstat.c
-
-struct netstat_data {
-  char current_name[21];
-  int some_process_unidentified;
-};;
 
 // toys/pending/openvt.c
 
@@ -1025,6 +1066,12 @@ struct expand_data {
   unsigned tabcount, *tab;
 };
 
+// toys/posix/file.c
+
+struct file_data {
+  int max_name_len;
+};
+
 // toys/posix/find.c
 
 struct find_data {
@@ -1076,7 +1123,7 @@ struct ls_data {
 
   unsigned screen_width;
   int nl_title;
-  char uid_buf[12], gid_buf[12], *escmore;
+  char *escmore;
 };
 
 // toys/posix/mkdir.c
@@ -1142,6 +1189,7 @@ struct paste_data {
 struct patch_data {
   char *infile;
   long prefix;
+  char *dir;
 
   struct double_list *current_hunk;
   long oldline, oldlen, newline, newlen;
@@ -1175,8 +1223,9 @@ struct ps_data {
       struct arg_list *p;
       struct arg_list *o;
       struct arg_list *k;
+      struct arg_list *O;
     } top;
-    struct{
+    struct {
       char *L;
       struct arg_list *G;
       struct arg_list *g;
@@ -1197,6 +1246,7 @@ struct ps_data {
   struct sysinfo si;
 #endif
   struct ptr_len gg, GG, pp, PP, ss, tt, uu, UU;
+  struct dirtree *threadparent;
   unsigned width, height;
   dev_t tty;
   void *fields, *kfields;
@@ -1304,7 +1354,7 @@ struct uudecode_data {
 // toys/posix/wc.c
 
 struct wc_data {
-  unsigned long totals[3];
+  unsigned long totals[4];
 };
 
 // toys/posix/xargs.c
@@ -1322,6 +1372,7 @@ struct xargs_data {
 
 extern union global_union {
 	struct getprop_data getprop;
+	struct log_data log;
 	struct hello_data hello;
 	struct skeleton_data skeleton;
 	struct dmesg_data dmesg;
@@ -1336,6 +1387,10 @@ extern union global_union {
 	struct seq_data seq;
 	struct su_data su;
 	struct umount_data umount;
+	struct ifconfig_data ifconfig;
+	struct netcat_data netcat;
+	struct netstat_data netstat;
+	struct tunctl_data tunctl;
 	struct acpi_data acpi;
 	struct base64_data base64;
 	struct blockdev_data blockdev;
@@ -1344,7 +1399,6 @@ extern union global_union {
 	struct free_data free;
 	struct hexedit_data hexedit;
 	struct hwclock_data hwclock;
-	struct ifconfig_data ifconfig;
 	struct ionice_data ionice;
 	struct login_data login;
 	struct losetup_data losetup;
@@ -1354,9 +1408,9 @@ extern union global_union {
 	struct mkpasswd_data mkpasswd;
 	struct mkswap_data mkswap;
 	struct modinfo_data modinfo;
-	struct netcat_data netcat;
 	struct nsenter_data nsenter;
 	struct oneit_data oneit;
+	struct setfattr_data setfattr;
 	struct shred_data shred;
 	struct stat_data stat;
 	struct swapon_data swapon;
@@ -1368,6 +1422,7 @@ extern union global_union {
 	struct arping_data arping;
 	struct bootchartd_data bootchartd;
 	struct brctl_data brctl;
+	struct chrt_data chrt;
 	struct compress_data compress;
 	struct crond_data crond;
 	struct crontab_data crontab;
@@ -1379,10 +1434,10 @@ extern union global_union {
 	struct dumpleases_data dumpleases;
 	struct expr_data expr;
 	struct fdisk_data fdisk;
-	struct file_data file;
 	struct fold_data fold;
 	struct fsck_data fsck;
 	struct ftpget_data ftpget;
+	struct getfattr_data getfattr;
 	struct getty_data getty;
 	struct groupadd_data groupadd;
 	struct host_data host;
@@ -1397,7 +1452,6 @@ extern union global_union {
 	struct mke2fs_data mke2fs;
 	struct modprobe_data modprobe;
 	struct more_data more;
-	struct netstat_data netstat;
 	struct openvt_data openvt;
 	struct ping_data ping;
 	struct route_data route;
@@ -1428,6 +1482,7 @@ extern union global_union {
 	struct du_data du;
 	struct env_data env;
 	struct expand_data expand;
+	struct file_data file;
 	struct find_data find;
 	struct grep_data grep;
 	struct head_data head;

@@ -273,16 +273,16 @@ struct string_list *find_in_path(char *path, char *filename)
   return rlist;
 }
 
-long estrtol(char *str, char **end, int base)
+long long estrtol(char *str, char **end, int base)
 {
   errno = 0;
 
-  return strtol(str, end, base);
+  return strtoll(str, end, base);
 }
 
-long xstrtol(char *str, char **end, int base)
+long long xstrtol(char *str, char **end, int base)
 {
-  long l = estrtol(str, end, base);
+  long long l = estrtol(str, end, base);
 
   if (errno) perror_exit_raw(str);
 
@@ -291,31 +291,32 @@ long xstrtol(char *str, char **end, int base)
 
 // atol() with the kilo/mega/giga/tera/peta/exa extensions.
 // (zetta and yotta don't fit in 64 bits.)
-long atolx(char *numstr)
+long long atolx(char *numstr)
 {
-  char *c, *suffixes="cbkmgtpe", *end;
-  long val;
+  char *c = numstr, *suffixes="cbkmgtpe", *end;
+  long long val;
 
   val = xstrtol(numstr, &c, 0);
-  if (*c) {
-    if (c != numstr && (end = strchr(suffixes, tolower(*c)))) {
-      int shift = end-suffixes-2;
-      if (shift >= 0) val *= 1024L<<(shift*10);
-    } else {
-      while (isspace(*c)) c++;
-      if (*c) error_exit("not integer: %s", numstr);
+  if (c != numstr && *c && (end = strchr(suffixes, tolower(*c)))) {
+    int shift = end-suffixes-2;
+
+    if (shift >= 0) {
+      if (toupper(*++c)=='d') do val *= 1000; while (shift--);
+      else val *= 1024LL<<(shift*10);
     }
   }
+  while (isspace(*c)) c++;
+  if (c==numstr || *c) error_exit("not integer: %s", numstr);
 
   return val;
 }
 
-long atolx_range(char *numstr, long low, long high)
+long long atolx_range(char *numstr, long long low, long long high)
 {
-  long val = atolx(numstr);
+  long long val = atolx(numstr);
 
-  if (val < low) error_exit("%ld < %ld", val, low);
-  if (val > high) error_exit("%ld > %ld", val, high);
+  if (val < low) error_exit("%lld < %lld", val, low);
+  if (val > high) error_exit("%lld > %lld", val, high);
 
   return val;
 }
@@ -444,7 +445,8 @@ off_t fdlength(int fd)
 
 // Read contents of file as a single nul-terminated string.
 // measure file size if !len, allocate buffer if !buf
-// note: for existing buffers use len = size-1, will set buf[len] = 0
+// Existing buffers need len in *plen
+// Returns amount of data read in *plen
 char *readfileat(int dirfd, char *name, char *ibuf, off_t *plen)
 {
   off_t len, rlen;
@@ -545,16 +547,20 @@ void poke(void *ptr, uint64_t val, int size)
 }
 
 // Iterate through an array of files, opening each one and calling a function
-// on that filehandle and name.  The special filename "-" means stdin if
-// flags is O_RDONLY, stdout otherwise.  An empty argument list calls
+// on that filehandle and name. The special filename "-" means stdin if
+// flags is O_RDONLY, stdout otherwise. An empty argument list calls
 // function() on just stdin/stdout.
 //
 // Note: pass O_CLOEXEC to automatically close filehandles when function()
-// returns, otherwise filehandles must be closed by function()
-void loopfiles_rw(char **argv, int flags, int permissions, int failok,
+// returns, otherwise filehandles must be closed by function().
+// pass WARN_ONLY to produce warning messages about files it couldn't
+// open/create, and skip them. Otherwise function is called with fd -1.
+void loopfiles_rw(char **argv, int flags, int permissions,
   void (*function)(int fd, char *name))
 {
-  int fd;
+  int fd, failok = !(flags&WARN_ONLY);
+
+  flags &= ~WARN_ONLY;
 
   // If no arguments, read from stdin.
   if (!*argv) function((flags & O_ACCMODE) != O_RDONLY ? 1 : 0, "-");
@@ -562,20 +568,20 @@ void loopfiles_rw(char **argv, int flags, int permissions, int failok,
     // Filename "-" means read from stdin.
     // Inability to open a file prints a warning, but doesn't exit.
 
-    if (!strcmp(*argv, "-")) fd=0;
-    else if (0>(fd = open(*argv, flags, permissions)) && !failok) {
+    if (!strcmp(*argv, "-")) fd = 0;
+    else if (0>(fd = notstdio(open(*argv, flags, permissions))) && !failok) {
       perror_msg_raw(*argv);
       continue;
     }
     function(fd, *argv);
-    if (flags & O_CLOEXEC) close(fd);
+    if ((flags & O_CLOEXEC) && fd) close(fd);
   } while (*++argv);
 }
 
-// Call loopfiles_rw with O_RDONLY|O_CLOEXEC and !failok (common case).
+// Call loopfiles_rw with O_RDONLY|O_CLOEXEC|WARN_ONLY (common case)
 void loopfiles(char **argv, void (*function)(int fd, char *name))
 {
-  loopfiles_rw(argv, O_RDONLY|O_CLOEXEC, 0, 0, function);
+  loopfiles_rw(argv, O_RDONLY|O_CLOEXEC|WARN_ONLY, 0, function);
 }
 
 // Slow, but small.
@@ -1006,7 +1012,7 @@ int qstrcmp(const void *a, const void *b)
 void create_uuid(char *uuid)
 {
   // Read 128 random bits
-  int fd = xopen("/dev/urandom", O_RDONLY);
+  int fd = xopenro("/dev/urandom");
   xreadall(fd, uuid, 16);
   close(fd);
 
@@ -1073,4 +1079,156 @@ int dev_major(int dev)
 int dev_makedev(int major, int minor)
 {
   return (minor&0xff)|((major&0xfff)<<8)|((minor&0xfff00)<<12);
+}
+
+// Return cached passwd entries.
+struct passwd *bufgetpwuid(uid_t uid)
+{
+  struct pwuidbuf_list {
+    struct pwuidbuf_list *next;
+    struct passwd pw;
+  } *list;
+  struct passwd *temp;
+  static struct pwuidbuf_list *pwuidbuf;
+
+  for (list = pwuidbuf; list; list = list->next)
+    if (list->pw.pw_uid == uid) return &(list->pw);
+
+  list = xmalloc(512);
+  list->next = pwuidbuf;
+
+  errno = getpwuid_r(uid, &list->pw, sizeof(*list)+(char *)list,
+    512-sizeof(*list), &temp);
+  if (!temp) {
+    free(list);
+
+    return 0;
+  }
+  pwuidbuf = list;
+
+  return &list->pw;
+}
+
+// Return cached passwd entries.
+struct group *bufgetgrgid(gid_t gid)
+{
+  struct grgidbuf_list {
+    struct grgidbuf_list *next;
+    struct group gr;
+  } *list;
+  struct group *temp;
+  static struct grgidbuf_list *grgidbuf;
+
+  for (list = grgidbuf; list; list = list->next)
+    if (list->gr.gr_gid == gid) return &(list->gr);
+
+  list = xmalloc(512);
+  list->next = grgidbuf;
+
+  errno = getgrgid_r(gid, &list->gr, sizeof(*list)+(char *)list,
+    512-sizeof(*list), &temp);
+  if (!temp) {
+    free(list);
+
+    return 0;
+  }
+  grgidbuf = list;
+
+  return &list->gr;
+}
+
+// Always null terminates, returns 0 for failure, len for success
+int readlinkat0(int dirfd, char *path, char *buf, int len)
+{
+  if (!len) return 0;
+
+  len = readlinkat(dirfd, path, buf, len-1);
+  if (len<1) return 0;
+  buf[len] = 0;
+
+  return len;
+}
+
+int readlink0(char *path, char *buf, int len)
+{
+  return readlinkat0(AT_FDCWD, path, buf, len);
+}
+
+// Do regex matching handling embedded NUL bytes in string (hence extra len
+// argument). Note that neither the pattern nor the match can currently include
+// NUL bytes (even with wildcards) and string must be null terminated at
+// string[len]. But this can find a match after the first NUL.
+int regexec0(regex_t *preg, char *string, long len, int nmatch,
+  regmatch_t pmatch[], int eflags)
+{
+  char *s = string;
+
+  for (;;) {
+    long ll = 0;
+    int rc;
+
+    while (len && !*s) {
+      s++;
+      len--;
+    }
+    while (s[ll] && ll<len) ll++;
+
+    rc = regexec(preg, s, nmatch, pmatch, eflags);
+    if (!rc) {
+      for (rc = 0; rc<nmatch && pmatch[rc].rm_so!=-1; rc++) {
+        pmatch[rc].rm_so += s-string;
+        pmatch[rc].rm_eo += s-string;
+      }
+
+      return 0;
+    }
+    if (ll==len) return rc;
+
+    s += ll;
+    len -= ll;
+  }
+}
+
+// Return user name or string representation of number, returned buffer
+// lasts until next call.
+char *getusername(uid_t uid)
+{
+  struct passwd *pw = bufgetpwuid(uid);
+  static char unum[12];
+
+  sprintf(unum, "%u", (unsigned)uid);
+  return pw ? pw->pw_name : unum;
+}
+
+// Return group name or string representation of number, returned buffer
+// lasts until next call.
+char *getgroupname(gid_t gid)
+{
+  struct group *gr = bufgetgrgid(gid);
+  static char gnum[12];
+
+  sprintf(gnum, "%u", (unsigned)gid);
+  return gr ? gr->gr_name : gnum;
+}
+
+// Iterate over lines in file, calling function. Function can write 0 to
+// the line pointer if they want to keep it, or 1 to terminate processing,
+// otherwise line is freed. Passed file descriptor is closed at the end.
+void do_lines(int fd, void (*call)(char **pline, long len))
+{
+  FILE *fp = fd ? xfdopen(fd, "r") : stdin;
+
+  for (;;) {
+    char *line = 0;
+    ssize_t len;
+
+    len = getline(&line, (void *)&len, fp);
+    if (len > 0) {
+      call(&line, len);
+      if (line == (void *)1) break;
+      free(line);
+    } else break;
+  }
+
+  if (fd) fclose(fp);
 }

@@ -18,12 +18,12 @@ config LS
     what to show:
     -a  all files including .hidden    -b  escape nongraphic chars
     -c  use ctime for timestamps       -d  directory, not contents
-    -i  inode number                   -k  block sizes in kilobytes
-    -p  put a '/' after dir names      -q  unprintable chars as '?'
-    -s  size (in blocks)               -u  use access time for timestamps
-    -A  list all files but . and ..    -H  follow command line symlinks
-    -L  follow symlinks                -R  recursively list files in subdirs
-    -F  append /dir *exe @sym |FIFO    -Z  security context
+    -i  inode number                   -p  put a '/' after dir names
+    -q  unprintable chars as '?'       -s  storage used (1024 byte units)
+    -u  use access time for timestamps -A  list all files but . and ..
+    -H  follow command line symlinks   -L  follow symlinks
+    -R  recursively list in subdirs    -F  append /dir *exe @sym |FIFO
+    -Z  security context
 
     output formats:
     -1  list one file per line         -C  columns (sorted vertically)
@@ -61,7 +61,7 @@ GLOBALS(
 
   unsigned screen_width;
   int nl_title;
-  char uid_buf[12], gid_buf[12], *escmore;
+  char *escmore;
 )
 
 // Callback from crunch_str to represent unprintable chars
@@ -121,25 +121,15 @@ static char endtype(struct stat *st)
   return 0;
 }
 
-static char *getusername(uid_t uid)
-{
-  struct passwd *pw = getpwuid(uid);
-
-  sprintf(TT.uid_buf, "%u", (unsigned)uid);
-  return pw ? pw->pw_name : TT.uid_buf;
-}
-
-static char *getgroupname(gid_t gid)
-{
-  struct group *gr = getgrgid(gid);
-
-  sprintf(TT.gid_buf, "%u", (unsigned)gid);
-  return gr ? gr->gr_name : TT.gid_buf;
-}
-
 static int numlen(long long ll)
 {
   return snprintf(0, 0, "%llu", ll);
+}
+
+static int print_with_h(char *s, long long value, int units)
+{
+  if (toys.optflags&FLAG_h) return human_readable(s, value*units, 0);
+  else return sprintf(s, "%lld", value);
 }
 
 // Figure out size of printable entry fields for display indent/wrap
@@ -164,13 +154,10 @@ static void entrylen(struct dirtree *dt, unsigned *len)
       // cheating slightly here: assuming minor is always 3 digits to avoid
       // tracking another column
       len[5] = numlen(dev_major(st->st_rdev))+5;
-    } else if (flags & FLAG_h) {
-        human_readable(tmp, st->st_size, 0);
-        len[5] = strwidth(tmp);
-    } else len[5] = numlen(st->st_size);
+    } else len[5] = print_with_h(tmp, st->st_size, 1);
   }
 
-  len[6] = (flags & FLAG_s) ? numlen(st->st_blocks) : 0;
+  len[6] = (flags & FLAG_s) ? print_with_h(tmp, st->st_blocks, 512) : 0;
   len[7] = (flags & FLAG_Z) ? strwidth((char *)dt->extra) : 0;
 }
 
@@ -235,7 +222,7 @@ static int filter(struct dirtree *new)
 
   if (flags & FLAG_u) new->st.st_mtime = new->st.st_atime;
   if (flags & FLAG_c) new->st.st_mtime = new->st.st_ctime;
-  if (flags & FLAG_k) new->st.st_blocks = (new->st.st_blocks + 1) / 2;
+  new->st.st_blocks >>= 1;
 
   if (flags & (FLAG_a|FLAG_f)) return DIRTREE_SAVE;
   if (!(flags & FLAG_A) && new->name[0]=='.') return 0;
@@ -334,12 +321,10 @@ static void listfiles(int dirfd, struct dirtree *indir)
     // Do preprocessing (Dirtree didn't populate, so callback wasn't called.)
     for (;dt; dt = dt->next) filter(dt);
     if (flags == (FLAG_1|FLAG_f)) return;
-  } else {
-    // Read directory contents. We dup() the fd because this will close it.
-    // This reads/saves contents to display later, except for in "ls -1f" mode.
-    dirtree_recurse(indir, filter, dup(dirfd),
+  // Read directory contents. We dup() the fd because this will close it.
+  // This reads/saves contents to display later, except for in "ls -1f" mode.
+  } else  dirtree_recurse(indir, filter, dup(dirfd),
       DIRTREE_SYMFOLLOW*!!(flags&FLAG_L));
-  }
 
   // Copy linked list to array and sort it. Directories go in array because
   // we visit them in sorted order too. (The nested loops let us measure and
@@ -373,10 +358,8 @@ static void listfiles(int dirfd, struct dirtree *indir)
     }
     totpad = totals[1]+!!totals[1]+totals[6]+!!totals[6]+totals[7]+!!totals[7];
     if ((flags&(FLAG_h|FLAG_l|FLAG_o|FLAG_n|FLAG_g|FLAG_s)) && indir->parent) {
-      if (flags&FLAG_h) {
-        human_readable(tmp, blocks*512, 0);
-        xprintf("total %s\n", tmp);
-      } else xprintf("total %llu\n", blocks);
+      print_with_h(tmp, blocks, 512);
+      xprintf("total %s\n", tmp);
     }
   }
 
@@ -395,7 +378,7 @@ static void listfiles(int dirfd, struct dirtree *indir)
       memset(colsizes, 0, columns*sizeof(unsigned));
       for (ul=0; ul<dtlen; ul++) {
         entrylen(sort[next_column(ul, dtlen, columns, &c)], len);
-        *len += totpad;
+        *len += totpad+1;
         if (c == columns) break;
         // Expand this column if necessary, break if that puts us over budget
         if (*len > colsizes[c]) {
@@ -430,20 +413,22 @@ static void listfiles(int dirfd, struct dirtree *indir)
       if (flags & FLAG_m) xputc(',');
       if (flags & (FLAG_C|FLAG_x)) {
         if (!curcol) xputc('\n');
-      } else if ((flags & FLAG_1) || width+1+*len > TT.screen_width) {
+      } else if ((flags & FLAG_1) || width+2+*len > TT.screen_width) {
         xputc('\n');
         width = 0;
       } else {
-        xputc(' ');
-        width++;
+        printf("  ");
+        width += 2;
       }
     }
     width += *len;
 
-    if (flags & FLAG_i)
-      xprintf("%*lu ", totals[1], (unsigned long)st->st_ino);
-    if (flags & FLAG_s)
-      xprintf("%*lu ", totals[6], (unsigned long)st->st_blocks);
+    if (flags & FLAG_i) printf("%*lu ", totals[1], (unsigned long)st->st_ino);
+
+    if (flags & FLAG_s) {
+      print_with_h(tmp, st->st_blocks, 512);
+      printf("%*s ", totals[6], tmp);
+    }
 
     if (flags & (FLAG_l|FLAG_o|FLAG_n|FLAG_g)) {
       struct tm *tm;
@@ -477,15 +462,15 @@ static void listfiles(int dirfd, struct dirtree *indir)
       if (S_ISCHR(st->st_mode) || S_ISBLK(st->st_mode))
         printf("% *d,% 4d", totals[5]-4, dev_major(st->st_rdev),
           dev_minor(st->st_rdev));
-      else if (flags&FLAG_h) {
-        human_readable(tmp, st->st_size, 0);
-        xprintf("%*s", totals[5]+1, tmp);
-      } else printf("% *lld", totals[5]+1, (long long)st->st_size);
+      else {
+        print_with_h(tmp, st->st_size, 1);
+        printf("%*s", totals[5]+1, tmp);
+      }
 
       // print time, always in --time-style=long-iso
       tm = localtime(&(st->st_mtime));
       strftime(tmp, sizeof(tmp), "%F %H:%M", tm);
-      xprintf(" %s ", tmp);
+      printf(" %s ", tmp);
     } else if (flags & FLAG_Z)
       printf("%-*s ", (int)totals[7], (char *)sort[next]->extra);
 
@@ -496,7 +481,7 @@ static void listfiles(int dirfd, struct dirtree *indir)
 
     ss = sort[next]->name;
     crunch_str(&ss, INT_MAX, stdout, TT.escmore, crunch_qb);
-    if (color) xprintf("\033[0m");
+    if (color) printf("\033[0m");
 
     if ((flags & (FLAG_l|FLAG_o|FLAG_n|FLAG_g)) && S_ISLNK(mode)) {
       printf(" -> ");
@@ -518,7 +503,7 @@ static void listfiles(int dirfd, struct dirtree *indir)
     // Pad columns
     if (flags & (FLAG_C|FLAG_x)) {
       curcol = colsizes[curcol]-(*len)-totpad;
-      if (curcol < 255) xprintf("%s", toybuf+255-curcol);
+      if (curcol < 255) printf("%s", toybuf+255-curcol);
     }
   }
 
