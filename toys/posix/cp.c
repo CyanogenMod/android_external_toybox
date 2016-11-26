@@ -317,7 +317,7 @@ int cp_node(struct dirtree *try)
       if (fdout == AT_FDCWD)
         rc = fchownat(cfd, catch, try->st.st_uid, try->st.st_gid,
                       AT_SYMLINK_NOFOLLOW);
-      else 
+      else
 	rc = fchown(fdout, try->st.st_uid, try->st.st_gid);
       if (rc && !geteuid()) {
         char *pp;
