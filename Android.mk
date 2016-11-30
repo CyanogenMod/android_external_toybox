@@ -125,6 +125,7 @@ LOCAL_SRC_FILES := \
     toys/other/makedevs.c \
     toys/other/mkswap.c \
     toys/other/modinfo.c \
+    toys/pending/modprobe.c \
     toys/other/mountpoint.c \
     toys/other/nbd_client.c \
     toys/other/netcat.c \

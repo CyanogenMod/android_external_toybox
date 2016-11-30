@@ -1550,9 +1550,9 @@
 #undef FLAG_b
 #endif
 
-// modprobe   alrqvsDb
+// modprobe alrqvsDb alrqvsDb
 #undef OPTSTR_modprobe
-#define OPTSTR_modprobe  0 
+#define OPTSTR_modprobe "alrqvsDb"
 #ifdef CLEANUP_modprobe
 #undef CLEANUP_modprobe
 #undef FOR_modprobe
@@ -4372,14 +4372,14 @@
 #ifndef TT
 #define TT this.modprobe
 #endif
-#define FLAG_b (FORCED_FLAG<<0)
-#define FLAG_D (FORCED_FLAG<<1)
-#define FLAG_s (FORCED_FLAG<<2)
-#define FLAG_v (FORCED_FLAG<<3)
-#define FLAG_q (FORCED_FLAG<<4)
-#define FLAG_r (FORCED_FLAG<<5)
-#define FLAG_l (FORCED_FLAG<<6)
-#define FLAG_a (FORCED_FLAG<<7)
+#define FLAG_b (1<<0)
+#define FLAG_D (1<<1)
+#define FLAG_s (1<<2)
+#define FLAG_v (1<<3)
+#define FLAG_q (1<<4)
+#define FLAG_r (1<<5)
+#define FLAG_l (1<<6)
+#define FLAG_a (1<<7)
 #endif
 
 #ifdef FOR_more
