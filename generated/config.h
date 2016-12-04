@@ -130,7 +130,7 @@
 #define USE_PS(...) __VA_ARGS__
 #define CFG_TOP 1
 #define USE_TOP(...) __VA_ARGS__
-#define CFG_IOTOP 1
+#define CFG_IOTOP 0
 #define USE_IOTOP(...) __VA_ARGS__
 #define CFG_TOP_COMMON 1
 #define USE_TOP_COMMON(...) __VA_ARGS__
